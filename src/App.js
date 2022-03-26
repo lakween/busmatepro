@@ -4,7 +4,6 @@ import Login from "./components/common/login-page/login-page";
 
 
 function App() {
-
   return (
     <div className="App">
       <header className="App-header">
