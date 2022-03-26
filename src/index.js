@@ -13,6 +13,7 @@ import "firebase/compat/firestore";
 import {store} from "./store/store";
 import { Provider } from "react-redux";
 
+
 import {
     ReactReduxFirebaseProvider,
     firebaseReducer
@@ -29,20 +30,22 @@ const rrfConfig = {
 };
 
 const rrfProps = {
-  firebase,
-  config: rrfConfig,
-  dispatch: store.dispatch,
-  createFirestoreInstance, //since we are using Firestore
+    firebase,
+    config: rrfConfig,
+    dispatch: store.dispatch,
+    createFirestoreInstance, //since we are using Firestore
 };
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
+            <ReactReduxFirebaseProvider {...rrfProps}>
             <BrowserRouter>
                 <ChakraProvider theme={theme}>
                     <App/>
                 </ChakraProvider>
             </BrowserRouter>
+            </ReactReduxFirebaseProvider>
         </Provider>
     </React.StrictMode>,
 
