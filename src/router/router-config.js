@@ -2,13 +2,15 @@ import { RouteObject } from "react-router-dom";
 import { Outlet, Link, useRoutes, useParams } from "react-router-dom";
 import Login from "../components/common/login-page/login-page";
 import App from "../App";
+import PassengerSidebar from "../components/common/passenger-sidebar/passenger-sidebar.component";
 
 export let RouterConfig = ()=>{
 
     let routes = [
         {
             path: "/",
-            element: <App />,
+            // element: <App />,
+            element: <PassengerSidebar />
         },
         // {
         //     path: "/",
