@@ -2,8 +2,11 @@ import {useFirebase} from "react-redux-firebase";
 import {Box, Button, Container, Flex, Input, Stack, Text} from '@chakra-ui/react'
 import {useSelector} from "react-redux";
 import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import {useNavigate} from "react-router-dom";
 
 const Login = () => {
+
+    let navigate = useNavigate();
     const firebase = useFirebase()
     //const auth = useSelector(state => state.firebase.auth);
     //console.log(auth, 'auth')
@@ -11,7 +14,8 @@ const Login = () => {
         <Box paddingY={'150px'} backgroundColor={'#c8d8e5'} height={'100vh'} width={'100%'}>
             <Flex justify={'center'} height={"50vh"} align={'center'} width={'100%'} columnGap={"20px"}
                   direction={'row'}>
-                <Box p={"5px"} ml={'20px'} borderColor={'Black'} borderStyle={'solid'} borderWidth={'2px'} borderRadius={'5px'}
+                <Box p={"5px"} ml={'20px'} borderColor={'Black'} borderStyle={'solid'} borderWidth={'2px'}
+                     borderRadius={'5px'}
                      justifyContent={'center'} alignItems={'center'} height={'100%'} width={'100%'} display={"flex"}
                      flex={0.6}>
                     <Text align={'center'}>What is Lorem Ipsum?
@@ -23,35 +27,34 @@ const Login = () => {
                         and more recently with desktop publishing software like Aldus PageMaker including versions of
                         Lorem Ipsum</Text>
                 </Box>
-                <Box  paddingTop={'20px'} padding={'10px'} height={'100%'} width={'100%'}  flex={0.4}>
-                            <Stack paddingX={'55px'} justifyContent={'center'} paddingTop={'60px'} spacing={3}>
-                                <Stack>
-                                    <Text mb="8px">User Name</Text>
-                                    <Input size="sm" placeholder="large size" />
-                                </Stack>
-                                <Stack>
-                                    <Text mb="8px">Password</Text>
-                                    <Input  size="sm" placeholder="large size" />
-                                </Stack>
-                                <Flex justifyContent={'center'} columnGap={'20px'} direction={'row'}>
-                                    <Button width={'65px'} colorScheme="teal" size="sm">
-                                        Sign Up
-                                    </Button>
-                                    <Button width={'65px'} colorScheme="teal" size="sm">
-                                        Log In
-                                    </Button>
-                                </Flex>
-                            </Stack>
-                            {/*<Flex justifyContent={'center'} alignItems={'center'}flex={0.5}>*/}
-                            {/*    <Text>Username</Text>*/}
-                            {/*</Flex>*/}
-                            {/*<Flex justifyContent={'center'} alignItems={'center'} flex={0.5}>*/}
-                            {/*    */}
-                            {/*</Flex>*/}
+                <Box paddingTop={'20px'} padding={'10px'} height={'100%'} width={'100%'} flex={0.4}>
+                    <Stack paddingX={'55px'} justifyContent={'center'} paddingTop={'60px'} spacing={3}>
+                        <Stack>
+                            <Text mb="8px">User Name</Text>
+                            <Input size="sm" placeholder="large size"/>
+                        </Stack>
+                        <Stack>
+                            <Text mb="8px">Password</Text>
+                            <Input size="sm" placeholder="large size"/>
+                        </Stack>
+                        <Flex justifyContent={'center'} columnGap={'20px'} direction={'row'}>
+                            <Button width={'65px'} colorScheme="teal" size="sm">
+                                Sign Up
+                            </Button>
+                            <Button width={'65px'} colorScheme="teal" size="sm" onClick={() => navigate('/passenger')}>
+                                Log In
+                            </Button>
+                        </Flex>
+                    </Stack>
+                    {/*<Flex justifyContent={'center'} alignItems={'center'}flex={0.5}>*/}
+                    {/*    <Text>Username</Text>*/}
+                    {/*</Flex>*/}
+                    {/*<Flex justifyContent={'center'} alignItems={'center'} flex={0.5}>*/}
+                    {/*    */}
+                    {/*</Flex>*/}
                 </Box>
             </Flex>
         </Box>
-
     );
 };
 
