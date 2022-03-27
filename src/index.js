@@ -11,6 +11,7 @@ import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import {store} from "./store/store";
 import { Provider } from "react-redux";
+import {RouterConfig} from "./router/router-config";
 
 
 import {
@@ -41,7 +42,7 @@ ReactDOM.render(
             <ReactReduxFirebaseProvider {...rrfProps}>
             <BrowserRouter>
                 <ChakraProvider theme={theme}>
-                    <App/>
+                    <RouterConfig/>
                 </ChakraProvider>
             </BrowserRouter>
             </ReactReduxFirebaseProvider>
