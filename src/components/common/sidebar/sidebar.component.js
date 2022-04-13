@@ -5,7 +5,7 @@ const Sidebar = () => {
 
     return (
         <Flex flexDirection={'row'}>
-            <Box gap={5} display={'flex'} bg={'aliceblue'} borderStyle={'solid'} borderRadius={'md'} borderWidth={2}
+            <Box gap={5} display={'flex'} bg={'aliceblue'} borderStyle={'solid'} borderRadius={'5px'} borderWidth={2}
                  flexDirection={'column'} width={'20vw'} height={'100vh'}>
                 <Box bgGradient='linear(to-r, #1d82d0, #0e436d)' flexDirection={"column"} display={'Flex'} justifyContent={'center'} alignItems={'center'} height={'20vh'}>
 

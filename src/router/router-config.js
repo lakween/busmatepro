@@ -4,6 +4,7 @@ import Login from "../components/common/login-page/login-page";
 import App from "../App";
 import Sidebar from "../components/common/sidebar/sidebar.component";
 import Home from "../components/passenger/pages/home-page/home.page";
+import SignUp from "../components/passenger/pages/sign-up/sign-up.page";
 
 export let RouterConfig = ()=>{
 
@@ -17,8 +18,12 @@ export let RouterConfig = ()=>{
             element: <Sidebar/>,
             children: [
                 { index: true, element: <Home/> },
-               // { path: "*", element: <NoMatch/> },
+               //{ path: "*", element: <NoMatch/> },
             ],
+        },
+        {
+            path: "signup",
+            element: <SignUp/>,
         },
     ];
 

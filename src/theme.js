@@ -68,10 +68,6 @@ const theme = extendTheme({
         widest: "0.1em",
     },
 
-    body:{
-       height: "500vh",
-        color:"black"
-    }
 });
 
 export default theme
