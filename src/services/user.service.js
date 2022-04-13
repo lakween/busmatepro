@@ -15,7 +15,7 @@ export const googleSignUp = async () => {
     return result
 }
 
-export const createDoc = (collection,toast,form) => {
+export const createDoc = (collection, toast, navigate, form) => {
     const db = firebase.firestore();
     return db.collection(collection).add(form)
         .then((docRef) => {
@@ -26,10 +26,11 @@ export const createDoc = (collection,toast,form) => {
                 duration: 9000,
                 isClosable: true,
             })
+            navigate()
         })
         .catch((error) => {
             console.error("Error adding document: ", error);
-            return{}
+            return {}
         });
 
 }

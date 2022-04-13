@@ -4,9 +4,11 @@ import Card from "../../../common/card/card.component";
 import {useSelector} from "react-redux";
 import useFormController from "../../../../hooks/useFormController";
 import {createDoc} from "../../../../services/user.service";
+import {useNavigate} from "react-router-dom";
 
 const SignUp = (getNames) => {
     const [isLoading, setIsLoading] = useState(false)
+    let navigate = useNavigate();
     let {email, displayName, uid} = useSelector((store) => (store.firebase.auth))
     let [valueChangeHandler, setValue, form, setForm] = useFormController({
         email: email, ...getNames(),
@@ -21,7 +23,7 @@ const SignUp = (getNames) => {
 
     const updateHandler = async () => {
         setIsLoading(true)
-        let res = await createDoc('userProfile', toast, form)
+        let res = await createDoc('userProfile', toast, navigate("/passenger") ,form)
         setIsLoading(false)
     }
 
