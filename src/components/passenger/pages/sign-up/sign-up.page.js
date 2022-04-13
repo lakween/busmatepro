@@ -53,7 +53,7 @@ const SignUp = (getNames) => {
     )
 
     return (
-        <Container padding={5} maxW='70%' bg={'#AAAAAA'}>
+        <Container display={'flex'} justifyContent={"center"} height={'100vh'} centerContent padding={5} maxW='70%' backgroundColor={'#c8d8e5'}>
             <Card inSideTitle={'Personal Informations'}>
                 <Flex gap={3} direction={'row'}>
                     <Box width={'100%'}>
@@ -66,12 +66,12 @@ const SignUp = (getNames) => {
                             <Input onChange={valueChangeHandler} value={form.last_name} name='last_name' type='text'/>
                         </FormControl>
                         <FormControl>
-                            <FormLabel>Address</FormLabel>
-                            <Input onChange={valueChangeHandler} name='address' type='text'/>
-                        </FormControl>
-                        <FormControl>
                             <FormLabel>Email</FormLabel>
                             <Input onChange={valueChangeHandler} value={form.email} name='email' type='email'/>
+                        </FormControl>
+                        <FormControl>
+                            <FormLabel>Password</FormLabel>
+                            <Input onChange={valueChangeHandler} name='password' type='password'/>
                         </FormControl>
                     </Box>
                     <Box width={'100%'}>
@@ -84,12 +84,12 @@ const SignUp = (getNames) => {
                             <Input onChange={valueChangeHandler} name='city' type='text'/>
                         </FormControl>
                         <FormControl>
-                            <FormLabel>Tel: NO</FormLabel>
-                            <Input onChange={valueChangeHandler} name='mobile_number' type='email'/>
+                            <FormLabel>Address</FormLabel>
+                            <Input onChange={valueChangeHandler} name='address' type='text'/>
                         </FormControl>
                         <FormControl>
                             <FormLabel>Tel: NO</FormLabel>
-                            <Input onChange={valueChangeHandler} name='password' type='password'/>
+                            <Input onChange={valueChangeHandler} name='mobile_number' type='email'/>
                         </FormControl>
                     </Box>
                 </Flex>

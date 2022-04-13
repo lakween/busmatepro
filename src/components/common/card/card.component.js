@@ -13,10 +13,10 @@ const Card = (props) => {
     </Text>)
 
     return (
-        <Box width={'100%'} bg={'white'} borderRadius={3}>
+        <Box width={'100%'} bg={'white'} borderRadius={6}>
             {outSideTitle && outsideTitleMarkup}
             <Box width={'100%'} padding={padding} margin={margin} borderStyle={"solid"} borderWidth={border} borderColor={"#DDDDDD"}
-                 borderRadius={3}>
+                 borderRadius={6}>
                 {inSideTitle && insideTitleMarkup}
                 {children}
             </Box>
