@@ -15,13 +15,21 @@ export const googleSignUp = async () => {
     return result
 }
 
-export const createNewUser = (form) => {
+export const createDoc = (collection,toast,form) => {
     const db = firebase.firestore();
-    db.collection("userProfile").add(form)
+    return db.collection(collection).add(form)
         .then((docRef) => {
-            console.log("Document written with ID: ", docRef.id);
+            toast({
+                title: 'Account created.',
+                description: "We've update your account for you.",
+                status: 'success',
+                duration: 9000,
+                isClosable: true,
+            })
         })
         .catch((error) => {
             console.error("Error adding document: ", error);
+            return{}
         });
+
 }

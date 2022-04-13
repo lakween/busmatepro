@@ -1,21 +1,29 @@
-import {Box, Button, Container, Flex, FormControl, FormHelperText, FormLabel, Input, Text} from '@chakra-ui/react'
-import React from "react";
+import {Box, Button, Container, Flex, FormControl, FormLabel, Input, useToast} from '@chakra-ui/react'
+import React, {useState} from "react";
 import Card from "../../../common/card/card.component";
-import {useComState} from "../../../../hooks/useComState";
 import {useSelector} from "react-redux";
 import useFormController from "../../../../hooks/useFormController";
-import {createNewUser,saveDocumentToFirestore} from "../../../../services/user.service";
-import firebase from "firebase/compat/app";
+import {createDoc} from "../../../../services/user.service";
 
-const SignUp = ( getNames) => {
-    let {email,displayName} = useSelector((store) => (store.firebase.auth))
-    let [valueChangeHandler,setValue,form,setForm] = useFormController({email:email , ...getNames()})
-     function getNames () {
-        const [first_name,last_name] =  displayName.split(" ");
-        return {first_name:first_name,last_name:last_name}
+const SignUp = (getNames) => {
+    const [isLoading, setIsLoading] = useState(false)
+    let {email, displayName, uid} = useSelector((store) => (store.firebase.auth))
+    let [valueChangeHandler, setValue, form, setForm] = useFormController({
+        email: email, ...getNames(),
+        reference_doc_id: uid,
+       'Document ID':'123584556'
+    })
+    const toast = useToast()
+
+    function getNames() {
+        const [first_name, last_name] = displayName.split(" ");
+        return {first_name: first_name, last_name: last_name}
     }
+
     const updateHandler = async () => {
-       await createNewUser(form)
+        setIsLoading(true)
+        let res = await createDoc('userProfile',toast,form)
+        setIsLoading(false)
     }
 
     return (
@@ -37,7 +45,7 @@ const SignUp = ( getNames) => {
                         </FormControl>
                         <FormControl>
                             <FormLabel>Email</FormLabel>
-                            <Input  onChange={valueChangeHandler} value={form.email} name='email' type='email'/>
+                            <Input onChange={valueChangeHandler} value={form.email} name='email' type='email'/>
                         </FormControl>
                     </Box>
                     <Box width={'100%'}>
@@ -60,10 +68,10 @@ const SignUp = ( getNames) => {
                     </Box>
                 </Flex>
                 <Flex justifyContent={'right'} mt={3} columnGap={'20px'} direction={'row'}>
-                    <Button  width={'100px'} colorScheme="teal" size="sm">
+                    <Button width={'100px'} colorScheme="teal" size="sm">
                         Skip
                     </Button>
-                    <Button onClick={updateHandler} width={'100px'} colorScheme="teal" size="sm">
+                    <Button isLoading={isLoading} onClick={updateHandler} width={'100px'} colorScheme="teal" size="sm">
                         Update
                     </Button>
                 </Flex>
