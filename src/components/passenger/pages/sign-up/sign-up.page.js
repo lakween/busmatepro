@@ -1,11 +1,10 @@
-import {Box, Container, Flex, FormControl, FormHelperText, FormLabel, Input, Text} from '@chakra-ui/react'
+import {Box, Button, Container, Flex, FormControl, FormHelperText, FormLabel, Input, Text} from '@chakra-ui/react'
 import React from "react";
 import Card from "../../../common/card/card.component";
 
 const SignUp = () => {
     return(
         <Container padding={5} maxW='70%' bg={'#AAAAAA'}>
-            <Box>
                 <Card inSideTitle={'Personal Informations'}>
                     <Flex gap={3} direction={'row'}>
                         <Box width={'100%'}>
@@ -41,9 +40,12 @@ const SignUp = () => {
                             </FormControl>
                         </Box>
                     </Flex>
+                    <Flex justifyContent={'right'} mt={3} columnGap={'20px'} direction={'row'}>
+                        <Button width={'100px'} colorScheme="teal" size="sm" >
+                            Sign Up
+                        </Button>
+                    </Flex>
                 </Card>
-            </Box>
-
         </Container>
     )
 }

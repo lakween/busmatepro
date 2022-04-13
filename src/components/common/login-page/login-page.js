@@ -38,6 +38,9 @@ const Login = () => {
                             <Input size="sm" placeholder="large size"/>
                         </Stack>
                         <Flex justifyContent={'center'} columnGap={'20px'} direction={'row'}>
+                            <Button colorScheme="teal" size="sm" onClick={() => navigate('/signup')}>
+                                Sign Up with Google
+                            </Button>
                             <Button width={'65px'} colorScheme="teal" size="sm" onClick={() => navigate('/signup')}>
                                 Sign Up
                             </Button>
