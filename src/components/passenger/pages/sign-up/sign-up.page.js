@@ -11,7 +11,6 @@ const SignUp = (getNames) => {
     let [valueChangeHandler, setValue, form, setForm] = useFormController({
         email: email, ...getNames(),
         reference_doc_id: uid,
-       'Document ID':'123584556'
     })
     const toast = useToast()
 
@@ -22,7 +21,7 @@ const SignUp = (getNames) => {
 
     const updateHandler = async () => {
         setIsLoading(true)
-        let res = await createDoc('userProfile',toast,form)
+        let res = await createDoc('userProfile', toast, form)
         setIsLoading(false)
     }
 
