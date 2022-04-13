@@ -1,5 +1,8 @@
 import firebase from "firebase/compat/app";
+import {getFirestore} from "firebase/firestore";
 import {useSelector} from "react-redux";
+import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
+import {doc, setDoc} from "firebase/firestore";
 
 export const googleSignUp = async () => {
 
@@ -12,17 +15,13 @@ export const googleSignUp = async () => {
     return result
 }
 
-// const createNewUser = async ({ email, password, username }) => {
-//     let data = {element: "barium"};
-//     await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_APIKEY}`, {
-//         method: "POST",
-//         headers: {'Content-Type': 'application/json'},
-//         body: JSON.stringify({
-//             email:'test7@gmail.com',
-//             password:'testing789',
-//             returnSecureToken:true
-//         })
-//     }).then(res => {
-//         return res;
-//     });
-// }
+export const createNewUser = (form) => {
+    const db = firebase.firestore();
+    db.collection("userProfile").add(form)
+        .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });
+}
