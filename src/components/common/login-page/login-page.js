@@ -1,25 +1,26 @@
 import {useFirebase} from "react-redux-firebase";
 import {Box, Button, Container, Flex, Input, Stack, Text} from '@chakra-ui/react'
 import {FcGoogle} from "react-icons/fc";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
 import {useNavigate} from "react-router-dom";
 import firebase from "firebase/compat/app";
 import {googleSignUp} from "../../../services/user.service";
 import {useState} from "react";
+import {useComState} from "../../../hooks/useComState";
+import {setCommonState} from "../../../store/reducers/common-slice";
 
 const Login = () => {
-
     let navigate = useNavigate();
+    let dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(false)
-    //const firebase = useFirebase()
-    //const auth = useSelector(state => state.firebase.auth);
-    //console.log(auth, 'auth')
+    const [state, setState] = useComState('')
 
-    function signUpwithGoogle() {
+    async function signUpwithGoogle() {
         setIsLoading(true)
-        let res = googleSignUp()
-
+        let res = await googleSignUp()
+        await dispatch(setCommonState(res))
+        navigate('signup')
     }
 
     return (

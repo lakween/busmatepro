@@ -1,10 +1,11 @@
 import firebase from "firebase/compat/app";
+import {useSelector} from "react-redux";
 
 export const googleSignUp = async () => {
+
     let provider = new firebase.auth.GoogleAuthProvider();
     let result = await firebase.auth().signInWithPopup(provider).then(function (result) {
-        // var token = result.credential.accessToken;
-        return {success: true, data: {email: result.user.email, user_name: result.user.displayName}};
+        return {email: result.user.email, user_name: result.user.displayName}
     }).catch(function (error) {
         return {success: false}
     });
