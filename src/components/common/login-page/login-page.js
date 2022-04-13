@@ -56,7 +56,7 @@ const Login = () => {
                             <Text mb="8px">Password</Text>
                             <Input name={'password'} onChange={valueChangeHandler} size="sm" type={'password'}/>
                         </Stack>
-                        <Flex justifyContent={'right'} columnGap={'20px'} direction={'row'}>
+                        <Flex justifyContent={'right'} gap={1} direction={'row'}>
                             <Button leftIcon={<FcGoogle/>} colorScheme="teal" size="sm" onClick={
                                 () => {
                                     signUpwithGoogle()
