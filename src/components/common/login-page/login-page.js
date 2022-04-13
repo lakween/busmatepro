@@ -5,22 +5,28 @@ import {useDispatch, useSelector} from "react-redux";
 import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
 import {useNavigate} from "react-router-dom";
 import firebase from "firebase/compat/app";
-import {googleSignUp} from "../../../services/user.service";
+import {googleSignUp, login} from "../../../services/user.service";
 import {useState} from "react";
 import {useComState} from "../../../hooks/useComState";
 import {setCommonState} from "../../../store/reducers/common-slice";
+import useFormController from "../../../hooks/useFormController";
 
 const Login = () => {
     let navigate = useNavigate();
     let dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(false)
     const [state, setState] = useComState('')
+    let [valueChangeHandler, setValue, form, setForm] = useFormController()
 
     async function signUpwithGoogle() {
         setIsLoading(true)
         let res = await googleSignUp()
         await dispatch(setCommonState(res))
         navigate('signup')
+    }
+
+    const loginHandler = async () => {
+        await login(form, navigate)
     }
 
     return (
@@ -44,11 +50,11 @@ const Login = () => {
                     <Stack paddingX={'55px'} justifyContent={'center'} paddingTop={'60px'} spacing={3}>
                         <Stack>
                             <Text mb="8px">User Name</Text>
-                            <Input size="sm" placeholder="large size"/>
+                            <Input name={'username'} onChange={valueChangeHandler} size="sm"/>
                         </Stack>
                         <Stack>
                             <Text mb="8px">Password</Text>
-                            <Input size="sm" placeholder="large size"/>
+                            <Input name={'password'} onChange={valueChangeHandler} size="sm" type={'password'}/>
                         </Stack>
                         <Flex justifyContent={'right'} columnGap={'20px'} direction={'row'}>
                             <Button leftIcon={<FcGoogle/>} colorScheme="teal" size="sm" onClick={
@@ -61,7 +67,7 @@ const Login = () => {
                             <Button width={'65px'} colorScheme="teal" size="sm" onClick={() => navigate('/signup')}>
                                 Sign Up
                             </Button>
-                            <Button width={'65px'} colorScheme="teal" size="sm" onClick={() => navigate('/passenger')}>
+                            <Button width={'65px'} colorScheme="teal" size="sm" onClick={loginHandler}>
                                 Log In
                             </Button>
                         </Flex>

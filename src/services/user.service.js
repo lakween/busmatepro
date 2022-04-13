@@ -5,7 +5,6 @@ import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
 import {doc, setDoc} from "firebase/firestore";
 
 export const googleSignUp = async () => {
-
     let provider = new firebase.auth.GoogleAuthProvider();
     let result = await firebase.auth().signInWithPopup(provider).then(function (result) {
         return {email: result.user.email, user_name: result.user.displayName}
@@ -32,5 +31,37 @@ export const createDoc = (collection, toast, navigate, form) => {
             console.error("Error adding document: ", error);
             return {}
         });
-
 }
+
+export const emailAndPasswordAuth = (email, password) => {
+    return firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            console.log('sucsess')
+        })
+        .catch((error) => {
+            console.log('err')
+        });
+}
+
+export const signOut = () => {
+    return firebase.auth().signOut().then(() => {
+        console.log('sucsess')
+    }).catch((error) => {
+        console.log('not')
+    });
+}
+
+export const login = (form,navigate) => {
+    return firebase.auth().signInWithEmailAndPassword(form.username, form.password)
+        .then((userCredential) => {
+            // Signed in
+            console.log('succ')
+            navigate('/passenger')
+            // ...
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+        });
+}
+

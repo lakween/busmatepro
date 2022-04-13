@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import Card from "../../../common/card/card.component";
 import {useSelector} from "react-redux";
 import useFormController from "../../../../hooks/useFormController";
-import {createDoc} from "../../../../services/user.service";
+import {createDoc, emailAndPasswordAuth, signOut} from "../../../../services/user.service";
 import {useNavigate} from "react-router-dom";
 
 const SignUp = (getNames) => {
@@ -17,15 +17,40 @@ const SignUp = (getNames) => {
     const toast = useToast()
 
     function getNames() {
-        const [first_name, last_name] = displayName.split(" ");
+        const [first_name, last_name] = displayName? displayName?.split(" "):['',''];
         return {first_name: first_name, last_name: last_name}
     }
 
     const updateHandler = async () => {
         setIsLoading(true)
-        let res = await createDoc('userProfile', toast, navigate("/passenger") ,form)
+        let res = await createDoc('userProfile', toast, navigate("/passenger"), form)
         setIsLoading(false)
     }
+
+    const signUpHandler = async () => {
+        let res = await emailAndPasswordAuth(form.email,form.password)
+        let result = await createDoc('userProfile', toast, navigate("/passenger"), form)
+    }
+
+    const signedButtonMarkup = (
+        <Flex justifyContent={'right'} mt={3} columnGap={'20px'} direction={'row'}>
+            <Button onClick={async () => { await signOut()
+                navigate("/passenger")
+            }} width={'100px'} colorScheme="teal" size="sm">
+                Skip
+            </Button>
+            <Button isLoading={isLoading} onClick={updateHandler} width={'100px'} colorScheme="teal" size="sm">
+                Update
+            </Button>
+        </Flex>
+    )
+    const notSignedButtonMarkup = (
+        <Flex justifyContent={'right'} mt={3} columnGap={'20px'} direction={'row'}>
+            <Button isLoading={isLoading} onClick={signUpHandler} width={'100px'} colorScheme="teal" size="sm">
+                SignUp
+            </Button>
+        </Flex>
+    )
 
     return (
         <Container padding={5} maxW='70%' bg={'#AAAAAA'}>
@@ -68,14 +93,7 @@ const SignUp = (getNames) => {
                         </FormControl>
                     </Box>
                 </Flex>
-                <Flex justifyContent={'right'} mt={3} columnGap={'20px'} direction={'row'}>
-                    <Button width={'100px'} colorScheme="teal" size="sm">
-                        Skip
-                    </Button>
-                    <Button isLoading={isLoading} onClick={updateHandler} width={'100px'} colorScheme="teal" size="sm">
-                        Update
-                    </Button>
-                </Flex>
+                {uid ? signedButtonMarkup : notSignedButtonMarkup}
             </Card>
         </Container>
     )
