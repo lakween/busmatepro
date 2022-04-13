@@ -1,15 +1,27 @@
 import {useFirebase} from "react-redux-firebase";
 import {Box, Button, Container, Flex, Input, Stack, Text} from '@chakra-ui/react'
+import {FcGoogle} from "react-icons/fc";
 import {useSelector} from "react-redux";
 import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
 import {useNavigate} from "react-router-dom";
+import firebase from "firebase/compat/app";
+import {googleSignUp} from "../../../services/user.service";
+import {useState} from "react";
 
 const Login = () => {
 
     let navigate = useNavigate();
-    const firebase = useFirebase()
+    const [isLoading, setIsLoading] = useState(false)
+    //const firebase = useFirebase()
     //const auth = useSelector(state => state.firebase.auth);
     //console.log(auth, 'auth')
+
+    function signUpwithGoogle() {
+        setIsLoading(true)
+        let res = googleSignUp()
+
+    }
+
     return (
         <Box paddingY={'150px'} backgroundColor={'#c8d8e5'} height={'100vh'} width={'100%'}>
             <Flex justify={'center'} height={"50vh"} align={'center'} width={'100%'} columnGap={"20px"}
@@ -37,8 +49,12 @@ const Login = () => {
                             <Text mb="8px">Password</Text>
                             <Input size="sm" placeholder="large size"/>
                         </Stack>
-                        <Flex justifyContent={'center'} columnGap={'20px'} direction={'row'}>
-                            <Button colorScheme="teal" size="sm" onClick={() => navigate('/signup')}>
+                        <Flex justifyContent={'right'} columnGap={'20px'} direction={'row'}>
+                            <Button leftIcon={<FcGoogle/>} colorScheme="teal" size="sm" onClick={
+                                () => {
+                                    signUpwithGoogle()
+                                }
+                            }>
                                 Sign Up with Google
                             </Button>
                             <Button width={'65px'} colorScheme="teal" size="sm" onClick={() => navigate('/signup')}>
@@ -60,50 +76,5 @@ const Login = () => {
         </Box>
     );
 };
-
-//
-// const auth = getAuth();
-// const authl = useSelector(state => state.firebase);
-// signInWithEmailAndPassword(auth, 'test@gmail.com', 'test@123')
-//     .then((userCredential) => {
-//         // Signed in
-//         const user = userCredential.user;
-//         console.log(authl)
-//         // ...
-//     })
-//     .catch((error) => {
-//         const errorCode = error.code;
-//         const errorMessage = error.message;
-//     });
-//
-// return (
-//     <div>
-//         <h1>Sign In</h1>
-//         <button
-//             onClick={(event) => {
-//                 event.preventDefault();
-//
-//             }}
-//         >
-//             Sign In with Google
-//         </button>
-//     </div>
-// );
-
-// const createNewUser = async ({ email, password, username }) => {
-//     let data = {element: "barium"};
-//     await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_APIKEY}`, {
-//         method: "POST",
-//         headers: {'Content-Type': 'application/json'},
-//         body: JSON.stringify({
-//             email:'test7@gmail.com',
-//             password:'testing789',
-//             returnSecureToken:true
-//         })
-//     }).then(res => {
-//         console.log("Request complete! response:", res);
-//     });
-// } -----------> this is working
-
 
 export default Login;

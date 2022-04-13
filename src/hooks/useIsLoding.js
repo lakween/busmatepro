@@ -1,4 +1,5 @@
 import {useState} from "react";
 
-
-export {}
+export const useIsLoading = (isLoding) => {
+    const[loading,setIsLoding] = useState(false)
+}
