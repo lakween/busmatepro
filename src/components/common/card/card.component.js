@@ -13,7 +13,7 @@ const Card = (props) => {
     </Text>)
 
     return (
-        <Box width={'100%'}>
+        <Box width={'100%'} bg={'white'}>
             {outSideTitle && outsideTitleMarkup}
             <Box width={'100%'} padding={padding} margin={margin} borderStyle={"solid"} borderWidth={border} borderColor={"#DDDDDD"}
                  borderRadius={3}>
