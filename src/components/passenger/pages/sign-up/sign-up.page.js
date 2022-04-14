@@ -28,8 +28,8 @@ const SignUp = (getNames) => {
     }
 
     const signUpHandler = async () => {
-        let res = await emailAndPasswordAuth(form.email,form.password)
-        let result = await createDoc('userProfile', toast, navigate("/passenger"), form)
+        let res = await emailAndPasswordAuth(form.email,form.password,toast)
+        let result = res ? await createDoc('userProfile', toast, navigate("/passenger"), form) : null
     }
 
     const signedButtonMarkup = (

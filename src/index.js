@@ -18,7 +18,6 @@ import {
 } from 'react-redux-firebase';
 import {createFirestoreInstance} from "redux-firestore";
 
-
 firebase.initializeApp(firebaseConfig)
 firebase.firestore();
 
@@ -31,7 +30,7 @@ const rrfProps = {
     firebase,
     config: rrfConfig,
     dispatch: store.dispatch,
-    createFirestoreInstance, //since we are using Firestore
+    createFirestoreInstance,
 };
 
 ReactDOM.render(

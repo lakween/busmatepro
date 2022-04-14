@@ -1,10 +1,7 @@
-import {useFirebase} from "react-redux-firebase";
-import {Box, Button, Container, Flex, Input, Stack, Text} from '@chakra-ui/react'
+import {Box, Button, Flex, Input, Stack, Text} from '@chakra-ui/react'
 import {FcGoogle} from "react-icons/fc";
-import {useDispatch, useSelector} from "react-redux";
-import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import firebase from "firebase/compat/app";
 import {googleSignUp, login} from "../../../services/user.service";
 import {useState} from "react";
 import {useComState} from "../../../hooks/useComState";

@@ -1,8 +1,4 @@
 import firebase from "firebase/compat/app";
-import {getFirestore} from "firebase/firestore";
-import {useSelector} from "react-redux";
-import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
-import {doc, setDoc} from "firebase/firestore";
 
 export const googleSignUp = async () => {
     let provider = new firebase.auth.GoogleAuthProvider();
@@ -33,13 +29,20 @@ export const createDoc = (collection, toast, navigate, form) => {
         });
 }
 
-export const emailAndPasswordAuth = (email, password) => {
+export const emailAndPasswordAuth = (email, password,toast) => {
     return firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
-            console.log('sucsess')
+           return true
         })
         .catch((error) => {
-            console.log('err')
+            toast({
+                title: 'Something wrong',
+                description: error.message,
+                status: 'error',
+                duration: 9000,
+                isClosable: true,
+            })
+            return false
         });
 }
 
@@ -57,6 +60,19 @@ export const login = (form,navigate) => {
             // Signed in
             console.log('succ')
             navigate('/passenger')
+            // ...
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+        });
+}
+
+export const checkEmailExist = (form) => {
+    return firebase.auth().signInWithEmailAndPassword(form.username, form.password)
+        .then((userCredential) => {
+            // Signed in
+            console.log('succ')
             // ...
         })
         .catch((error) => {
