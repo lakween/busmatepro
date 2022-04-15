@@ -1,19 +1,20 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
+function MyMapComponent({
+                            center,
+                            zoom,
+                        }) {
+    const ref = useRef();
 
+    useEffect(() => {
+        new window.google.maps.Map(ref.current, {
+            center,
+            zoom,
+        });
+    });
 
-const Map = ()=>{
-    const ref = useRef(null);
-    const [map, setMap] = useState();
-
-    React.useEffect(() => {
-        if (ref.current && !map) {
-            setMap(new window.google.maps.Map(ref.current, {}));
-        }
-    }, [ref, map]);
-
-    return(
-        <div ref={ref} />
-    )
+    return <div ref={ref} id="map" />;
 }
+export default MyMapComponent
+
 
