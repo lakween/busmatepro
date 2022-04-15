@@ -7,7 +7,7 @@ import {useDispatch} from "react-redux";
 
 const Home= ()=>{
 
-    const[holts ,setHolts] = useState({})
+    const[holts ,setHolts] = useState([])
     const dispatch = useDispatch()
 
     useEffect(()=>{
@@ -34,14 +34,14 @@ const Home= ()=>{
                 <Flex direction={"row"} gap={5} justify={"center"} align={"center"}>
 
                     <Select icon={''} placeholder='Start' size={'sm'} >
-                        <option value='option1'>Option 1</option>
-                        <option value='option2'>Option 2</option>
-                        <option value='option3'>Option 3</option>
+                        {
+                            holts?.map((holt)=>( <option value={holt.id}>{holt.holt_name}</option>))
+                        }
                     </Select>
                     <Select icon={''} placeholder='End' size={'sm'} size={'sm'}>
-                        <option value='option1'>Option 1</option>
-                        <option value='option2'>Option 2</option>
-                        <option value='option3'>Option 3</option>
+                        {
+                            holts?.map((holt)=>( <option value={holt.id}>{holt.holt_name}</option>))
+                        }
                     </Select>
                 </Flex>
             </Card>
