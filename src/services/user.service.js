@@ -1,4 +1,5 @@
 import firebase from "firebase/compat/app";
+import {collection, getDocs} from "firebase/firestore";
 
 export const googleSignUp = async () => {
     let provider = new firebase.auth.GoogleAuthProvider();
@@ -29,15 +30,16 @@ export const createDoc = (collection, toast, navigate, form) => {
         });
 }
 
-export const emailAndPasswordAuth = (email, password,toast) => {
+export const emailAndPasswordAuth = (email, password, toast) => {
     return firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
-           return true
+            return true
         })
         .catch((error) => {
+            console.log((JSON.stringify(error)))
             toast({
                 title: 'Something wrong',
-                description: error.message,
+                description: [...error.message.split(":")][1],
                 status: 'error',
                 duration: 9000,
                 isClosable: true,
@@ -54,7 +56,7 @@ export const signOut = () => {
     });
 }
 
-export const login = (form,navigate) => {
+export const login = (form, navigate) => {
     return firebase.auth().signInWithEmailAndPassword(form.username, form.password)
         .then((userCredential) => {
             // Signed in
@@ -81,3 +83,13 @@ export const checkEmailExist = (form) => {
         });
 }
 
+export const getAllDocuments = async (ooo) => {
+        let data = []
+        const db = firebase.firestore();
+        const querySnapshot = await getDocs(collection(db, "bus holts"))
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            data.push({id:doc.id,...doc.data()})
+        });
+        return data
+}

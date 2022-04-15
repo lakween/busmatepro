@@ -29,6 +29,7 @@ const SignUp = (getNames) => {
 
     const signUpHandler = async () => {
         let res = await emailAndPasswordAuth(form.email,form.password,toast)
+        console.log(res)
         let result = res ? await createDoc('userProfile', toast, navigate("/passenger"), form) : null
     }
 
