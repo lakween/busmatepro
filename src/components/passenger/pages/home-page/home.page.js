@@ -3,6 +3,7 @@ import {Box, Flex, Select, Text} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {getAllDocuments} from "../../../../services/user.service";
 import {useDispatch} from "react-redux";
+import { Wrapper, Status } from "@googlemaps/react-wrapper";
 
 
 const Home= ()=>{
@@ -19,7 +20,10 @@ const Home= ()=>{
         setHolts(data)
     }
 
-    console.log(holts)
+    const render = () => {
+        return <h1>{'status'}</h1>;
+    };
+
     return (
         <>
         <Box display={"flex"} flexDirection={"column"} gap={5} padding={10} width={'80%'} justify={"center"} align={"center"}>
@@ -44,6 +48,11 @@ const Home= ()=>{
                         }
                     </Select>
                 </Flex>
+            </Card>
+            <Card>
+                <Wrapper apiKey={process.env.REACT_APP_GOOGLE_MAP_APIKEY} render={render}>
+                    <YourComponent/>
+                </Wrapper>
             </Card>
         </Box>
         </>
