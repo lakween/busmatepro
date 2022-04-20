@@ -10,12 +10,21 @@ import MyMapComponent from "../../../common/map/map.component";
 
 const Home= ()=>{
 
+    const[holts ,setHolts] = useState([])
     const [zoom, setZoom] = useState(3); // initial zoom
     const [renderr, setRender] = useState(3); // initial zoom
     const [center, setCenter] = useState({
         lat: 0,
         lng: 0,
     });
+    useEffect(()=>{
+        getData()
+    },[])
+
+    async function getData(){
+        let data = await getAllDocuments('bus holts')
+        setHolts(data)
+    }
 
         return (
         <>
@@ -32,12 +41,12 @@ const Home= ()=>{
 
                     <Select icon={''} placeholder='Start' size={'sm'} >
                         {
-                            // holts?.map((holt)=>( <option value={holt.id}>{holt.holt_name}</option>))
+                            holts?.map((holt)=>( <option value={holt.id}>{holt.holt_name}</option>))
                         }
                     </Select>
                     <Select icon={''} placeholder='End' size={'sm'} size={'sm'}>
                         {
-                            // holts?.map((holt)=>( <option value={holt.id}>{holt.holt_name}</option>))
+                            holts?.map((holt)=>( <option value={holt.id}>{holt.holt_name}</option>))
                         }
                     </Select>
                 </Flex>
