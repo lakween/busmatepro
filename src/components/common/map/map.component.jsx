@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Wrapper, Status } from "@googlemaps/react-wrapper";
-import { isLatLngLiteral } from "@googlemaps/typescript-guards";
+import {Wrapper, Status} from "@googlemaps/react-wrapper";
+import {isLatLngLiteral} from "@googlemaps/typescript-guards";
 import {useEffect, useRef, useState} from "react";
 import {createCustomEqual} from "fast-equals";
 
@@ -17,8 +17,9 @@ const MapComponent = () => {
     });
 
     const onClick = (e) => {
-        // avoid directly mutating state
-        setClicks([...clicks, e.latLng]);
+        console.log('clicks', clicks)
+        let obj = {latLng: e.latLng, busDetails: {name: 'test', availableSeats: 'test'}}
+        setClicks([...clicks, obj]);
     };
 
     const onIdle = (m) => {
@@ -26,71 +27,21 @@ const MapComponent = () => {
         setCenter(m?.getCenter().toJSON());
     };
 
-    // const form = (
-    //     <div
-    //         style={{
-    //             padding: "1rem",
-    //             flexBasis: "250px",
-    //             overflow: "auto",
-    //             height: "65vh", width: "100%"
-    //         }}
-    //     >
-    //         <label htmlFor="zoom">Zoom</label>
-    //         <input
-    //             type="number"
-    //             id="zoom"
-    //             name="zoom"
-    //             value={zoom}
-    //             onChange={(event) => setZoom(Number(event.target.value))}
-    //         />
-    //         <br />
-    //         <label htmlFor="lat">Latitude</label>
-    //         <input
-    //             type="number"
-    //             id="lat"
-    //             name="lat"
-    //             value={center.lat}
-    //             onChange={(event) =>
-    //                 setCenter({ ...center, lat: Number(event.target.value) })
-    //             }
-    //         />
-    //         <br />
-    //         <label htmlFor="lng">Longitude</label>
-    //         <input
-    //             type="number"
-    //             id="lng"
-    //             name="lng"
-    //             value={center.lng}
-    //             onChange={(event) =>
-    //                 setCenter({ ...center, lng: Number(event.target.value) })
-    //             }
-    //         />
-    //         <h3>{clicks.length === 0 ? "Click on map to add markers" : "Clicks"}</h3>
-    //         {clicks.map((latLng, i) => (
-    //             <pre key={i}>{JSON.stringify(latLng.toJSON(), null, 2)}</pre>
-    //         ))}
-    //         <button onClick={() => setClicks([])}>Clear</button>
-    //     </div>
-    // );
-    {
-        console.log('render')}
     return (
         <>
-            <Wrapper apiKey={"AIzaSyB5h2G7hf-wjjrZMJPSRC4HOfQ71WYyvGo"} >
+            <Wrapper apiKey={"AIzaSyB5h2G7hf-wjjrZMJPSRC4HOfQ71WYyvGo"}>
                 <Map
                     center={center}
                     onClick={onClick}
                     //onIdle={onIdle}
                     zoom={8}
-                    style={{ width: "100%", height: "65vh" }}
+                    style={{width: "100%", height: "65vh"}}
                 >
-                    {clicks?.map((latLng, i) => (
-                        <Marker key={i} position={latLng} />
+                    {clicks?.map((obj, i) => (
+                        <Marker key={i} position={obj.latLng} data={obj.busDetails}/>
                     ))}
                 </Map>
             </Wrapper>
-            {/* Basic form for controlling center and zoom of map. */}
-            {/*{form}*/}
         </>
     );
 };
@@ -104,15 +55,12 @@ const Map = ({
              }) => {
     const ref = useRef(null);
     const [map, setMap] = useState();
-    console.log(map,'map')
+    console.log(map, 'map')
     useEffect(() => {
         if (ref.current && !map) {
             setMap(new window.google.maps.Map(ref.current, {}));
-
         }
     }, [ref, map]);
-    // because React does not do deep comparisons, a custom hook is used
-    // see discussion in https://github.com/googlemaps/js-samples/issues/946
     useDeepCompareEffectForMaps(() => {
         if (map) {
             map.setOptions(options);
@@ -138,11 +86,11 @@ const Map = ({
 
     return (
         <>
-            <div ref={ref} style={style} />
+            <div ref={ref} style={style}/>
             {React.Children.map(children, (child) => {
                 if (React.isValidElement(child)) {
                     // set the map prop on the child component
-                    return React.cloneElement(child, { map });
+                    return React.cloneElement(child, {map});
                 }
             })}
         </>
@@ -150,6 +98,7 @@ const Map = ({
 };
 
 const Marker = (options) => {
+    console.log(options, 'options')
     const [marker, setMarker] = useState();
 
     useEffect(() => {
@@ -166,21 +115,18 @@ const Marker = (options) => {
                     strokeWeight: 0.5,
                     scale: 7
                 },
-
-                title:'The marker`s title will appear as a tooltip.',
+                title: 'click here for details',
             }));
         }
-        marker?.addListener("click", () => {
-            alert('clicked')
+
+        marker?.addListener("click", (event) => {
+            console.log('clicked', event)
         });
-        // remove marker from map on unmount
         return () => {
             if (marker) {
                 marker.setMap(null);
             }
         };
-
-
     }, [marker]);
 
     useEffect(() => {
@@ -229,4 +175,5 @@ function useDeepCompareEffectForMaps(
 ) {
     useEffect(callback, dependencies.map(useDeepCompareMemoize));
 }
+
 export default MapComponent;
