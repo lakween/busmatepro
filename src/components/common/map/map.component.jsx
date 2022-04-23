@@ -166,15 +166,21 @@ const Marker = (options) => {
                     strokeWeight: 0.5,
                     scale: 7
                 },
+
                 title:'The marker`s title will appear as a tooltip.',
             }));
         }
+        marker?.addListener("click", () => {
+            alert('clicked')
+        });
         // remove marker from map on unmount
         return () => {
             if (marker) {
                 marker.setMap(null);
             }
         };
+
+
     }, [marker]);
 
     useEffect(() => {
