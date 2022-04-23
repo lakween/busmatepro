@@ -82,7 +82,7 @@ const MapComponent = () => {
                     onClick={onClick}
                     //onIdle={onIdle}
                     zoom={8}
-                    style={{ width: "100%", height: "70vh" }}
+                    style={{ width: "100%", height: "65vh" }}
                 >
                     {clicks?.map((latLng, i) => (
                         <Marker key={i} position={latLng} />
@@ -156,7 +156,6 @@ const Marker = (options) => {
         if (!marker) {
             // eslint-disable-next-line no-undef
             setMarker(new google.maps.Marker({
-
                 icon: {
                     // eslint-disable-next-line no-undef
                     path: google.maps.SymbolPath.CIRCLE,
@@ -164,9 +163,10 @@ const Marker = (options) => {
                     fillOpacity: 0.6,
                     strokeColor: '#00A',
                     strokeOpacity: 0.4,
-                    strokeWeight: 1,
+                    strokeWeight: 0.5,
                     scale: 7
-                }
+                },
+                title:'The marker`s title will appear as a tooltip.',
             }));
         }
         // remove marker from map on unmount
@@ -183,7 +183,7 @@ const Marker = (options) => {
         }
     }, [marker, options]);
 
-    return null;
+    return null
 };
 
 const deepCompareEqualsForMaps = createCustomEqual(
