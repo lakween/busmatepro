@@ -2,9 +2,9 @@ import {Box, Button, Flex, Input, Stack, Text} from '@chakra-ui/react'
 import {FcGoogle} from "react-icons/fc";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import {googleSignUp, login} from "../../../services/user.service";
+import {googleSignUp, login} from "../../../actions/user.actions";
 import {useState} from "react";
-import {useComState} from "../../../hooks/useComState";
+import {useService} from "../../../hooks/useService";
 import {setCommonState} from "../../../store/reducers/common-slice";
 import useFormController from "../../../hooks/useFormController";
 
@@ -12,18 +12,17 @@ const Login = () => {
     let navigate = useNavigate();
     let dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(false)
-    const [state, setState] = useComState('')
     let [valueChangeHandler, setValue, form, setForm] = useFormController()
 
     async function signUpwithGoogle() {
         setIsLoading(true)
-        let res = await googleSignUp()
+        let res = await dispatch(googleSignUp())
         await dispatch(setCommonState(res))
         navigate('signup')
     }
 
     const loginHandler = async () => {
-        await login(form, navigate)
+        await dispatch(login(form, navigate))
     }
 
     return (

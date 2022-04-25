@@ -1,14 +1,15 @@
 import {Box, Button, Container, Flex, FormControl, FormLabel, Input, useToast} from '@chakra-ui/react'
 import React, {useState} from "react";
 import Card from "../../../common/card/card.component";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import useFormController from "../../../../hooks/useFormController";
-import {createDoc, emailAndPasswordAuth, signOut} from "../../../../services/user.service";
+import {createDoc, emailAndPasswordAuth, signOut} from "../../../../actions/user.actions";
 import {useNavigate} from "react-router-dom";
 
 const SignUp = (getNames) => {
     const [isLoading, setIsLoading] = useState(false)
     let navigate = useNavigate();
+    let dispatch = useDispatch()
     let {email, displayName, uid} = useSelector((store) => (store.firebase.auth))
     let [valueChangeHandler, setValue, form, setForm] = useFormController({
         email: email, ...getNames(),
@@ -23,14 +24,14 @@ const SignUp = (getNames) => {
 
     const updateHandler = async () => {
         setIsLoading(true)
-        let res = await createDoc('userProfile', toast, navigate("/passenger"), form)
+        let res = await dispatch(createDoc('userProfile', toast, navigate("/passenger"), form))
         setIsLoading(false)
     }
 
     const signUpHandler = async () => {
-        let res = await emailAndPasswordAuth(form.email,form.password,toast)
+        let res = await dispatch(emailAndPasswordAuth(form.email,form.password,toast))
         console.log(res)
-        let result = res ? await createDoc('userProfile', toast, navigate("/passenger"), form) : null
+        let result = res ? await dispatch(createDoc('userProfile', toast, navigate("/passenger"), form)) : null
     }
 
     const signedButtonMarkup = (

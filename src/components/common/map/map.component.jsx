@@ -3,48 +3,55 @@ import {Wrapper, Status} from "@googlemaps/react-wrapper";
 import {isLatLngLiteral} from "@googlemaps/typescript-guards";
 import {useEffect, useRef, useState} from "react";
 import {createCustomEqual} from "fast-equals";
+import firebase from "firebase/compat/app";
+import {collection, getDocs, doc, query, where} from "firebase/firestore";
+import {useDispatch} from "react-redux";
+import {getBus} from "../../../actions/map.actions";
 
 const render = (status) => {
     return <h1>{status}</h1>;
 };
 
-const MapComponent = () => {
-    const [clicks, setClicks] = useState([]);
-    const [zoom, setZoom] = useState(8); // initial zoom
-    const [center, setCenter] = useState({
-        lat: 20,
-        lng: 40,
-    });
+const MapComponent = ({form}) => {
+        const dispatch = useDispatch()
+        dispatch(getBus(form))
 
-    const onClick = (e) => {
-        console.log('clicks', clicks)
-        let obj = {latLng: e.latLng, busDetails: {name: 'test', availableSeats: 'test'}}
-        setClicks([...clicks, obj]);
-    };
+        const [clicks, setClicks] = useState([]);
+        const [zoom, setZoom] = useState(8); // initial zoom
+        const [center, setCenter] = useState({
+            lat: 20,
+            lng: 40,
+        });
 
-    const onIdle = (m) => {
-        setZoom(m?.getZoom());
-        setCenter(m?.getCenter().toJSON());
-    };
+        const onClick = (e) => {
+            let obj = {latLng: e.latLng, busDetails: {name: 'test', availableSeats: 'test'}}
+            setClicks([...clicks, obj]);
+        };
 
-    return (
-        <>
-            <Wrapper apiKey={"AIzaSyB5h2G7hf-wjjrZMJPSRC4HOfQ71WYyvGo"}>
-                <Map
-                    center={center}
-                    onClick={onClick}
-                    //onIdle={onIdle}
-                    zoom={8}
-                    style={{width: "100%", height: "65vh"}}
-                >
-                    {clicks?.map((obj, i) => (
-                        <Marker key={i} position={obj.latLng} data={obj.busDetails}/>
-                    ))}
-                </Map>
-            </Wrapper>
-        </>
-    );
-};
+        const onIdle = (m) => {
+            setZoom(m?.getZoom());
+            setCenter(m?.getCenter().toJSON());
+        };
+
+        return (
+            <>
+                <Wrapper apiKey={"AIzaSyB5h2G7hf-wjjrZMJPSRC4HOfQ71WYyvGo"}>
+                    <Map
+                        center={center}
+                        onClick={onClick}
+                        //onIdle={onIdle}
+                        zoom={zoom}
+                        style={{width: "100%", height: "65vh"}}
+                    >
+                        {clicks?.map((obj, i) => (
+                            <Marker key={i} position={obj.latLng} data={obj.busDetails}/>
+                        ))}
+                    </Map>
+                </Wrapper>
+            </>
+        );
+    }
+;
 
 const Map = ({
                  onClick,
@@ -55,7 +62,6 @@ const Map = ({
              }) => {
     const ref = useRef(null);
     const [map, setMap] = useState();
-    console.log(map, 'map')
     useEffect(() => {
         if (ref.current && !map) {
             setMap(new window.google.maps.Map(ref.current, {}));
@@ -98,7 +104,6 @@ const Map = ({
 };
 
 const Marker = (options) => {
-    console.log(options, 'options')
     const [marker, setMarker] = useState();
 
     useEffect(() => {
