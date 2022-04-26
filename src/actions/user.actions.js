@@ -100,4 +100,3 @@ export const getAllDocuments =  (CollectionName) => {
         return data
     }
 }
-

@@ -36,7 +36,7 @@ const SignUp = (getNames) => {
 
     const signedButtonMarkup = (
         <Flex justifyContent={'right'} mt={3} columnGap={'20px'} direction={'row'}>
-            <Button onClick={async () => { await signOut()
+            <Button onClick={ () => {
                 navigate("/passenger")
             }} width={'100px'} colorScheme="teal" size="sm">
                 Skip
