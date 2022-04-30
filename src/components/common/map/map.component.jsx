@@ -7,47 +7,55 @@ import firebase from "firebase/compat/app";
 import {collection, getDocs, doc, query, where} from "firebase/firestore";
 import {useDispatch} from "react-redux";
 import {getBus} from "../../../actions/map.actions";
+import {background, Spinner} from "@chakra-ui/react";
 
 const render = (status) => {
     return <h1>{status}</h1>;
 };
 
-const MapComponent = ({form}) => {
+const MapComponent = ({locations}) => {
+        console.log(locations, 'locations')
         const dispatch = useDispatch()
-        dispatch(getBus(form))
-
         const [clicks, setClicks] = useState([]);
-        const [zoom, setZoom] = useState(8); // initial zoom
-        const [center, setCenter] = useState({
-            lat: 20,
-            lng: 40,
-        });
+        const [zoom, setZoom] = useState(13); // initial zoom
+        // const [center, setCenter] = useState({
+        //     lat: 6.5284950413709035,
+        //     lng: 80.39347518042418
+        // });
+
+
+        // useEffect(() => {
+        //
+        // }, [holts])
 
         const onClick = (e) => {
             let obj = {latLng: e.latLng, busDetails: {name: 'test', availableSeats: 'test'}}
+            console.log(clicks, 'click')
             setClicks([...clicks, obj]);
         };
 
-        const onIdle = (m) => {
-            setZoom(m?.getZoom());
-            setCenter(m?.getCenter().toJSON());
-        };
+        // const onIdle = (m) => {
+        //     setZoom(m?.getZoom());
+        //     setCenter(m?.getCenter().toJSON());
+        // };
 
         return (
-            <>
-                <Wrapper apiKey={"AIzaSyB5h2G7hf-wjjrZMJPSRC4HOfQ71WYyvGo"}>
-                    <Map
-                        center={center}
-                        onClick={onClick}
-                        //onIdle={onIdle}
-                        zoom={zoom}
-                        style={{width: "100%", height: "65vh"}}
-                    >
-                        {clicks?.map((obj, i) => (
-                            <Marker key={i} position={obj.latLng} data={obj.busDetails}/>
-                        ))}
-                    </Map>
-                </Wrapper>
+            <>  <Wrapper apiKey={"AIzaSyB5h2G7hf-wjjrZMJPSRC4HOfQ71WYyvGo"}>
+                <Map
+                    center={locations[0]?.latLng ||{
+                            lat: 6.5284950413709035,
+                            lng: 80.39347518042418
+                         }}
+                    onClick={onClick}
+                    //onIdle={onIdle}
+                    zoom={zoom}
+                    style={{width: "100%", height: "65vh"}}
+                >
+                      {locations?.map((obj, i) => (
+                        <Marker key={i} position={obj.latLng} data={obj.busDetails}/>
+                    ))}
+                </Map>
+            </Wrapper>
             </>
         );
     }
@@ -93,6 +101,7 @@ const Map = ({
     return (
         <>
             <div ref={ref} style={style}/>
+
             {React.Children.map(children, (child) => {
                 if (React.isValidElement(child)) {
                     // set the map prop on the child component

@@ -16,9 +16,9 @@ const Login = () => {
 
     async function signUpwithGoogle() {
         setIsLoading(true)
-        let res = await dispatch(googleSignUp())
-        await dispatch(setCommonState(res))
-        navigate('signup')
+        let res = await dispatch(googleSignUp(navigate))
+        console.log(res)
+
     }
 
     const loginHandler = async () => {

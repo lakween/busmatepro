@@ -1,10 +1,11 @@
 import firebase from "firebase/compat/app";
 import {collection, getDocs} from "firebase/firestore";
 
-export const googleSignUp =  () => {
+export const googleSignUp =  (navigate) => {
     return async (dispatch)=>{
         let provider = new firebase.auth.GoogleAuthProvider();
         let result = await firebase.auth().signInWithPopup(provider).then(function (result) {
+            navigate('signup')
             return {email: result.user.email, user_name: result.user.displayName}
         }).catch(function (error) {
             return {success: false}

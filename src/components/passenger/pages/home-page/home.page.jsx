@@ -1,5 +1,5 @@
 import Card from "../../../common/card/card.component";
-import {Box, Flex, Select, Text} from "@chakra-ui/react";
+import {Box, Flex, Select, Spinner, Text} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {getAllDocuments} from "../../../../actions/user.actions";
 import MapComponent from "../../../common/map/map.component";
@@ -12,23 +12,35 @@ const Home = () => {
     let dispatch = useDispatch()
     const [routes, setRoutes] = useState([])
     const [holts, setHolts] = useState([])
-    const onChnageHandler =  async (event) => {
+    const [locations, setLocations] = useState([])
+    const onChnageHandler = async (event) => {
         let array = []
-        let holtsRef = await routes.find((route) =>route.id == event.target.value).holts
-        for(let holt of holtsRef){
-            let holtData =  await dispatch(getDocFromCollection('bus holts',holt.id))
-            array.push(holtData)
+        let holtsRef = await routes?.find((route) => route.id == event.target.value).holts
+        if (holtsRef) {
+            for (let holt of holtsRef) {
+                let holtData = await dispatch(getDocFromCollection('bus holts', holt.id))
+                array.push(holtData)
+            }
+            let locationsArray = []
+            for (let item of array) {
+                if (item.location) {
+                    locationsArray.push({latLng: JSON.parse(item.location)})
+                }
+            }
+            setLocations(locationsArray || [])
+        } else {
+            setLocations([])
+            setHolts(array)
         }
-        setHolts(array)
-
     }
+
     useEffect(() => {
         getData()
     }, [])
 
     async function getData() {
         let data = await dispatch(getAllDocuments("bus routs"))
-        setRoutes(data)
+        setRoutes(data || [])
     }
 
     return (
@@ -58,8 +70,17 @@ const Home = () => {
                         {/*}*/}
                     </Flex>
                 </Card>
-                <Card>
-                    {/*<MapComponent form={form}/>*/}
+                <Card minHeight={"65vh"}>
+                    {locations.length > 0 ? <MapComponent locations={locations}/> :
+                        <Box display={"flex"} width={'100%'} minHeight={"65vh"}  justifyContent={"center"} justifyItems={"center"} alignItems={"center"} alignContent={"center"}>
+                            <Spinner
+                                thickness='4px'
+                                speed='0.65s'
+                                emptyColor='gray'
+                                color='blue.500'
+                                size='xl'
+                            />
+                        </Box>}
                 </Card>
             </Box>
         </>
