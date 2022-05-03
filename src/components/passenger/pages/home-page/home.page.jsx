@@ -13,6 +13,7 @@ const Home = () => {
     const [routes, setRoutes] = useState([])
     const [holts, setHolts] = useState([])
     const [locations, setLocations] = useState([])
+
     const onChnageHandler = async (event) => {
         let array = []
         let holtsRef = await routes?.find((route) => route.id == event.target.value).holts
@@ -21,6 +22,7 @@ const Home = () => {
                 let holtData = await dispatch(getDocFromCollection('bus holts', holt.id))
                 array.push(holtData)
             }
+            console.log(array, 'array')
             let locationsArray = []
             for (let item of array) {
                 if (item.location) {
@@ -71,20 +73,17 @@ const Home = () => {
                     </Flex>
                 </Card>
                 <Card minHeight={"65vh"}>
-                    {locations.length > 0 ? <MapComponent locations={locations}/> :
-                        <Box display={"flex"} width={'100%'} minHeight={"65vh"}  justifyContent={"center"} justifyItems={"center"} alignItems={"center"} alignContent={"center"}>
-                            <Spinner
-                                thickness='4px'
-                                speed='0.65s'
-                                emptyColor='gray'
-                                color='blue.500'
-                                size='xl'
-                            />
-                        </Box>}
+                    <MapComponent locations={locations}/>
+                    {locations.length > 0 ? null: <text>Loading....</text>}
                 </Card>
             </Box>
         </>
     )
 }
+
+const setHoltLocations =()=>{
+
+}
+
 
 export default Home

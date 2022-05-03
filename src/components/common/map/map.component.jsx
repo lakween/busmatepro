@@ -8,6 +8,7 @@ import {collection, getDocs, doc, query, where} from "firebase/firestore";
 import {useDispatch} from "react-redux";
 import {getBus} from "../../../actions/map.actions";
 import {background, Spinner} from "@chakra-ui/react";
+import {login} from "../../../actions/user.actions";
 
 const render = (status) => {
     return <h1>{status}</h1>;
@@ -18,16 +19,6 @@ const MapComponent = ({locations}) => {
         const dispatch = useDispatch()
         const [clicks, setClicks] = useState([]);
         const [zoom, setZoom] = useState(13); // initial zoom
-        // const [center, setCenter] = useState({
-        //     lat: 6.5284950413709035,
-        //     lng: 80.39347518042418
-        // });
-
-
-        // useEffect(() => {
-        //
-        // }, [holts])
-
         const onClick = (e) => {
             let obj = {latLng: e.latLng, busDetails: {name: 'test', availableSeats: 'test'}}
             console.log(clicks, 'click')
@@ -51,9 +42,14 @@ const MapComponent = ({locations}) => {
                     zoom={zoom}
                     style={{width: "100%", height: "65vh"}}
                 >
-                      {locations?.map((obj, i) => (
-                        <Marker key={i} position={obj.latLng} data={obj.busDetails}/>
-                    ))}
+                      {locations?.map((obj, i) => {
+                          console.log(obj, 'obj')
+                         return < HoltMarker
+                          key = {i}
+                          position = {obj.latLng}
+                          data = {obj.busDetails}
+                          />
+                      })}
                 </Map>
             </Wrapper>
             </>
@@ -104,7 +100,6 @@ const Map = ({
 
             {React.Children.map(children, (child) => {
                 if (React.isValidElement(child)) {
-                    // set the map prop on the child component
                     return React.cloneElement(child, {map});
                 }
             })}
@@ -112,7 +107,47 @@ const Map = ({
     );
 };
 
-const Marker = (options) => {
+const HoltMarker = (options) => {
+    const [marker, setMarker] = useState();
+
+    useEffect(() => {
+        if (!marker) {
+            // eslint-disable-next-line no-undef
+            setMarker(new google.maps.Marker({
+                icon: {
+                    // eslint-disable-next-line no-undef
+                    path: google.maps.SymbolPath.CIRCLE,
+                    fillColor: '#00F',
+                    fillOpacity: 0.6,
+                    strokeColor: '#00A',
+                    strokeOpacity: 0.4,
+                    strokeWeight: 0.5,
+                    scale: 7
+                },
+                title: 'click here for details',
+            }));
+        }
+
+        marker?.addListener("click", (event) => {
+            console.log('clicked', event)
+        });
+        return () => {
+            if (marker) {
+                marker.setMap(null);
+            }
+        };
+    }, [marker]);
+
+    useEffect(() => {
+        if (marker) {
+            marker.setOptions(options);
+        }
+    }, [marker, options]);
+
+    return null
+};
+
+const BusMarker = (options) => {
     const [marker, setMarker] = useState();
 
     useEffect(() => {
@@ -165,10 +200,6 @@ const deepCompareEqualsForMaps = createCustomEqual(
             // eslint-disable-next-line no-undef
             return new google.maps.LatLng(a).equals(new google.maps.LatLng(b));
         }
-
-        // TODO extend to other types
-
-        // use fast-equals for other objects
         return deepEqual(a, b);
     }
 );
