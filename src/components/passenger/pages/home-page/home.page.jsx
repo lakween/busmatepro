@@ -1,23 +1,20 @@
 import Card from "../../../common/card/card.component";
-import {Box, Flex, Select, Spinner, Text} from "@chakra-ui/react";
+import {Box, Flex, Select, Text} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {getAllDocuments} from "../../../../actions/user.actions";
 import MapComponent from "../../../common/map/map.component";
-import useFormController from "../../../../hooks/useFormController";
 import {useDispatch} from "react-redux";
-import {getDocs} from "firebase/firestore";
-import {getDocFromCollection} from "../../../../actions/common.action";
 import {getHoltLocations} from "../../../../actions/home.action";
 
 const Home = () => {
     let dispatch = useDispatch()
     const [routes, setRoutes] = useState([])
     const [holts, setHolts] = useState([])
-    const [holtLocations, setHoltHoltLocations] = useState([])
+    const [holtLocations, setHoltLocations] = useState([])
 
     const onChnageHandler = async (event) => {
        let result = await dispatch(getHoltLocations(routes,event.target.value))
-        setHoltHoltLocations(result)
+        setHoltLocations(result)
     }
 
     useEffect(() => {
