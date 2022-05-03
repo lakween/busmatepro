@@ -7,33 +7,17 @@ import useFormController from "../../../../hooks/useFormController";
 import {useDispatch} from "react-redux";
 import {getDocs} from "firebase/firestore";
 import {getDocFromCollection} from "../../../../actions/common.action";
+import {getHoltLocations} from "../../../../actions/home.action";
 
 const Home = () => {
     let dispatch = useDispatch()
     const [routes, setRoutes] = useState([])
     const [holts, setHolts] = useState([])
-    const [locations, setLocations] = useState([])
+    const [holtLocations, setHoltHoltLocations] = useState([])
 
     const onChnageHandler = async (event) => {
-        let array = []
-        let holtsRef = await routes?.find((route) => route.id == event.target.value).holts
-        if (holtsRef) {
-            for (let holt of holtsRef) {
-                let holtData = await dispatch(getDocFromCollection('bus holts', holt.id))
-                array.push(holtData)
-            }
-            console.log(array, 'array')
-            let locationsArray = []
-            for (let item of array) {
-                if (item.location) {
-                    locationsArray.push({latLng: JSON.parse(item.location)})
-                }
-            }
-            setLocations(locationsArray || [])
-        } else {
-            setLocations([])
-            setHolts(array)
-        }
+       let result = await dispatch(getHoltLocations(routes,event.target.value))
+        setHoltHoltLocations(result)
     }
 
     useEffect(() => {
@@ -73,17 +57,15 @@ const Home = () => {
                     </Flex>
                 </Card>
                 <Card minHeight={"65vh"}>
-                    <MapComponent locations={locations}/>
-                    {locations.length > 0 ? null: <text>Loading....</text>}
+                    <MapComponent locations={holtLocations}/>
+                    {holtLocations.length > 0 ? null: <text>Loading....</text>}
                 </Card>
             </Box>
         </>
     )
 }
 
-const setHoltLocations =()=>{
 
-}
 
 
 export default Home
