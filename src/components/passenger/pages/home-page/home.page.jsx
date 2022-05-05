@@ -4,17 +4,19 @@ import {useEffect, useState} from "react";
 import {getAllDocuments} from "../../../../actions/user.actions";
 import MapComponent from "../../../common/map/map.component";
 import {useDispatch} from "react-redux";
-import {getHoltLocations} from "../../../../actions/home.action";
+import {getHoltLocations,getBusLocations} from "../../../../actions/home.action";
 
 const Home = () => {
     let dispatch = useDispatch()
     const [routes, setRoutes] = useState([])
     const [holts, setHolts] = useState([])
     const [holtLocations, setHoltLocations] = useState([])
+    const [busLocations, setBusLocaions] = useState([])
 
     const onChnageHandler = async (event) => {
-       let result = await dispatch(getHoltLocations(routes,event.target.value))
-        setHoltLocations(result)
+       // let result = await dispatch(getHoltLocations(routes, event.target.value))
+        let res = await dispatch(getBusLocations(routes, event.target.value))
+        setHoltLocations([])
     }
 
     useEffect(() => {
@@ -55,14 +57,11 @@ const Home = () => {
                 </Card>
                 <Card minHeight={"65vh"}>
                     <MapComponent locations={holtLocations}/>
-                    {holtLocations.length > 0 ? null: <text>Loading....</text>}
+                    {holtLocations.length > 0 ? null : <text>Loading....</text>}
                 </Card>
             </Box>
         </>
     )
 }
-
-
-
 
 export default Home
