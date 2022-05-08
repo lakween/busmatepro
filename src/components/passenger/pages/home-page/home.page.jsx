@@ -14,9 +14,9 @@ const Home = () => {
     const [busLocations, setBusLocaions] = useState([])
 
     const onChnageHandler = async (event) => {
-       let result = await dispatch(getHoltLocations(routes, event.target.value))
-       //  let res = await dispatch(getBusLocations(routes, event.target.value))
-        setHoltLocations(result || [])
+       // let result = await dispatch(getHoltLocations(routes, event.target.value))
+        let res = await dispatch(getBusLocations(routes, event.target.value))
+        setHoltLocations([])
     }
 
     useEffect(() => {
