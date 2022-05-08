@@ -1,21 +1,16 @@
 import * as React from "react";
-import {Wrapper, Status} from "@googlemaps/react-wrapper";
-import {isLatLngLiteral} from "@googlemaps/typescript-guards";
 import {useEffect, useRef, useState} from "react";
+import {Wrapper} from "@googlemaps/react-wrapper";
+import {isLatLngLiteral} from "@googlemaps/typescript-guards";
 import {createCustomEqual} from "fast-equals";
-import firebase from "firebase/compat/app";
-import {collection, getDocs, doc, query, where} from "firebase/firestore";
 import {useDispatch} from "react-redux";
-import {getBus} from "../../../actions/map.actions";
-import {background, Spinner} from "@chakra-ui/react";
-import {login} from "../../../actions/user.actions";
 
 const render = (status) => {
     return <h1>{status}</h1>;
 };
 
-const MapComponent = ({locations}) => {
-        console.log(locations, 'locations')
+const MapComponent = ({locations, busDetails}) => {
+        console.log(busDetails, 'locations')
         const dispatch = useDispatch()
         const [clicks, setClicks] = useState([]);
         const [zoom, setZoom] = useState(13); // initial zoom
@@ -33,23 +28,33 @@ const MapComponent = ({locations}) => {
         return (
             <>  <Wrapper apiKey={"AIzaSyB5h2G7hf-wjjrZMJPSRC4HOfQ71WYyvGo"}>
                 <Map
-                    center={locations[0]?.latLng ||{
-                            lat: 6.5284950413709035,
-                            lng: 80.39347518042418
-                         }}
+                    center={locations[0]?.latLng || {
+                        lat: 6.5284950413709035,
+                        lng: 80.39347518042418
+                    }}
                     onClick={onClick}
                     //onIdle={onIdle}
                     zoom={zoom}
                     style={{width: "100%", height: "65vh"}}
                 >
-                      {locations?.map((obj, i) => {
-                          console.log(obj, 'obj')
-                         return < HoltMarker
-                          key = {i}
-                          position = {obj.latLng}
-                          data = {obj.busDetails}
-                          />
-                      })}
+                    {locations?.map((obj, i) => {
+                        console.log(obj, 'obj')
+                        return < HoltMarker
+                            key={i}
+                            position={obj.latLng}
+                            data={obj.busDetails}
+                        />
+                    })}
+                    {busDetails?.map((obj, i) => {
+                        console.log(obj, 'obj')
+                        return < BusMarker
+                            key={i}
+                            position={
+                                obj?.current_holt
+                            }
+                            data={obj.busDetails}
+                        />
+                    })}
                 </Map>
             </Wrapper>
             </>
@@ -157,9 +162,9 @@ const BusMarker = (options) => {
                 icon: {
                     // eslint-disable-next-line no-undef
                     path: google.maps.SymbolPath.CIRCLE,
-                    fillColor: '#00F',
+                    fillColor: '#fc0000',
                     fillOpacity: 0.6,
-                    strokeColor: '#00A',
+                    strokeColor: '#fc0000',
                     strokeOpacity: 0.4,
                     strokeWeight: 0.5,
                     scale: 7

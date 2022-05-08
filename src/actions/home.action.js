@@ -11,22 +11,17 @@ export const getHoltLocations = (routes, eventValue) => {
                 let holtData = await dispatch(getDocFromCollection('bus holts', holt.id))
                 array.push(holtData)
             }
-
             let locationsArray = []
             for (let item of array) {
                 if (item.location) {
                     locationsArray.push({latLng: JSON.parse(item.location)})
                 }
             }
-            //setHoltLocation(locationsArray || [])
             return locationsArray || []
         } else {
             return []
-            // setHoltLocation([])
-            // setHolts(array)
         }
     }
-
 }
 
 export const getBusLocations = (routes, eventValue) => {
@@ -36,17 +31,24 @@ export const getBusLocations = (routes, eventValue) => {
         const busRoutRef = firebase.firestore()
             .collection('bus routs')
             .doc(eventValue);
-
+        let busDetails = []
         const bus = await collection(db, "bus");
-        const query = await query(bus, where("route", "==", busRoutRef));
-        const querySnapshot = await getDocs(query)
+        const queryData = await query(bus, where("route", "==", busRoutRef));
+        const querySnapshot = await getDocs(queryData)
         for (let doc of querySnapshot.docs) {
-            console.log(doc.id, " => ", doc.data());
             if (doc.data().current_holt) {
-                const userRef = await doc.data().current_holt;
-                let data = await getDoc(userRef)
-                console.log(data.data())
+                const current_holtData = await doc.data().current_holt;
+                let data = await getDoc(current_holtData)
+                busDetails.push({
+                    bus_id: doc.id,
+                    bus_no: doc.data().bus_no,
+                    available: doc.data().available,
+                    available_seats: doc.data(),
+                    current_holt: JSON.parse(data.data().location)
+                })
             }
         }
+
+        return busDetails
     }
 }

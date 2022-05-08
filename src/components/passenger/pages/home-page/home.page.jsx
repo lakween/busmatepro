@@ -11,12 +11,14 @@ const Home = () => {
     const [routes, setRoutes] = useState([])
     const [holts, setHolts] = useState([])
     const [holtLocations, setHoltLocations] = useState([])
-    const [busLocations, setBusLocaions] = useState([])
+    const [busDetails, setBusDetails] = useState([])
 
     const onChnageHandler = async (event) => {
-       // let result = await dispatch(getHoltLocations(routes, event.target.value))
-        let res = await dispatch(getBusLocations(routes, event.target.value))
-        setHoltLocations([])
+       let result = await dispatch(getHoltLocations(routes, event.target.value))
+        let busDetails = await dispatch(getBusLocations(routes, event.target.value))
+        console.log(busDetails,'busDetails')
+        setHoltLocations([...result])
+        setBusDetails([...busDetails])
     }
 
     useEffect(() => {
@@ -56,7 +58,7 @@ const Home = () => {
                     </Flex>
                 </Card>
                 <Card minHeight={"65vh"}>
-                    <MapComponent locations={holtLocations}/>
+                    <MapComponent locations={holtLocations} busDetails={busDetails}/>
                     {holtLocations.length > 0 ? null : <text>Loading....</text>}
                 </Card>
             </Box>
