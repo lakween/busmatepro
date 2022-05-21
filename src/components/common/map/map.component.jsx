@@ -10,57 +10,60 @@ const render = (status) => {
 };
 
 const MapComponent = ({locations, busDetails}) => {
-        console.log(busDetails, 'locations')
-        const dispatch = useDispatch()
-        const [clicks, setClicks] = useState([]);
-        const [zoom, setZoom] = useState(13); // initial zoom
-        const onClick = (e) => {
-            let obj = {latLng: e.latLng, busDetails: {name: 'test', availableSeats: 'test'}}
-            console.log(clicks, 'click')
-            setClicks([...clicks, obj]);
-        };
+    console.log(busDetails, 'locations')
+    const dispatch = useDispatch()
+    const [clicks, setClicks] = useState([]);
+    const [zoom, setZoom] = useState(13); // initial zoom
+    const onClick = (e) => {
+        // let obj = {latLng: e.latLng, busDetails: {name: 'test', availableSeats: 'test'}}
+        console.log('click')
+        // setClicks([...clicks, obj]);
+    };
 
-        // const onIdle = (m) => {
-        //     setZoom(m?.getZoom());
-        //     setCenter(m?.getCenter().toJSON());
-        // };
+    // eslint-disable-next-line no-undef
 
-        return (
-            <>  <Wrapper apiKey={"AIzaSyB5h2G7hf-wjjrZMJPSRC4HOfQ71WYyvGo"}>
-                <Map
-                    center={locations[0]?.latLng || {
-                        lat: 6.5284950413709035,
-                        lng: 80.39347518042418
-                    }}
-                    onClick={onClick}
-                    //onIdle={onIdle}
-                    zoom={zoom}
-                    style={{width: "100%", height: "65vh"}}
-                >
-                    {locations?.map((obj, i) => {
-                        console.log(obj, 'obj')
-                        return < HoltMarker
+    // const onIdle = (m) => {
+    //     setZoom(m?.getZoom());
+    //     setCenter(m?.getCenter().toJSON());
+    // };
+
+    return (
+        <>  <Wrapper apiKey={"AIzaSyB5h2G7hf-wjjrZMJPSRC4HOfQ71WYyvGo"}>
+            <Map
+                center={locations[0]?.latLng || {
+                    lat: 6.5284950413709035,
+                    lng: 80.39347518042418
+                }}
+                onClick={onClick}
+                //onIdle={onIdle}
+                zoom={zoom}
+                style={{width: "100%", height: "65vh"}}
+            >
+                {locations?.map((obj, i) => (
+                        <HoltMarker
                             key={i}
                             position={obj.latLng}
                             data={obj.busDetails}
+                            eventHandlers={{ click: onClick }}
                         />
-                    })}
-                    {busDetails?.map((obj, i) => {
-                        console.log(obj, 'obj')
-                        return < BusMarker
-                            key={i}
-                            position={
-                                obj?.current_holt
-                            }
-                            data={obj.busDetails}
-                        />
-                    })}
-                </Map>
-            </Wrapper>
-            </>
-        );
-    }
-;
+
+
+                    )
+                )}
+                {busDetails?.map((obj, i) => (
+                    <BusMarker
+                        key={i}
+                        position={
+                            obj?.current_holt
+                        }
+                        data={obj.busDetails}
+                    />
+                ))}
+            </Map>
+        </Wrapper>
+        </>
+    );
+}
 
 const Map = ({
                  onClick,
@@ -87,7 +90,9 @@ const Map = ({
             ["click", "idle"].forEach((eventName) =>
                 // eslint-disable-next-line no-undef
                 google.maps.event.clearListeners(map, eventName)
+
             );
+            // eslint-disable-next-line no-undef
 
             if (onClick) {
                 map.addListener("click", onClick);
@@ -98,6 +103,7 @@ const Map = ({
             }
         }
     }, [map, onClick, onIdle]);
+
 
     return (
         <>
@@ -134,8 +140,10 @@ const HoltMarker = (options) => {
         }
 
         marker?.addListener("click", (event) => {
-            console.log('clicked', event)
-        });
+            console.log("this.getPosition()")
+        })
+
+
         return () => {
             if (marker) {
                 marker.setMap(null);
@@ -174,8 +182,9 @@ const BusMarker = (options) => {
         }
 
         marker?.addListener("click", (event) => {
-            console.log('clicked', event)
-        });
+            console.log("this.getPosition()")
+        })
+
         return () => {
             if (marker) {
                 marker.setMap(null);
