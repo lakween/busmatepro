@@ -56,7 +56,7 @@ const MapComponent = ({locations, busDetails}) => {
                         position={
                             obj?.current_holt
                         }
-                        data={obj.busDetails}
+                        data={obj}
                     />
                 ))}
             </Map>
@@ -177,12 +177,12 @@ const BusMarker = (options) => {
                     strokeWeight: 0.5,
                     scale: 7
                 },
-                title: 'click here for details',
+                title: `${options.data.available == 'yes' ? '* available' : '* unavailable'} , bus_no: ${options.data.bus_no}`,
             }));
         }
 
         marker?.addListener("click", (event) => {
-            console.log("this.getPosition()")
+            console.log(options , "this.getPosition()")
         })
 
         return () => {
