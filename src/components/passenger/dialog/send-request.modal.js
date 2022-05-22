@@ -21,11 +21,6 @@ const SendRequestModal = ()=>{
 
     return (
         <>
-            <Button onClick={onOpen}>Open Modal</Button>
-            <Button ml={4} ref={finalRef}>
-                I'll receive focus on close
-            </Button>
-
             <Modal
                 initialFocusRef={initialRef}
                 finalFocusRef={finalRef}
