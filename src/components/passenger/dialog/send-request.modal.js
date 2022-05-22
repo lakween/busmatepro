@@ -10,14 +10,25 @@ import {
 } from '@chakra-ui/react'
 import {useDispatch, useSelector} from "react-redux";
 import {setModalPoperty} from "../../../store/reducers/modal-slice";
+import {getDocFromCollection} from "../../../actions/common.action";
+import {getHoltsByRoute} from "../../../actions/home.action";
 
 const SendRequestModal = () => {
     const poperties = useSelector((state) => (state.modalSlice.sendRequestModel))
+    const [holtList, setHoltList] = useState({})
     let dispatch = useDispatch()
-    console.log(poperties)
+    console.log(holtList,'jjj')
 
     const initialRef = useRef()
     const finalRef = useRef()
+
+    useEffect(() => {
+        getHoltList()
+    }, [])
+
+    async function getHoltList(){
+        setHoltList( await dispatch(getHoltsByRoute('bus routs', poperties.data.selectedRoute)))
+    }
 
     return (
         <>
@@ -44,7 +55,7 @@ const SendRequestModal = () => {
                         </Flex>
                         <Flex direction={'row'} justifyContent={"space-between"}>
                             <Text>Available Seats</Text>
-                            <Text>{poperties.data.available_seats }</Text>
+                            <Text>{poperties.data.available_seats}</Text>
                         </Flex>
                         <Text></Text>
                         {/*<FormControl>*/}

@@ -44,10 +44,27 @@ export const getBusLocations = (routes, eventValue) => {
                     bus_no: doc.data().bus_no,
                     available: doc.data().available,
                     available_seats: doc.data().available_seats,
-                    current_holt: JSON.parse(data.data().location)
+                    current_holt: JSON.parse(data.data().location),
+                    selectedRoute:eventValue
                 })
             }
         }
         return busDetails
+    }
+}
+
+export const getHoltsByRoute = (collec,id) => {
+    return async (dispatch) => {
+        const db = firebase.firestore();
+        let data = []
+        const snapshot = await db.collection(collec).doc(id).get()
+        let holtsRef = snapshot.data().holts
+        if (holtsRef) {
+            for (let holt of holtsRef) {
+                let holtData = await dispatch(getDocFromCollection('bus holts', holt.id))
+                data.push(holtData)
+            }
+            return data
+        }
     }
 }
