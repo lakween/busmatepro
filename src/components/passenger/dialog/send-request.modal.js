@@ -6,7 +6,7 @@ import {
     ModalHeader,
     ModalFooter,
     ModalBody,
-    ModalCloseButton, Button, Input, FormLabel, FormControl, useDisclosure,
+    ModalCloseButton, Button, Input, FormLabel, FormControl, useDisclosure, Text, Flex,
 } from '@chakra-ui/react'
 import {useDispatch, useSelector} from "react-redux";
 import {setModalPoperty} from "../../../store/reducers/modal-slice";
@@ -34,15 +34,28 @@ const SendRequestModal = () => {
                     <ModalHeader>Create your account</ModalHeader>
                     <ModalCloseButton/>
                     <ModalBody pb={6}>
-                        <FormControl>
-                            <FormLabel>First name</FormLabel>
-                            <Input ref={initialRef} placeholder='First name'/>
-                        </FormControl>
+                        <Flex direction={'row'} justifyContent={"space-between"}>
+                            <Text>Status</Text>
+                            <Text>{poperties.data.available ? 'Available' : 'Not Available'}</Text>
+                        </Flex>
+                        <Flex direction={'row'} justifyContent={"space-between"}>
+                            <Text>Status</Text>
+                            <Text>{poperties.data.available ? 'Available' : 'Not Available'}</Text>
+                        </Flex>
+                        <Flex direction={'row'} justifyContent={"space-between"}>
+                            <Text>Available Seats</Text>
+                            <Text>{poperties.data.available_seats }</Text>
+                        </Flex>
+                        <Text></Text>
+                        {/*<FormControl>*/}
+                        {/*    <FormLabel>First name</FormLabel>*/}
+                        {/*    <Input ref={initialRef} placeholder='First name'/>*/}
+                        {/*</FormControl>*/}
 
-                        <FormControl mt={4}>
-                            <FormLabel>Last name</FormLabel>
-                            <Input placeholder='Last name'/>
-                        </FormControl>
+                        {/*<FormControl mt={4}>*/}
+                        {/*    <FormLabel>Last name</FormLabel>*/}
+                        {/*    <Input placeholder='Last name'/>*/}
+                        {/*</FormControl>*/}
                     </ModalBody>
 
                     <ModalFooter>

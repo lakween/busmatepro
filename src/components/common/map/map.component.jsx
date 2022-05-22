@@ -15,11 +15,6 @@ const MapComponent = ({locations, busDetails}) => {
     const dispatch = useDispatch()
     const [clicks, setClicks] = useState([]);
     const [zoom, setZoom] = useState(13); // initial zoom
-    const onClick = (e) => {
-        // let obj = {latLng: e.latLng, busDetails: {name: 'test', availableSeats: 'test'}}
-        console.log('click')
-        // setClicks([...clicks, obj]);
-    };
 
     // eslint-disable-next-line no-undef
 
@@ -35,7 +30,6 @@ const MapComponent = ({locations, busDetails}) => {
                     lat: 6.5284950413709035,
                     lng: 80.39347518042418
                 }}
-                onClick={onClick}
                 //onIdle={onIdle}
                 zoom={zoom}
                 style={{width: "100%", height: "65vh"}}
@@ -45,7 +39,6 @@ const MapComponent = ({locations, busDetails}) => {
                             key={i}
                             position={obj.latLng}
                             data={obj.busDetails}
-                            eventHandlers={{click: onClick}}
                         />
 
 
@@ -138,11 +131,6 @@ const HoltMarker = (options) => {
                 title: 'click here for details',
             }));
         }
-
-        marker?.addListener("click", (event) => {
-            console.log("this.getPosition()")
-        })
-
 
         return () => {
             if (marker) {

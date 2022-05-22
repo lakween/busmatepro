@@ -43,12 +43,11 @@ export const getBusLocations = (routes, eventValue) => {
                     bus_id: doc.id,
                     bus_no: doc.data().bus_no,
                     available: doc.data().available,
-                    available_seats: doc.data(),
+                    available_seats: doc.data().available_seats,
                     current_holt: JSON.parse(data.data().location)
                 })
             }
         }
-
         return busDetails
     }
 }
