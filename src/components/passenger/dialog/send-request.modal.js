@@ -17,10 +17,6 @@ const SendRequestModal = () => {
     const poperties = useSelector((state) => (state.modalSlice.sendRequestModel))
     const [holtList, setHoltList] = useState([])
     let dispatch = useDispatch()
-    console.log(holtList,'jjj')
-
-    const initialRef = useRef()
-    const finalRef = useRef()
 
     useEffect(() => {
         getHoltList()
@@ -33,8 +29,6 @@ const SendRequestModal = () => {
     return (
         <>
             <Modal
-                initialFocusRef={initialRef}
-                finalFocusRef={finalRef}
                 isOpen={poperties.isOpen}
                 onClose={() => {
                     dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: false}))
@@ -42,7 +36,7 @@ const SendRequestModal = () => {
             >
                 <ModalOverlay/>
                 <ModalContent>
-                    <ModalHeader>Create your account</ModalHeader>
+                    <ModalHeader>Send Pickup Request</ModalHeader>
                     <ModalCloseButton/>
                     <ModalBody pb={6}>
                         <Flex direction={'row'} justifyContent={"space-between"}>
@@ -59,25 +53,14 @@ const SendRequestModal = () => {
                         </Flex>
                         <Flex direction={'row'} justifyContent={"space-between"}>
                             <Text>Pick up at</Text>
-                            <Select name={"holt"} icon={''}  placeholder='Start' size={'sm'}>
+                            <Select name={"holt"} icon={''}  placeholder='Start' size={'sm'} width={'150px'}>
                                 {
                                     holtList?.map((holt, index) => (
                                         <option key={index} value={holt.id}>{holt.holt_name}</option>))
                                 }
                             </Select>
                         </Flex>
-
-                        {/*<FormControl>*/}
-                        {/*    <FormLabel>First name</FormLabel>*/}
-                        {/*    <Input ref={initialRef} placeholder='First name'/>*/}
-                        {/*</FormControl>*/}
-
-                        {/*<FormControl mt={4}>*/}
-                        {/*    <FormLabel>Last name</FormLabel>*/}
-                        {/*    <Input placeholder='Last name'/>*/}
-                        {/*</FormControl>*/}
                     </ModalBody>
-
                     <ModalFooter>
                         <Button colorScheme='blue' mr={3}>
                             Send Request
