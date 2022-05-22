@@ -4,6 +4,7 @@ import {Wrapper} from "@googlemaps/react-wrapper";
 import {isLatLngLiteral} from "@googlemaps/typescript-guards";
 import {createCustomEqual} from "fast-equals";
 import {useDispatch} from "react-redux";
+import {setModalPoperty} from "../../../store/reducers/modal-slice";
 
 const render = (status) => {
     return <h1>{status}</h1>;
@@ -162,6 +163,7 @@ const HoltMarker = (options) => {
 
 const BusMarker = (options) => {
     const [marker, setMarker] = useState();
+    let dispatch = useDispatch()
 
     useEffect(() => {
         if (!marker) {
@@ -177,12 +179,12 @@ const BusMarker = (options) => {
                     strokeWeight: 0.5,
                     scale: 7
                 },
-                title: `${options.data.available == 'yes' ? '* available' : '* unavailable'} , bus_no: ${options.data.bus_no}`,
+                title: `${options.data.available == 'yes' ? '* available' : '* unavailable'} , kmbus_no: ${options.data.bus_no}`,
             }));
         }
 
         marker?.addListener("click", (event) => {
-            console.log(options , "this.getPosition()")
+            dispatch(setModalPoperty({model:'sendRequestModel',poperty:'isOpen',value:true}))
         })
 
         return () => {

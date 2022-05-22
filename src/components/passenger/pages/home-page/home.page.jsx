@@ -3,8 +3,9 @@ import {Box, Flex, Select, Text} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {getAllDocuments} from "../../../../actions/user.actions";
 import MapComponent from "../../../common/map/map.component";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {getHoltLocations,getBusLocations} from "../../../../actions/home.action";
+import {setModalPoperty} from '../../../../store/reducers/modal-slice'
 
 const Home = () => {
     let dispatch = useDispatch()
@@ -12,6 +13,8 @@ const Home = () => {
     const [holts, setHolts] = useState([])
     const [holtLocations, setHoltLocations] = useState([])
     const [busDetails, setBusDetails] = useState([])
+    const store = useSelector((state)=>(state))
+    console.log(store,'store')
 
     const onChnageHandler = async (event) => {
        let result = await dispatch(getHoltLocations(routes, event.target.value))

@@ -17,6 +17,7 @@ import {
     firebaseReducer
 } from 'react-redux-firebase';
 import {createFirestoreInstance} from "redux-firestore";
+import SendRequestModal from "./components/passenger/dialog/send-request.modal";
 
 firebase.initializeApp(firebaseConfig)
 firebase.firestore();
@@ -40,6 +41,7 @@ ReactDOM.render(
             <BrowserRouter>
                 <ChakraProvider theme={theme}>
                     <RouterConfig/>
+                    <SendRequestModal/>
                 </ChakraProvider>
             </BrowserRouter>
             </ReactReduxFirebaseProvider>

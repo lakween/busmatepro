@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const commonSlice = createSlice({
-    name: 'counter',
+    name: 'commonSlice',
     initialState: {},
     reducers: {
         setCommonState:(state,{payload}) => state = payload
