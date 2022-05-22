@@ -45,7 +45,7 @@ const MapComponent = ({locations, busDetails}) => {
                             key={i}
                             position={obj.latLng}
                             data={obj.busDetails}
-                            eventHandlers={{ click: onClick }}
+                            eventHandlers={{click: onClick}}
                         />
 
 
@@ -91,7 +91,6 @@ const Map = ({
             ["click", "idle"].forEach((eventName) =>
                 // eslint-disable-next-line no-undef
                 google.maps.event.clearListeners(map, eventName)
-
             );
             // eslint-disable-next-line no-undef
 
@@ -184,7 +183,8 @@ const BusMarker = (options) => {
         }
 
         marker?.addListener("click", (event) => {
-            dispatch(setModalPoperty({model:'sendRequestModel',poperty:'isOpen',value:true}))
+            dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: true}))
+            dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'data', value: options.data}))
         })
 
         return () => {

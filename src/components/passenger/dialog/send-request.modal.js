@@ -11,10 +11,10 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {setModalPoperty} from "../../../store/reducers/modal-slice";
 
-const SendRequestModal = ()=>{
-    const poperties = useSelector((state)=>(state.modalSlice.sendRequestModel))
+const SendRequestModal = () => {
+    const poperties = useSelector((state) => (state.modalSlice.sendRequestModel))
     let dispatch = useDispatch()
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    console.log(poperties)
 
     const initialRef = useRef()
     const finalRef = useRef()
@@ -25,21 +25,23 @@ const SendRequestModal = ()=>{
                 initialFocusRef={initialRef}
                 finalFocusRef={finalRef}
                 isOpen={poperties.isOpen}
-                onClose={()=>{ dispatch(setModalPoperty({model:'sendRequestModel',poperty:'isOpen',value:false}))}}
+                onClose={() => {
+                    dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: false}))
+                }}
             >
-                <ModalOverlay />
+                <ModalOverlay/>
                 <ModalContent>
                     <ModalHeader>Create your account</ModalHeader>
-                    <ModalCloseButton />
+                    <ModalCloseButton/>
                     <ModalBody pb={6}>
                         <FormControl>
                             <FormLabel>First name</FormLabel>
-                            <Input ref={initialRef} placeholder='First name' />
+                            <Input ref={initialRef} placeholder='First name'/>
                         </FormControl>
 
                         <FormControl mt={4}>
                             <FormLabel>Last name</FormLabel>
-                            <Input placeholder='Last name' />
+                            <Input placeholder='Last name'/>
                         </FormControl>
                     </ModalBody>
 
@@ -47,7 +49,9 @@ const SendRequestModal = ()=>{
                         <Button colorScheme='blue' mr={3}>
                             Save
                         </Button>
-                        <Button onClick={onClose}>Cancel</Button>
+                        <Button onClick={() => {
+                            dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: false}))
+                        }}>Cancel</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

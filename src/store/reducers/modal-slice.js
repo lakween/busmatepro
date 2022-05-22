@@ -4,7 +4,8 @@ const modalSlice = createSlice({
     name: 'modalSlice',
     initialState: {
         sendRequestModel:{
-            isOpen:false
+            isOpen:false,
+            data:{}
         }
     },
     reducers: {
