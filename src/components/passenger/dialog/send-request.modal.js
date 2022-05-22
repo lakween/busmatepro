@@ -35,8 +35,8 @@ const SendRequestModal = () => {
                     <ModalCloseButton/>
                     <ModalBody pb={6}>
                         <Flex direction={'row'} justifyContent={"space-between"}>
-                            <Text>Status</Text>
-                            <Text>{poperties.data.available ? 'Available' : 'Not Available'}</Text>
+                            <Text>Bus Number</Text>
+                            <Text>{poperties.data.bus_no}</Text>
                         </Flex>
                         <Flex direction={'row'} justifyContent={"space-between"}>
                             <Text>Status</Text>
@@ -60,7 +60,7 @@ const SendRequestModal = () => {
 
                     <ModalFooter>
                         <Button colorScheme='blue' mr={3}>
-                            Save
+                            Send Request
                         </Button>
                         <Button onClick={() => {
                             dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: false}))
