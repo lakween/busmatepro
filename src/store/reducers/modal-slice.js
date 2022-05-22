@@ -8,12 +8,11 @@ const modalSlice = createSlice({
         }
     },
     reducers: {
-        setModalState:(state,{payload}) => state = payload,
         setModalPoperty:(state,{payload}) => {
             state = state[payload.model][payload.poperty] = payload.value
         }
     },
 })
 
-export const { setModalState, setModalPoperty } = modalSlice.actions
+export const { setModalPoperty } = modalSlice.actions
 export default modalSlice.reducer

@@ -8,8 +8,12 @@ import {
     ModalBody,
     ModalCloseButton, Button, Input, FormLabel, FormControl, useDisclosure,
 } from '@chakra-ui/react'
+import {useDispatch, useSelector} from "react-redux";
+import {setModalPoperty} from "../../../store/reducers/modal-slice";
 
 const SendRequestModal = ()=>{
+    const poperties = useSelector((state)=>(state.modalSlice.sendRequestModel))
+    let dispatch = useDispatch()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const initialRef = useRef()
@@ -25,8 +29,8 @@ const SendRequestModal = ()=>{
             <Modal
                 initialFocusRef={initialRef}
                 finalFocusRef={finalRef}
-                isOpen={isOpen}
-                onClose={onClose}
+                isOpen={poperties.isOpen}
+                onClose={()=>{ dispatch(setModalPoperty({model:'sendRequestModel',poperty:'isOpen',value:false}))}}
             >
                 <ModalOverlay />
                 <ModalContent>

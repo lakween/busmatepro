@@ -13,13 +13,10 @@ const Home = () => {
     const [holts, setHolts] = useState([])
     const [holtLocations, setHoltLocations] = useState([])
     const [busDetails, setBusDetails] = useState([])
-    const store = useSelector((state)=>(state))
-    console.log(store,'store')
 
     const onChnageHandler = async (event) => {
        let result = await dispatch(getHoltLocations(routes, event.target.value))
         let busDetails = await dispatch(getBusLocations(routes, event.target.value))
-        console.log(busDetails,'busDetails')
         setHoltLocations([...result])
         setBusDetails([...busDetails])
     }
