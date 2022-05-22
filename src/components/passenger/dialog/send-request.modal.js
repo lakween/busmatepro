@@ -6,7 +6,7 @@ import {
     ModalHeader,
     ModalFooter,
     ModalBody,
-    ModalCloseButton, Button, Input, FormLabel, FormControl, useDisclosure, Text, Flex,
+    ModalCloseButton, Button, Input, FormLabel, FormControl, useDisclosure, Text, Flex, Select,
 } from '@chakra-ui/react'
 import {useDispatch, useSelector} from "react-redux";
 import {setModalPoperty} from "../../../store/reducers/modal-slice";
@@ -15,7 +15,7 @@ import {getHoltsByRoute} from "../../../actions/home.action";
 
 const SendRequestModal = () => {
     const poperties = useSelector((state) => (state.modalSlice.sendRequestModel))
-    const [holtList, setHoltList] = useState({})
+    const [holtList, setHoltList] = useState([])
     let dispatch = useDispatch()
     console.log(holtList,'jjj')
 
@@ -57,7 +57,16 @@ const SendRequestModal = () => {
                             <Text>Available Seats</Text>
                             <Text>{poperties.data.available_seats}</Text>
                         </Flex>
-                        <Text></Text>
+                        <Flex direction={'row'} justifyContent={"space-between"}>
+                            <Text>Pick up at</Text>
+                            <Select name={"holt"} icon={''}  placeholder='Start' size={'sm'}>
+                                {
+                                    holtList?.map((holt, index) => (
+                                        <option key={index} value={holt.id}>{holt.holt_name}</option>))
+                                }
+                            </Select>
+                        </Flex>
+
                         {/*<FormControl>*/}
                         {/*    <FormLabel>First name</FormLabel>*/}
                         {/*    <Input ref={initialRef} placeholder='First name'/>*/}

@@ -62,7 +62,7 @@ export const getHoltsByRoute = (collec,id) => {
         if (holtsRef) {
             for (let holt of holtsRef) {
                 let holtData = await dispatch(getDocFromCollection('bus holts', holt.id))
-                data.push(holtData)
+                data.push({...holtData,id:holt.id})
             }
             return data
         }
