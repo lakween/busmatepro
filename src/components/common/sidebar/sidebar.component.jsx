@@ -35,9 +35,12 @@ const NavLink = () => (
         <Link as={ReachLink} cursor={'pointer'} to='/home'>
             Profile
         </Link>
-        <Text cursor={'pointer'}>
-            Booking
-        </Text>
+        <Link as={ReachLink} cursor={'pointer'} to='/passenger'>
+            Pickng
+        </Link>
+        <Link as={ReachLink} cursor={'pointer'} to='/passenger/history'>
+            Request History
+        </Link>
     </Box>
 
 )
