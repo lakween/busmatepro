@@ -40,7 +40,8 @@ const SendRequestModal = () => {
             bus_id: db.doc('bus/'+ poperties.data.bus_id),
             status: 'waiting'
         }
-        let result = await dispatch(createDocOfCollection('user requests',data))
+        let result =  dispatch(createDocOfCollection('user requests',data))
+        dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: false}))
     }
 
     return (
