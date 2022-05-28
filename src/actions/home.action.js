@@ -45,7 +45,7 @@ export const getBusLocations = (routes, eventValue) => {
                     available: doc.data().available,
                     available_seats: doc.data().available_seats,
                     current_holt: JSON.parse(data.data().location),
-                    selectedRoute:eventValue
+                    selectedRoute: eventValue
                 })
             }
         }
@@ -53,17 +53,20 @@ export const getBusLocations = (routes, eventValue) => {
     }
 }
 
-export const getHoltsByRoute = (collec,id) => {
+export const getHoltsByRoute = (collec, id) => {
+
     return async (dispatch) => {
         const db = firebase.firestore();
         let data = []
         const snapshot = await db.collection(collec).doc(id).get()
-        let holtsRef = snapshot.data().holts
+        let holtsRef = await snapshot.data()?.holts
+        console.log('aaaa', snapshot.data())
         if (holtsRef) {
             for (let holt of holtsRef) {
                 let holtData = await dispatch(getDocFromCollection('bus holts', holt.id))
-                data.push({...holtData,id:holt.id})
+                data.push({...holtData, id: holt.id})
             }
+            console.log(data, 'data')
             return data
         }
     }

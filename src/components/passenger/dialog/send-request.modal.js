@@ -10,20 +10,35 @@ import {
 } from '@chakra-ui/react'
 import {useDispatch, useSelector} from "react-redux";
 import {setModalPoperty} from "../../../store/reducers/modal-slice";
-import {getDocFromCollection} from "../../../actions/common.action";
+import {createDocOfCollection, getDocFromCollection} from "../../../actions/common.action";
 import {getHoltsByRoute} from "../../../actions/home.action";
+import useFormController from "../../../hooks/useFormController";
 
 const SendRequestModal = () => {
+
     const poperties = useSelector((state) => (state.modalSlice.sendRequestModel))
+    let authData = useSelector((store) => (store.firebase.auth))
     const [holtList, setHoltList] = useState([])
+    let [valueChangeHandler, setValue, form, setForm] = useFormController()
     let dispatch = useDispatch()
 
     useEffect(() => {
         getHoltList()
-    }, [])
+    }, [poperties.isOpen])
 
-    async function getHoltList(){
-        setHoltList( await dispatch(getHoltsByRoute('bus routs', poperties.data.selectedRoute)))
+    async function getHoltList() {
+        let data = await dispatch(getHoltsByRoute('bus routs', poperties.data.selectedRoute))
+        setHoltList(data)
+    }
+
+    async function sendRequest(form) {
+        let data = {
+            ...form,
+            user_id: authData.uid,
+            bus_id: poperties.data.bus_id,
+            status: 'waiting'
+        }
+        let result = await dispatch(createDocOfCollection('user requests',data))
     }
 
     return (
@@ -53,7 +68,8 @@ const SendRequestModal = () => {
                         </Flex>
                         <Flex direction={'row'} justifyContent={"space-between"}>
                             <Text>Pick up at</Text>
-                            <Select name={"holt"} icon={''}  placeholder='Start' size={'sm'} width={'150px'}>
+                            <Select onChange={valueChangeHandler} name={"holt"} icon={''} placeholder='Start'
+                                    size={'sm'} width={'150px'}>
                                 {
                                     holtList?.map((holt, index) => (
                                         <option key={index} value={holt.id}>{holt.holt_name}</option>))
@@ -62,7 +78,9 @@ const SendRequestModal = () => {
                         </Flex>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3}>
+                        <Button colorScheme='blue' mr={3} onClick={() => {
+                            sendRequest()
+                        }}>
                             Send Request
                         </Button>
                         <Button onClick={() => {
