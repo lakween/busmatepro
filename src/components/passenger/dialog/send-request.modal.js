@@ -13,6 +13,7 @@ import {setModalPoperty} from "../../../store/reducers/modal-slice";
 import {createDocOfCollection, getDocFromCollection} from "../../../actions/common.action";
 import {getHoltsByRoute} from "../../../actions/home.action";
 import useFormController from "../../../hooks/useFormController";
+import firebase from "firebase/compat/app";
 
 const SendRequestModal = () => {
 
@@ -32,10 +33,11 @@ const SendRequestModal = () => {
     }
 
     async function sendRequest(form) {
+        const db = firebase.firestore();
         let data = {
             ...form,
             user_id: authData.uid,
-            bus_id: poperties.data.bus_id,
+            bus_id: db.doc('bus/'+ poperties.data.bus_id),
             status: 'waiting'
         }
         let result = await dispatch(createDocOfCollection('user requests',data))
