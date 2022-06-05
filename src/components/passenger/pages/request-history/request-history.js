@@ -1,27 +1,14 @@
 import MUIDataTable from "mui-datatables";
 import {createTheme, ThemeProvider, unstable_createMuiStrictModeTheme} from '@material-ui/core/styles';
 import {CacheProvider} from "@emotion/react";
-import {extendTheme} from '@chakra-ui/react'
+import {Box, extendTheme} from '@chakra-ui/react'
 import blue from "@mui/material/colors/blue";
+import Card from "../../../common/card/card.component";
+import {getRequests} from "../../../../actions/request-history.Action";
+import {useDispatch} from "react-redux";
 
 let themeMUI = createTheme()
 
-themeMUI = createTheme(themeMUI, {
-    palette: {
-        ...themeMUI.palette,
-        action: {
-            focus: "#e6e6e6",
-            // other variants
-        }
-    },
-    components: {
-        MuiTableBody: {
-            styleOverrides: {
-                root: {}
-            }
-        }
-    }
-});
 
 
 const columns = ["Name", "Company", "City", "State"];
@@ -35,14 +22,21 @@ const data = [
 
 
 const RequestHistory = (theme) => {
+    const dispatch = useDispatch()
+    dispatch(getRequests())
 
     return (
         <>
-            <MUIDataTable
-            title={"Employee List"}
-            data={data}
-            columns={columns}
-        />
+            <Box mt={10}>
+                <Card inSideTitle={'In Progress Request'}>
+                    <MUIDataTable
+                        title={"Employee List"}
+                        data={data}
+                        columns={columns}/>
+                </Card>
+
+            </Box>
+
         </>
 
     )
