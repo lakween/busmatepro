@@ -1,4 +1,7 @@
-import { extendTheme } from '@chakra-ui/react'
+import {extendTheme} from '@chakra-ui/react'
+import { createTheme } from "@mui/material/styles";
+import blue from "@mui/material/colors/blue";
+let themeMUI = createTheme()
 
 const theme = extendTheme({
     colors: {
@@ -67,7 +70,44 @@ const theme = extendTheme({
         wider: "0.05em",
         widest: "0.1em",
     },
-
+    ...themeMUI
+    // palette: {
+    //     background: {
+    //         paper: '#0066ff',
+    //     },
+    //     text:{
+    //
+    //     },
+    //     transitions:{
+    //         create:()=>{},
+    //     },
+    //     primary: {
+    //         main: '#0052cc',
+    //     },
+    //     secondary: {
+    //         main: '#edf2ff',
+    //     },
+    //
+    // },
 });
+// theme = createTheme(theme, {
+//     ...chakraTheme,
+//     palette: {
+//         ...theme.palette,
+//         action: {
+//             focus: "#e6e6e6",
+//             // other variants
+//         }
+//     },
+//     components: {
+//         MuiTableBody: {
+//             styleOverrides: {
+//                 root: {
+//
+//                 }
+//             }
+//         }
+//     }
+// });
 
 export default theme

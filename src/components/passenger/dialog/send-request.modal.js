@@ -38,7 +38,8 @@ const SendRequestModal = () => {
             ...form,
             user_id: authData.uid,
             bus_id: db.doc('bus/'+ poperties.data.bus_id),
-            status: 'waiting'
+            status: 'waiting',
+            doc_status:1
         }
         let result =  dispatch(createDocOfCollection('user requests',data))
         dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: false}))

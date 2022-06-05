@@ -18,6 +18,7 @@ import {
 } from 'react-redux-firebase';
 import {createFirestoreInstance} from "redux-firestore";
 import SendRequestModal from "./components/passenger/dialog/send-request.modal";
+import RequestHistory from "./components/passenger/pages/request-history/request-history";
 
 firebase.initializeApp(firebaseConfig)
 firebase.firestore();
