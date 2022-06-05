@@ -7,7 +7,7 @@ import Card from "../../../common/card/card.component";
 import {getRequests} from "../../../../actions/request-history.Action";
 import {useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
-import {columns} from "./components/column,";
+import {columns,options} from "./components/column,";
 
 let themeMUI = createTheme()
 
@@ -36,14 +36,21 @@ const RequestHistory = (theme) => {
 
     return (
         <>
-            <Box mt={10}>
-                <Card inSideTitle={'In Progress Request'}>
+            <Box mt={10} maxH={'100vh'}>
+                <Card>
                     <MUIDataTable
-                        title={"Employee List"}
+                        title={"In Progress Request"}
                         data={requests}
-                        columns={columns}/>
+                        columns={columns}
+                        options={options}
+                    />
+                    {/*<MUIDataTable*/}
+                    {/*    title={"In Progress Request"}*/}
+                    {/*    data={requests}*/}
+                    {/*    columns={columns}*/}
+                    {/*    options={options}*/}
+                    {/*/>*/}
                 </Card>
-
             </Box>
 
         </>

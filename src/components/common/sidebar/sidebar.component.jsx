@@ -7,7 +7,7 @@ import React from "react";
 const Sidebar = () => {
     let displayName = useSelector((store) => (store.firebase.auth.displayName))
     return (
-        <Flex flexDirection={'row'} gap={'20px'} >
+        <Flex maxH={'100vh'} flexDirection={'row'} gap={'20px'} overflowY={'hidden'} >
             <Box gap={5} display={'flex'} bg={'aliceblue'} borderStyle={'solid'} borderRadius={'5px'} borderWidth={2}
                  flexDirection={'column'} width={'20vw'} height={'100vh'}>
                 <Box gap={2} bgGradient='linear(to-r, #1d82d0, #0e436d)' flexDirection={"column"} display={'Flex'}
@@ -25,7 +25,7 @@ const Sidebar = () => {
                 </Flex>
                 <NavLink/>
             </Box>
-            <Box width={'100%'}>
+            <Box width={'100%'} maxH={'100vh'}  overflowY={'scroll'}>
                 <Outlet/>
             </Box>
         </Flex>

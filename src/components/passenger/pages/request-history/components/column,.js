@@ -13,6 +13,8 @@ export const columns = [
     },
 ];
 
-const options = {
+export const options = {
     filterType: 'checkbox',
+    download:false,
+    print:false
 };
