@@ -6,13 +6,11 @@ import blue from "@mui/material/colors/blue";
 import Card from "../../../common/card/card.component";
 import {getRequests} from "../../../../actions/request-history.Action";
 import {useDispatch} from "react-redux";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {columns} from "./components/column,";
 
 let themeMUI = createTheme()
 
-
-
-const columns = ["Name", "Company", "City", "State"];
 
 const data = [
     ["Joe James", "Test Corp", "Yonkers", "NY"],
@@ -24,11 +22,17 @@ const data = [
 
 const RequestHistory = (theme) => {
     const dispatch = useDispatch()
+    const [requests,setRequest] = useState([])
 
     useEffect(()=>{
-        dispatch(getRequests())
+        getData()
     },[])
 
+    const getData = async ()=>{
+        let res =  await dispatch(getRequests())
+        console.log(res,'res')
+        setRequest(res)
+    }
 
     return (
         <>
@@ -36,7 +40,7 @@ const RequestHistory = (theme) => {
                 <Card inSideTitle={'In Progress Request'}>
                     <MUIDataTable
                         title={"Employee List"}
-                        data={data}
+                        data={requests}
                         columns={columns}/>
                 </Card>
 
