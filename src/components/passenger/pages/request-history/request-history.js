@@ -6,6 +6,7 @@ import blue from "@mui/material/colors/blue";
 import Card from "../../../common/card/card.component";
 import {getRequests} from "../../../../actions/request-history.Action";
 import {useDispatch} from "react-redux";
+import {useEffect} from "react";
 
 let themeMUI = createTheme()
 
@@ -23,7 +24,11 @@ const data = [
 
 const RequestHistory = (theme) => {
     const dispatch = useDispatch()
-    dispatch(getRequests())
+
+    useEffect(()=>{
+        dispatch(getRequests())
+    },[])
+
 
     return (
         <>
