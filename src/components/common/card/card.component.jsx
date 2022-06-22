@@ -1,4 +1,4 @@
-import {Box, Text} from "@chakra-ui/react";
+import {Box, Text, useColorModeValue} from "@chakra-ui/react";
 import React from "react";
 
 const Card = (props) => {
@@ -13,9 +13,9 @@ const Card = (props) => {
     </Text>)
 
     return (
-        <Box width={'100%'} bg={'white'} borderRadius={6} minHeight={minHeight}>
+        <Box  bg={useColorModeValue('white', 'gray.900')} width={'100%'} bg={'white'} borderRadius={6} minHeight={minHeight} borderColor={useColorModeValue('gray.200', 'gray.700')}>
             {outSideTitle && outsideTitleMarkup}
-            <Box width={'100%'} padding={padding}  minHeight={minHeight} margin={margin} borderStyle={"solid"} borderWidth={border} borderColor={"#DDDDDD"}
+            <Box  bg={useColorModeValue('white', 'gray.900')} borderColor={useColorModeValue('gray.200', 'gray.700')} width={'100%'} padding={padding}  minHeight={minHeight} margin={margin} borderStyle={"solid"} borderWidth={border} borderColor={"#DDDDDD"}
                  borderRadius={6}>
                 {inSideTitle && insideTitleMarkup}
                 {children}

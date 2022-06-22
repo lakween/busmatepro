@@ -5,7 +5,7 @@ import {
     IconButton,
     Link, Menu, MenuButton, MenuDivider, MenuItem, MenuList,
     Text, useColorMode,
-    useColorModeValue,Drawer,
+    useColorModeValue, Drawer,
     useDisclosure, VStack,
     Wrap,
     WrapItem
@@ -58,7 +58,7 @@ import {FiBell, FiChevronDown, FiHome, FiMenu} from "react-icons/fi";
 //     </Box>
 //
 // )
- function Sidebar({children}) {
+function Sidebar({children}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
     const data = useSelector(state => state)
 
@@ -82,7 +82,7 @@ import {FiBell, FiChevronDown, FiHome, FiMenu} from "react-icons/fi";
                 </DrawerContent>
             </Drawer>
             <MobileNav onOpen={onOpen}/>
-            <Box ml={{base: 0, md: 60}}  p="4">
+            <Box ml={{base: 0, md: 60}} p="4">
                 <Outlet/>
             </Box>
         </Box>
@@ -90,22 +90,28 @@ import {FiBell, FiChevronDown, FiHome, FiMenu} from "react-icons/fi";
 }
 
 const SidebarContent = ({onClose}) => {
-    const [LinkItems, setLinkItems] = useState([])
+
     let navigate = useNavigate();
     const dispatch = useDispatch()
 
     let icons = {
-        FiHome:FiHome
+        FiHome: FiHome
     }
 
-    useEffect(() => {
-        getData()
-    }, [])
+    let LinkItems = [
+        {name: 'Home', link: "passenger"},
+        {name: 'Request History', link: "/passenger/history"}
+    ]
 
-    async function getData() {
-        // let res = await dispatch(getAllDocFromCollection('userRoutes'))
-        // setLinkItems([...res])
-    }
+
+    // useEffect(() => {
+    //     getData()
+    // }, [])
+    //
+    // async function getData() {
+    //     // let res = await dispatch(getAllDocFromCollection('userRoutes'))
+    //     // setLinkItems([...res])
+    // }
 
     return (
 
@@ -129,13 +135,17 @@ const SidebarContent = ({onClose}) => {
                     {link.name}
                 </NavItem>
             ))}
+
+
         </Box>
     );
 };
 
-const NavItem = ({icon,link, navigate, children, ...rest}) => {
+const NavItem = ({icon, link, navigate, children, ...rest}) => {
     return (
-        <Link onClick={()=>{ navigate(link)}} style={{textDecoration: 'none'}} _focus={{boxShadow: 'none'}}>
+        <Link onClick={() => {
+            navigate(link)
+        }} style={{textDecoration: 'none'}} _focus={{boxShadow: 'none'}}>
             <Flex
                 align="center"
                 p="4"
@@ -237,11 +247,11 @@ const MobileNav = ({onOpen, ...rest}) => {
                         <MenuList
                             bg={useColorModeValue('white', 'gray.900')}
                             borderColor={useColorModeValue('gray.200', 'gray.700')}>
-                            <MenuItem onClick={()=>navigate('/profile')}>Profile</MenuItem>
+                            <MenuItem onClick={() => navigate('/profile')}>Profile</MenuItem>
                             <MenuItem>Settings</MenuItem>
                             <MenuItem>Billing</MenuItem>
                             <MenuDivider/>
-                            <MenuItem onClick={()=>navigate('/login')}>Sign out</MenuItem>
+                            <MenuItem onClick={() => navigate('/login')}>Sign out</MenuItem>
                         </MenuList>
                     </Menu>
                 </Flex>

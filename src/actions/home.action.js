@@ -33,11 +33,14 @@ export const getBusLocations = (routes, eventValue) => {
             .doc(eventValue);
         let busDetails = []
         const bus = await collection(db, "bus");
-        const queryData = await query(bus, where("route", "==", busRoutRef));
+        const queryData = await query(bus, where("route_id", "==", busRoutRef));
+        console.log( queryData,'busDetails')
         const querySnapshot = await getDocs(queryData)
+
         for (let doc of querySnapshot.docs) {
             if (doc.data().current_holt) {
                 const current_holtData = await doc.data().current_holt;
+
                 let data = await getDoc(current_holtData)
                 busDetails.push({
                     bus_id: doc.id,
@@ -49,6 +52,7 @@ export const getBusLocations = (routes, eventValue) => {
                 })
             }
         }
+
         return busDetails
     }
 }

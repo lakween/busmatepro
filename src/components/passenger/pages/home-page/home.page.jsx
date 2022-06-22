@@ -1,5 +1,5 @@
 import Card from "../../../common/card/card.component";
-import {Box, Flex, Select, Text} from "@chakra-ui/react";
+import {Box, Flex, Select, Text, useColorModeValue} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {getAllDocuments} from "../../../../actions/user.actions";
 import MapComponent from "../../../common/map/map.component";
@@ -32,17 +32,17 @@ const Home = () => {
 
     return (
         <>
-            <Box display={"flex"} flexDirection={"column"} gap={5} padding={10} width={'80%'} justify={"center"}
-                 align={"center"}>
-                <Card>
-                    <Flex justify={"center"} align={"center"}>
+            <Box display={"flex"} borderColor={useColorModeValue('gray.200', 'gray.700')} flexDirection={"column"} gap={5} padding={10} width={'80%'} justify={"center"}
+                 align={"center"} bg={useColorModeValue('gray.100', 'gray.900')}>
+                <Card bg={useColorModeValue('gray.100', 'gray.900')} borderColor={useColorModeValue('gray.200', 'gray.700')}>
+                    <Flex bg={useColorModeValue('gray.100', 'gray.900')} borderColor={useColorModeValue('gray.200', 'gray.700')} justify={"center"} align={"center"} >
                         <Text fontWeight={1} textAlign={"center"}>
                             Start your journey today
                         </Text>
                     </Flex>
                 </Card>
                 <Card>
-                    <Flex direction={"row"} gap={5} justify={"center"} align={"center"}>
+                    <Flex bg={useColorModeValue('gray.100', 'gray.900')} direction={"row"} gap={5} justify={"center"} align={"center"}>
 
                         <Select name={"start"} icon={''} onChange={onChnageHandler} placeholder='Start' size={'sm'}>
                             {
