@@ -12,7 +12,7 @@ export let RouterConfig = () => {
     let routes = [
         {
             path: "/",
-            element: <App/>,
+            element: <Login/>,
         },
         {
             path: "passenger",
