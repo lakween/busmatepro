@@ -15,7 +15,7 @@ const Home = () => {
     const [busDetails, setBusDetails] = useState([])
 
     const onChnageHandler = async (event) => {
-       let result = await dispatch(getHoltLocations(routes, event.target.value))
+       let result = await getHoltLocations(routes, event.target.value)
         let busDetails = await dispatch(getBusLocations(routes, event.target.value))
         setHoltLocations([...result])
         setBusDetails([...busDetails])

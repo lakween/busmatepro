@@ -1,50 +1,39 @@
-import {getDocFromCollection} from "./common.action";
+import {createDocOfCollection, filterDocsFromCollection, getDocFromCollection} from "./common.action";
 import firebase from "firebase/compat/app";
 import {collection, getDocs, query, where, getDoc} from "firebase/firestore";
 
-export const getHoltLocations = (routes, eventValue) => {
-    return async (dispatch) => {
-        let holtsRef = await routes?.find((route) => route.id == eventValue).holts
-        let holtsKey = await getDocFromCollection('bus routs', eventValue)
-        let holtLocations = []
-        for (let holt of holtsKey?.holts) {
-            let result = await getDocFromCollection('bus holts', holt)
-            if (result?.location) {
-                holtLocations.push({latLng: JSON.parse(result?.location)})
-            }
+export const getHoltLocations = async (routes, eventValue) => {
+    let holtsRef = await routes?.find((route) => route.id == eventValue).holts
+    let holtsKey = await getDocFromCollection('bus routs', eventValue)
+    let holtLocations = []
+    for (let holt of holtsKey?.holts) {
+        let result = await getDocFromCollection('bus holts', holt)
+        if (result?.location) {
+            holtLocations.push({latLng: JSON.parse(result?.location)})
         }
-        return  holtLocations || []
     }
+    return holtLocations || []
+
 }
 
 export const getBusLocations = (routes, eventValue) => {
     return async (dispatch) => {
         const db = firebase.firestore();
-        const busRoutRef = firebase.firestore()
-            .collection('bus routs')
-            .doc(eventValue);
+        let result = await filterDocsFromCollection('bus','',[['route_id','==',eventValue]])
         let busDetails = []
-        const bus = await collection(db, "bus");
-        const queryData = await query(bus, where("route_id", "==", busRoutRef));
-        console.log(queryData, 'busDetails')
-        const querySnapshot = await getDocs(queryData)
-
-        for (let doc of querySnapshot.docs) {
-            if (doc.data().current_holt) {
-                const current_holtData = await doc.data().current_holt;
-
-                let data = await getDoc(current_holtData)
+        for (let doc of result) {
+            if (doc.current_holt) {
+                let data = await createDocOfCollection('bus holts',doc.current_holt)
                 busDetails.push({
                     bus_id: doc.id,
-                    bus_no: doc.data().bus_no,
-                    available: doc.data().available,
-                    available_seats: doc.data().available_seats,
-                    current_holt: JSON.parse(data.data().location),
+                    bus_no: doc.bus_no,
+                    available: doc.available,
+                    available_seats: doc?.available_seats,
+                    current_holt: JSON.parse(data?.location),
                     selectedRoute: eventValue
                 })
             }
         }
-
         return busDetails
     }
 }
