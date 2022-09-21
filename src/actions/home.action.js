@@ -4,37 +4,29 @@ import {collection, getDocs, query, where, getDoc} from "firebase/firestore";
 
 export const getHoltLocations = (routes, eventValue) => {
     return async (dispatch) => {
-        let array = []
         let holtsRef = await routes?.find((route) => route.id == eventValue).holts
-        if (holtsRef) {
-            for (let holt of holtsRef) {
-                let holtData = await dispatch(getDocFromCollection('bus holts', holt.id))
-                array.push(holtData)
+        let holtsKey = await getDocFromCollection('bus routs', eventValue)
+        let holtLocations = []
+        for (let holt of holtsKey?.holts) {
+            let result = await getDocFromCollection('bus holts', holt)
+            if (result?.location) {
+                holtLocations.push({latLng: JSON.parse(result?.location)})
             }
-            let locationsArray = []
-            for (let item of array) {
-                if (item.location) {
-                    locationsArray.push({latLng: JSON.parse(item.location)})
-                }
-            }
-            return locationsArray || []
-        } else {
-            return []
         }
+        return  holtLocations || []
     }
 }
 
 export const getBusLocations = (routes, eventValue) => {
     return async (dispatch) => {
         const db = firebase.firestore();
-
         const busRoutRef = firebase.firestore()
             .collection('bus routs')
             .doc(eventValue);
         let busDetails = []
         const bus = await collection(db, "bus");
         const queryData = await query(bus, where("route_id", "==", busRoutRef));
-        console.log( queryData,'busDetails')
+        console.log(queryData, 'busDetails')
         const querySnapshot = await getDocs(queryData)
 
         for (let doc of querySnapshot.docs) {
