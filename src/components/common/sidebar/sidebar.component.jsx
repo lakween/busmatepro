@@ -15,6 +15,7 @@ import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import React from "react";
 import {FiBell, FiChevronDown, FiHome, FiMenu} from "react-icons/fi";
+import RequestHistory from "../../passenger/pages/request-history/request-history";
 
 // const Sidebar = () => {
 //     let displayName = useSelector((store) => (store.firebase.auth.displayName))
@@ -100,9 +101,9 @@ const SidebarContent = ({onClose}) => {
 
     let LinkItems = [
         {name: 'Home', link: "/passenger"},
-        {name: 'Request History', link: "/passenger/history"}
+        {name: 'Request History', link: "/passenger/history"},
+        {name: "Ratings & Feedback", link:"/passenger/ratings&feedback"},
     ]
-
 
     // useEffect(() => {
     //     getData()

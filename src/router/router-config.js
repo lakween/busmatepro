@@ -4,6 +4,7 @@ import Sidebar from "../components/common/sidebar/sidebar.component";
 import Home from "../components/passenger/pages/home-page/home.page";
 import SignUp from "../components/passenger/pages/sign-up/sign-up.page";
 import RequestHistory from "../components/passenger/pages/request-history/request-history";
+import RatingsFeedback from "../components/passenger/pages/ratings and feedback/ratings&feedback";
 
 export let RouterConfig = () => {
 
@@ -18,6 +19,7 @@ export let RouterConfig = () => {
             children: [
                 {index: true, element: <Home/>},
                 {path: "history", element: <RequestHistory/>},
+                {path: "ratings&feedback", element: <RatingsFeedback/>},
             ],
         },
         {
