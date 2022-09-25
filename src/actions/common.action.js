@@ -1,11 +1,17 @@
 import firebase from "firebase/compat/app";
-import {collection, getDocs, addDoc, where, query} from "firebase/firestore";
+import {collection, getDocs, addDoc,doc, where, query, getDoc} from "firebase/firestore";
 
-export const getDocFromCollection = async (collection,document)=>{
-        let data = ''
-        const db = firebase.firestore();
-        const snapshot = await db.collection(collection).doc(document).get()
-        return snapshot.data() ? snapshot.data() : {}
+export const getDocFromCollection = async (coll,docum)=>{
+
+    const db = firebase.firestore();
+    const docRef = await doc(db, coll, docum);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        return docSnap.data()
+    } else {
+        return {}
+    }
 }
 
 export const createDocOfCollection = (collName,data)=>{

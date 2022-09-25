@@ -11,10 +11,11 @@ const render = (status) => {
 };
 
 const MapComponent = ({locations, busDetails}) => {
-    console.log(busDetails, 'locations')
     const dispatch = useDispatch()
     const [clicks, setClicks] = useState([]);
     const [zoom, setZoom] = useState(13); // initial zoom
+
+    // console.log(busDetails,'busDetails')
 
     // eslint-disable-next-line no-undef
 
@@ -40,19 +41,16 @@ const MapComponent = ({locations, busDetails}) => {
                             position={obj.latLng}
                             data={obj.busDetails}
                         />
-
-
                     )
                 )}
-                {busDetails?.map((obj, i) => (
-                    <BusMarker
+                {busDetails?.map((obj, i) =>
+                    (<BusMarker
                         key={i}
                         position={
                             obj?.current_holt
                         }
                         data={obj}
-                    />
-                ))}
+                    />))}
             </Map>
         </Wrapper>
         </>
@@ -153,6 +151,7 @@ const BusMarker = (options) => {
     let dispatch = useDispatch()
 
     useEffect(() => {
+        console.log(options,'llllwwww')
         if (!marker) {
             // eslint-disable-next-line no-undef
             setMarker(new google.maps.Marker({
@@ -166,13 +165,13 @@ const BusMarker = (options) => {
                     strokeWeight: 0.5,
                     scale: 7
                 },
-                title: `${options.data.available == 'yes' ? '* available' : '* unavailable'} , kmbus_no: ${options.data.bus_no}`,
+                title: `${options.data.available == 'yes' ? '* available' : '* unavailable'} , Bus No: ${options.data.bus_no} ,Avalable Seats :  ${options.data.available_seats}`,
             }));
         }
 
         marker?.addListener("click", (event) => {
-            dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: true}))
             dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'data', value: options.data}))
+            dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: true}))
         })
 
         return () => {
@@ -180,13 +179,13 @@ const BusMarker = (options) => {
                 marker.setMap(null);
             }
         };
-    }, [marker]);
+    }, [marker,options?.data]);
 
     useEffect(() => {
         if (marker) {
             marker.setOptions(options);
         }
-    }, [marker, options]);
+    }, [marker, options?.data]);
 
     return null
 };

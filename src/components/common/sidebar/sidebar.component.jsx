@@ -99,7 +99,7 @@ const SidebarContent = ({onClose}) => {
     }
 
     let LinkItems = [
-        {name: 'Home', link: "passenger"},
+        {name: 'Home', link: "/passenger"},
         {name: 'Request History', link: "/passenger/history"}
     ]
 

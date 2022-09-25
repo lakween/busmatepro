@@ -17,31 +17,33 @@ import firebase from "firebase/compat/app";
 
 const SendRequestModal = () => {
 
-    const poperties = useSelector((state) => (state.modalSlice.sendRequestModel))
-    let authData = useSelector((store) => (store.firebase.auth))
+    const poperties = useSelector((state) => (state?.modalSlice.sendRequestModel))
+    let authData = useSelector((store) => (store?.firebase.auth))
     const [holtList, setHoltList] = useState([])
     let [valueChangeHandler, setValue, form, setForm] = useFormController()
     let dispatch = useDispatch()
+    console.log(form,'form')
 
     useEffect(() => {
-        getHoltList()
+        if (poperties.isOpen) {
+            getHoltList()
+        }
     }, [poperties.isOpen])
 
     async function getHoltList() {
-        let data = await dispatch(getHoltsByRoute('bus routs', poperties.data.selectedRoute))
+        let data = await getHoltsByRoute('bus routs', poperties.data.selectedRoute)
         setHoltList(data)
     }
 
-    async function sendRequest(form) {
+    async function sendRequest() {
         const db = firebase.firestore();
         let data = {
             ...form,
             user_id: authData.uid,
-            bus_id: db.doc('bus/'+ poperties.data.bus_id),
+            bus_id: poperties.data.bus_id,
             status: 'waiting',
-            doc_status:1
         }
-        let result =  dispatch(createDocOfCollection('user requests',data))
+        let result = dispatch(createDocOfCollection('user requests', data))
         dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: false}))
     }
 
@@ -72,11 +74,11 @@ const SendRequestModal = () => {
                         </Flex>
                         <Flex direction={'row'} justifyContent={"space-between"}>
                             <Text>Pick up at</Text>
-                            <Select onChange={valueChangeHandler} name={"holt"} icon={''} placeholder='Start'
+                            <Select onChange={valueChangeHandler} name={"pickUp_holt"} icon={''} placeholder='Start'
                                     size={'sm'} width={'150px'}>
                                 {
                                     holtList?.map((holt, index) => (
-                                        <option key={index} value={holt.id}>{holt.holt_name}</option>))
+                                        <option key={index} value={holt.holt_id}>{holt.holt_name}</option>))
                                 }
                             </Select>
                         </Flex>

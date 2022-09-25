@@ -4,6 +4,7 @@ const useFormController = (defaultValues) => {
     const [form, setForm] = useState(defaultValues ? {...defaultValues} : {})
 
     const valueChangeHandler = (event) => {
+
         let {name, value} = event.target
         setForm({...form, [name]: value})
     }
