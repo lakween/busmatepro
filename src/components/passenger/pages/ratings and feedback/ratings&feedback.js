@@ -9,7 +9,8 @@ import {getAllDocFromCollection} from "../../../../actions/common.action";
 const RatingsFeedback = () => {
     const [value, setValue] = useState(2);
     const [hover, setHover] = useState(-1);
-    const [busList, setBusList] = useState(-1);
+    const [busList, setBusList] = useState([]);
+    const [selectedBus, setSelectedBus] = useState();
 
     const labels = {
         1: 'Useless',
@@ -27,6 +28,10 @@ const RatingsFeedback = () => {
         getbuslist()
     }, [])
 
+    const onChangeBusSelection = (e) => {
+        setSelectedBus(e?.target?.value)
+    }
+
     async function getbuslist() {
         let result = await getAllDocFromCollection('bus')
         setBusList(result)
@@ -40,39 +45,56 @@ const RatingsFeedback = () => {
                 </div>
                 <div className={'flex-row mt-2'}>
                     <div style={{width: '20vw'}}>
-                        <Select placeholder='Select a bus'>
-                            { busList.map((item,index)=>(
-                                <option key={index} value='option3'>Option 3</option>
+                        <Select onChange={onChangeBusSelection} placeholder='Select a bus'>
+                            {busList.map((item, index) => (
+                                <option key={index} value={item?.id}>{item?.bus_no}</option>
                             ))}
                         </Select>
                     </div>
-                    <div className={'row mt-2 border-1 border-light'}>
-                        <div className={'col-4'}>
-                            <Rating
-                                name="simple-controlled"
-                                value={value}
-                                // precision={0.5}
-                                getLabelText={getLabelText}
-                                onChange={(event, newValue) => {
-                                    setValue(newValue);
-                                }}
-                                onChangeActive={(event, newHover) => {
-                                    setHover(newHover);
-                                }}
-                                emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}
-                            />
-                            {value !== null && (
-                                <Box sx={{ml: 2}}>{labels[hover !== -1 ? hover : value]}</Box>
-                            )}
-                        </div>
-                        <div className={'col-4'}>
-                            <Textarea placeholder='Yours feedBack'/>
-                        </div>
-
-                    </div>
-
+                    {
+                        selectedBus && (
+                            <div className={'row mt-2 border-1 border-light'}>
+                                <div className={'col-2'}>
+                                    <div className={'row'}>
+                                        <text>Bus NO:</text>
+                                    </div>
+                                    <div className={'row'}>
+                                        <text>{busList?.filter((item) => (item.id == selectedBus))[0]?.bus_no}</text>
+                                    </div>
+                                </div>
+                                <div className={'col-2'}>
+                                    <div className={'row'}>
+                                        <text>Route:</text>
+                                    </div>
+                                    <div className={'row'}>
+                                        <text>{busList?.filter((item) => (item.id == selectedBus))[0]?.route_id}</text>
+                                    </div>
+                                </div>
+                                <div className={'col-4'}>
+                                    <Rating
+                                        name="simple-controlled"
+                                        value={value}
+                                        // precision={0.5}
+                                        getLabelText={getLabelText}
+                                        onChange={(event, newValue) => {
+                                            setValue(newValue);
+                                        }}
+                                        onChangeActive={(event, newHover) => {
+                                            setHover(newHover);
+                                        }}
+                                        emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}
+                                    />
+                                    {value !== null && (
+                                        <Box sx={{ml: 2}}>{labels[hover !== -1 ? hover : value]}</Box>
+                                    )}
+                                </div>
+                                <div className={'col-4'}>
+                                    <Textarea placeholder='Yours feedBack'/>
+                                </div>
+                            </div>
+                        )
+                    }
                 </div>
-
             </div>
         </>
     )
