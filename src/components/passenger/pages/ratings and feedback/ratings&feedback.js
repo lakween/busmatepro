@@ -5,7 +5,12 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 import {useEffect, useState} from "react";
-import {createDocOfCollection, getAllDocFromCollection, getDocFromCollection} from "../../../../actions/common.action";
+import {
+    createDocOfCollection,
+    filterDocsFromCollection,
+    getAllDocFromCollection,
+    getDocFromCollection, updateDoc
+} from "../../../../actions/common.action";
 import useFormController from "../../../../hooks/useFormController";
 
 const RatingsFeedback = () => {
@@ -13,6 +18,7 @@ const RatingsFeedback = () => {
     const [busList, setBusList] = useState([]);
     const [selectedBus, setSelectedBus] = useState();
     const [busRouteName, setBusRouteName] = useState();
+    const [previous, setPrevious] = useState({});
     let [valueChangeHandler, setValue, form, setForm] = useFormController({})
     const toast = useToast()
     const {currentUser} = getAuth()
@@ -22,9 +28,21 @@ const RatingsFeedback = () => {
     }, [])
 
     const onChangeBusSelection = async (e) => {
+        setForm({})
         let result = await getDocFromCollection('bus routs', 'SZFDerpHXuK1VWEP3rZZ')
+        let previousReatings = await getPreviousReatings(e?.target?.value)
         setBusRouteName(result?.name)
         setSelectedBus(e?.target?.value)
+    }
+
+    const getPreviousReatings = async (busID) => {
+
+        let result = await filterDocsFromCollection('bus review', '', [['bus_id', '==', busID], ['user_id', '==', currentUser?.uid]])
+        if (result.length > 0) {
+            console.log(result)
+            setPrevious(result[0])
+            setForm({...result[0]})
+        }
     }
 
     async function getbuslist() {
@@ -38,9 +56,8 @@ const RatingsFeedback = () => {
             user_id: currentUser?.uid,
             ...form
         }
-
-        let result = await createDocOfCollection('bus review', data)
-        if (result)
+        if (data?.id) {
+            await updateDoc('bus review', data.id, data)
             toast({
                 title: 'Saved',
                 // description:,
@@ -48,6 +65,18 @@ const RatingsFeedback = () => {
                 duration: 9000,
                 isClosable: true,
             })
+        } else {
+            let result = await createDocOfCollection('bus review', data)
+            if (result)
+                toast({
+                    title: 'Saved',
+                    // description:,
+                    status: 'error',
+                    duration: 9000,
+                    isClosable: true,
+                })
+        }
+
     }
 
     return (
@@ -89,7 +118,7 @@ const RatingsFeedback = () => {
                                     <RatingStar setForm={setForm} form={form}/>
                                 </div>
                                 <div className={'col-4'}>
-                                    <Textarea name={'comment'} onChange={valueChangeHandler}
+                                    <Textarea name={'comment'} value={form["comment"]} onChange={valueChangeHandler}
                                               placeholder='Yours feedBack'/>
                                 </div>
                                 <div className={'row'}>
