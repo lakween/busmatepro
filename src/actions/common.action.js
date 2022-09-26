@@ -14,12 +14,10 @@ export const getDocFromCollection = async (coll,docum)=>{
     }
 }
 
-export const createDocOfCollection = (collName,data)=>{
-    return async (dispatch)=>{
+export const createDocOfCollection = async (collName,data)=>{
         const db = firebase.firestore();
         const docRef = await addDoc(collection(db, collName), data);
-        console.log("Document written with ID: ", docRef.id)
-    }
+        return docRef.id
 }
 
 export const getAllDocFromCollection = async (collName) => {

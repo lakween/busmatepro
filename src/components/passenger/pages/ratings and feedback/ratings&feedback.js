@@ -1,4 +1,4 @@
-import {Button, color, Select, Textarea} from "@chakra-ui/react";
+import {Button, color, Select, Textarea, useToast} from "@chakra-ui/react";
 import {getAuth} from "firebase/auth";
 import {Rating} from "@mui/material";
 import * as React from 'react';
@@ -14,6 +14,7 @@ const RatingsFeedback = () => {
     const [selectedBus, setSelectedBus] = useState();
     const [busRouteName, setBusRouteName] = useState();
     let [valueChangeHandler, setValue, form, setForm] = useFormController({})
+    const toast = useToast()
     const {currentUser} = getAuth()
 
     useEffect(() => {
@@ -26,8 +27,6 @@ const RatingsFeedback = () => {
         setSelectedBus(e?.target?.value)
     }
 
-    console.log(form, 'form')
-
     async function getbuslist() {
         let result = await getAllDocFromCollection('bus')
         setBusList(result)
@@ -36,29 +35,20 @@ const RatingsFeedback = () => {
     async function onSaveHandler() {
         let data = {
             bus_id: selectedBus,
-            user_id:currentUser?.uid,
+            user_id: currentUser?.uid,
             ...form
         }
 
-       let result = await createDocOfCollection('bus review',data)
-        console.log(result)
+        let result = await createDocOfCollection('bus review', data)
+        if (result)
+            toast({
+                title: 'Saved',
+                // description:,
+                status: 'error',
+                duration: 9000,
+                isClosable: true,
+            })
     }
-
-    // const RouteName = ({routeID}) => {
-    //     const [route, setRoute] = useState()
-    //     useEffect(() => {
-    //         getRoute()
-    //     }, [])
-    //
-    //     const getRoute = async () => {
-    //         let result = await getDocFromCollection('bus routs', 'SZFDerpHXuK1VWEP3rZZ')
-    //         setRoute(result?.name)
-    //     }
-    //
-    //     return (
-    //         <>{route}</>
-    //     )
-    // }
 
     return (
         <>
