@@ -1,44 +1,64 @@
 import {Button, color, Select, Textarea} from "@chakra-ui/react";
+import {getAuth} from "firebase/auth";
 import {Rating} from "@mui/material";
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 import {useEffect, useState} from "react";
-import {getAllDocFromCollection, getDocFromCollection} from "../../../../actions/common.action";
+import {createDocOfCollection, getAllDocFromCollection, getDocFromCollection} from "../../../../actions/common.action";
+import useFormController from "../../../../hooks/useFormController";
 
 const RatingsFeedback = () => {
 
     const [busList, setBusList] = useState([]);
     const [selectedBus, setSelectedBus] = useState();
+    const [busRouteName, setBusRouteName] = useState();
+    let [valueChangeHandler, setValue, form, setForm] = useFormController({})
+    const {currentUser} = getAuth()
 
     useEffect(() => {
         getbuslist()
     }, [])
 
-    const onChangeBusSelection = (e) => {
+    const onChangeBusSelection = async (e) => {
+        let result = await getDocFromCollection('bus routs', 'SZFDerpHXuK1VWEP3rZZ')
+        setBusRouteName(result?.name)
         setSelectedBus(e?.target?.value)
     }
+
+    console.log(form, 'form')
 
     async function getbuslist() {
         let result = await getAllDocFromCollection('bus')
         setBusList(result)
     }
 
-    const RouteName = ({routeID}) => {
-        const [route, setRoute] = useState()
-        useEffect(() => {
-            getRoute()
-        }, [])
-
-        const getRoute = async () => {
-            let result = await getDocFromCollection('bus routs', 'SZFDerpHXuK1VWEP3rZZ')
-            setRoute(result?.name)
+    async function onSaveHandler() {
+        let data = {
+            bus_id: selectedBus,
+            user_id:currentUser?.uid,
+            ...form
         }
 
-        return (
-            <>{route}</>
-        )
+       let result = await createDocOfCollection('bus review',data)
+        console.log(result)
     }
+
+    // const RouteName = ({routeID}) => {
+    //     const [route, setRoute] = useState()
+    //     useEffect(() => {
+    //         getRoute()
+    //     }, [])
+    //
+    //     const getRoute = async () => {
+    //         let result = await getDocFromCollection('bus routs', 'SZFDerpHXuK1VWEP3rZZ')
+    //         setRoute(result?.name)
+    //     }
+    //
+    //     return (
+    //         <>{route}</>
+    //     )
+    // }
 
     return (
         <>
@@ -70,20 +90,21 @@ const RatingsFeedback = () => {
                                         <text>Route:</text>
                                     </div>
                                     <div className={'row'}>
-                                        <text><RouteName
-                                            routeID={busList?.filter((item) => (item.id == selectedBus))[0]?.route_id}/>
+                                        <text>
+                                            {busRouteName}
                                         </text>
                                     </div>
                                 </div>
                                 <div className={'col-4'}>
-                                    <RatingStar/>
+                                    <RatingStar setForm={setForm} form={form}/>
                                 </div>
                                 <div className={'col-4'}>
-                                    <Textarea placeholder='Yours feedBack'/>
+                                    <Textarea name={'comment'} onChange={valueChangeHandler}
+                                              placeholder='Yours feedBack'/>
                                 </div>
                                 <div className={'row'}>
                                     <div>
-                                        <Button colorScheme='teal' size='sm'>
+                                        <Button onClick={onSaveHandler} colorScheme='teal' size='sm'>
                                             Save
                                         </Button>
                                     </div>
@@ -97,7 +118,7 @@ const RatingsFeedback = () => {
     )
 }
 
-const RatingStar = () => {
+const RatingStar = ({setForm, form}) => {
     const [value, setValue] = useState(2);
     const [hover, setHover] = useState(-1);
 
@@ -117,11 +138,11 @@ const RatingStar = () => {
         <>
             <Rating
                 name="simple-controlled"
-                value={value}
+                value={form["rate"]}
                 // precision={0.5}
                 getLabelText={getLabelText}
                 onChange={(event, newValue) => {
-                    setValue(newValue);
+                    setForm({...form, rate: newValue});
                 }}
                 onChangeActive={(event, newHover) => {
                     setHover(newHover);
