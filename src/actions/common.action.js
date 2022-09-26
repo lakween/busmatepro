@@ -20,6 +20,12 @@ export const createDocOfCollection = async (collName, data) => {
     return docRef.id
 }
 
+export const updateDoc = async (col, docum, data) => {
+    const db = firebase.firestore();
+    delete data.id
+    await setDoc(doc(db, col, docum), data);
+}
+
 export const getAllDocFromCollection = async (collName) => {
     const db = firebase.firestore();
     let array = []
@@ -49,8 +55,4 @@ export const filterDocsFromCollection = async (coll, fields, filters) => {
     return array
 }
 
-export const updateDoc = async (col, doc, data) => {
-    const db = firebase.firestore();
-    delete data.id
-    await setDoc(doc(db, col, doc), data);
-}
+

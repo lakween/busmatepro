@@ -12,6 +12,17 @@ import {
     getDocFromCollection, updateDoc
 } from "../../../../actions/common.action";
 import useFormController from "../../../../hooks/useFormController";
+import {
+    Table,
+    Thead,
+    Tbody,
+    Tfoot,
+    Tr,
+    Th,
+    Td,
+    TableCaption,
+    TableContainer,
+} from '@chakra-ui/react'
 
 const RatingsFeedback = () => {
 
@@ -19,12 +30,14 @@ const RatingsFeedback = () => {
     const [selectedBus, setSelectedBus] = useState();
     const [busRouteName, setBusRouteName] = useState();
     const [previous, setPrevious] = useState({});
+    const [allFeedbacks, setAllFeedbacks] = useState([]);
     let [valueChangeHandler, setValue, form, setForm] = useFormController({})
     const toast = useToast()
     const {currentUser} = getAuth()
 
     useEffect(() => {
         getbuslist()
+        getAllFeedbacks()
     }, [])
 
     const onChangeBusSelection = async (e) => {
@@ -42,6 +55,14 @@ const RatingsFeedback = () => {
             console.log(result)
             setPrevious(result[0])
             setForm({...result[0]})
+        }
+    }
+
+    const getAllFeedbacks = async () => {
+
+        let result = await filterDocsFromCollection('bus review', '', [['user_id', '==', currentUser?.uid]])
+        if (result.length > 0) {
+            setAllFeedbacks(result)
         }
     }
 
@@ -131,6 +152,32 @@ const RatingsFeedback = () => {
                             </div>
                         )
                     }
+                </div>
+                <div className={'my-3'}>
+                    <div> Your Ratings And feedbacks</div>
+                    <TableContainer className={'mt-2'}>
+                        <Table size='sm'>
+                            <Thead>
+                                <Tr>
+                                    <Th>Bus No</Th>
+                                    <Th>Route</Th>
+                                    <Th>Stars</Th>
+                                    <Th>feedbacks</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {allFeedbacks.map((item,index) => (
+                                    <Tr key={index}>
+                                        <Td>{item?.bus_id}</Td>
+                                        <Td>{'lll'}</Td>
+                                        <Td >{item?.rate}</Td>
+                                        <Td >{item?.comment}</Td>
+                                    </Tr>
+                                ))
+                                }
+                            </Tbody>
+                        </Table>
+                    </TableContainer>
                 </div>
             </div>
         </>
