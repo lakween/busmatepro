@@ -7,22 +7,9 @@ import {useEffect, useState} from "react";
 import {getAllDocFromCollection, getDocFromCollection} from "../../../../actions/common.action";
 
 const RatingsFeedback = () => {
-    const [value, setValue] = useState(2);
-    const [hover, setHover] = useState(-1);
+
     const [busList, setBusList] = useState([]);
     const [selectedBus, setSelectedBus] = useState();
-
-    const labels = {
-        1: 'Useless',
-        2: 'Poor',
-        3: 'Ok',
-        4: 'Good',
-        5: 'Excellent',
-    };
-
-    function getLabelText(value) {
-        return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
-    }
 
     useEffect(() => {
         getbuslist()
@@ -41,7 +28,7 @@ const RatingsFeedback = () => {
         const [route, setRoute] = useState()
         useEffect(() => {
             getRoute()
-        }, [routeID])
+        }, [])
 
         const getRoute = async () => {
             let result = await getDocFromCollection('bus routs', 'SZFDerpHXuK1VWEP3rZZ')
@@ -89,22 +76,7 @@ const RatingsFeedback = () => {
                                     </div>
                                 </div>
                                 <div className={'col-4'}>
-                                    <Rating
-                                        name="simple-controlled"
-                                        value={value}
-                                        // precision={0.5}
-                                        getLabelText={getLabelText}
-                                        onChange={(event, newValue) => {
-                                            setValue(newValue);
-                                        }}
-                                        onChangeActive={(event, newHover) => {
-                                            setHover(newHover);
-                                        }}
-                                        emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}
-                                    />
-                                    {value !== null && (
-                                        <Box sx={{ml: 2}}>{labels[hover !== -1 ? hover : value]}</Box>
-                                    )}
+                                    <RatingStar/>
                                 </div>
                                 <div className={'col-4'}>
                                     <Textarea placeholder='Yours feedBack'/>
@@ -121,6 +93,44 @@ const RatingsFeedback = () => {
                     }
                 </div>
             </div>
+        </>
+    )
+}
+
+const RatingStar = () => {
+    const [value, setValue] = useState(2);
+    const [hover, setHover] = useState(-1);
+
+    const labels = {
+        1: 'Useless',
+        2: 'Poor',
+        3: 'Ok',
+        4: 'Good',
+        5: 'Excellent',
+    };
+
+    function getLabelText(value) {
+        return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
+    }
+
+    return (
+        <>
+            <Rating
+                name="simple-controlled"
+                value={value}
+                // precision={0.5}
+                getLabelText={getLabelText}
+                onChange={(event, newValue) => {
+                    setValue(newValue);
+                }}
+                onChangeActive={(event, newHover) => {
+                    setHover(newHover);
+                }}
+                emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}
+            />
+            {value !== null && (
+                <Box sx={{ml: 2}}>{labels[hover !== -1 ? hover : value]}</Box>
+            )}
         </>
     )
 }
