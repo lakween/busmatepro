@@ -1,10 +1,10 @@
-import {color, Select, Textarea} from "@chakra-ui/react";
+import {Button, color, Select, Textarea} from "@chakra-ui/react";
 import {Rating} from "@mui/material";
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 import {useEffect, useState} from "react";
-import {getAllDocFromCollection} from "../../../../actions/common.action";
+import {getAllDocFromCollection, getDocFromCollection} from "../../../../actions/common.action";
 
 const RatingsFeedback = () => {
     const [value, setValue] = useState(2);
@@ -37,6 +37,22 @@ const RatingsFeedback = () => {
         setBusList(result)
     }
 
+    const RouteName = ({routeID}) => {
+        const [route, setRoute] = useState()
+        useEffect(() => {
+            getRoute()
+        }, [routeID])
+
+        const getRoute = async () => {
+            let result = await getDocFromCollection('bus routs', 'SZFDerpHXuK1VWEP3rZZ')
+            setRoute(result?.name)
+        }
+
+        return (
+            <>{route}</>
+        )
+    }
+
     return (
         <>
             <div className="flex-row">
@@ -67,7 +83,9 @@ const RatingsFeedback = () => {
                                         <text>Route:</text>
                                     </div>
                                     <div className={'row'}>
-                                        <text>{busList?.filter((item) => (item.id == selectedBus))[0]?.route_id}</text>
+                                        <text><RouteName
+                                            routeID={busList?.filter((item) => (item.id == selectedBus))[0]?.route_id}/>
+                                        </text>
                                     </div>
                                 </div>
                                 <div className={'col-4'}>
@@ -90,6 +108,13 @@ const RatingsFeedback = () => {
                                 </div>
                                 <div className={'col-4'}>
                                     <Textarea placeholder='Yours feedBack'/>
+                                </div>
+                                <div className={'row'}>
+                                    <div>
+                                        <Button colorScheme='teal' size='sm'>
+                                            Save
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         )
