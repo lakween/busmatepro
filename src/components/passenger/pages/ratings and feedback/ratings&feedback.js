@@ -6,11 +6,11 @@ import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 import {useEffect, useState} from "react";
 import {
-    createDocOfCollection,
+    createDocOfCollection, deleteDocument,
     filterDocsFromCollection,
     getAllDocFromCollection,
     getDocFromCollection,
-    updateDocument
+    updateDocument, updateFieldsOnly
 } from "../../../../actions/common.action";
 import useFormController from "../../../../hooks/useFormController";
 import {
@@ -72,6 +72,18 @@ const RatingsFeedback = () => {
         setBusList(result)
     }
 
+    const deleteHandler = async (id) => {
+        await deleteDocument("bus review", id);
+        toast({
+            title: 'Deleted',
+            // description:,
+            status: 'success',
+            duration: 9000,
+            isClosable: true,
+        })
+        setRefetch(!refetch)
+    }
+
     async function onSaveHandler() {
         let data = {
             bus_id: selectedBus,
@@ -98,7 +110,7 @@ const RatingsFeedback = () => {
                     isClosable: true,
                 })
         }
-
+        setRefetch(!refetch)
     }
 
     return (
@@ -164,15 +176,21 @@ const RatingsFeedback = () => {
                                     <Th>Route</Th>
                                     <Th>Stars</Th>
                                     <Th>feedbacks</Th>
+                                    <Th>Action</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
                                 {allFeedbacks.map((item, index) => (
                                     <Tr key={index}>
                                         <Td><BusNoCell busId={item?.bus_id}/></Td>
-                                        <Td><RouteCell busId={item?.bus_id} /></Td>
+                                        <Td><RouteCell busId={item?.bus_id}/></Td>
                                         <Td>{item?.rate}</Td>
                                         <Td>{item?.comment}</Td>
+                                        <Td>
+                                            <Button onClick={() => deleteHandler(item?.id)} colorScheme='teal'
+                                                    size='xs'>
+                                                delete
+                                            </Button></Td>
                                     </Tr>
                                 ))
                                 }
@@ -227,7 +245,7 @@ const BusNoCell = ({busId}) => {
     const [busDetails, setBusDetails] = useState()
 
     useEffect(() => {
-                getBusNo()
+        getBusNo()
 
     }, [busId])
 
@@ -254,6 +272,7 @@ const RouteCell = ({busId}) => {
         let secondResult = await getDocFromCollection('bus routs', result?.route_id)
         setBusDetails(secondResult?.name)
     }
+
     return (
         <>{busDetails}</>
     )

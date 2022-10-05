@@ -1,5 +1,5 @@
 import {getAuth} from "firebase/auth";
-import {Box, Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
+import {Box, Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useToast} from '@chakra-ui/react'
 import {useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
 import {
@@ -13,6 +13,7 @@ const RequestHistory = (theme) => {
     const dispatch = useDispatch()
     const [requests, setRequest] = useState([])
     const [refetch, setRefetch] = useState(false);
+    const toast = useToast()
 
     useEffect(() => {
         getData()
@@ -26,12 +27,26 @@ const RequestHistory = (theme) => {
 
     const cancelHandler = async (id) => {
         await updateFieldsOnly('user requests', id, {status: 'Cancelled'})
+        toast({
+            title: 'Cancelled',
+            // description:,
+            status: 'success',
+            duration: 9000,
+            isClosable: true,
+        })
         setRefetch(!refetch)
     }
     
     const deleteHandler = async (id) => {
         await deleteDocument( "user requests", id);
         setRefetch(!refetch)
+        toast({
+            title: 'Deleted',
+            // description:,
+            status: 'success',
+            duration: 9000,
+            isClosable: true,
+        })
     }
 
     const CustomTdGroup = ({busID, pickUpHolt}) => {
@@ -68,6 +83,7 @@ const RequestHistory = (theme) => {
                                 <Th>Route</Th>
                                 <Th>PickUp Holt</Th>
                                 <Th>Status</Th>
+                                <Th>Action</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
