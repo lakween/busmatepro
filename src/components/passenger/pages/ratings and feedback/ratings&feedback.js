@@ -169,8 +169,8 @@ const RatingsFeedback = () => {
                             <Tbody>
                                 {allFeedbacks.map((item, index) => (
                                     <Tr key={index}>
-                                        <Td><BusNoAndRouteCell busId={item?.bus_id} type={'busNo'}/></Td>
-                                        <Td><BusNoAndRouteCell busId={item?.bus_id} type={'route'}/></Td>
+                                        <Td><BusNoCell busId={item?.bus_id}/></Td>
+                                        <Td><RouteCell busId={item?.bus_id} /></Td>
                                         <Td>{item?.rate}</Td>
                                         <Td>{item?.comment}</Td>
                                     </Tr>
@@ -223,37 +223,41 @@ const RatingStar = ({setForm, form}) => {
     )
 }
 
-const BusNoAndRouteCell = ({busId, type}) => {
+const BusNoCell = ({busId}) => {
     const [busDetails, setBusDetails] = useState()
 
     useEffect(() => {
-        switch (type) {
-            case 'busNo' : {
                 getBusNo()
-            }
-            case 'route' : {
-                getRoute()
-            }
-        }
+
     }, [busId])
 
     async function getBusNo() {
         let result = await getDocFromCollection('bus', busId)
-        // let secondResult =await getDocFromCollection('bus routs', busId)
         setBusDetails(result?.bus_no)
-        console.log(result, 'result')
-    }
-
-    async function getRoute() {
-        let result = await getDocFromCollection('bus', busId)
-        let secondResult = await getDocFromCollection('bus routs', result?.route_id)
-        console.log(secondResult, 'secondResult')
-        setBusDetails(secondResult?.name)
     }
 
     return (
         <>{busDetails}</>
     )
 }
+
+const RouteCell = ({busId}) => {
+    const [busDetails, setBusDetails] = useState()
+
+    useEffect(() => {
+        getRoute()
+
+    }, [busId])
+
+    async function getRoute() {
+        let result = await getDocFromCollection('bus', busId)
+        let secondResult = await getDocFromCollection('bus routs', result?.route_id)
+        setBusDetails(secondResult?.name)
+    }
+    return (
+        <>{busDetails}</>
+    )
+}
+
 
 export default RatingsFeedback
