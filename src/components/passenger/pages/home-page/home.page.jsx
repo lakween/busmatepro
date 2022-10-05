@@ -39,7 +39,6 @@ const Home = () => {
     async function getLocations() {
         let result = await getHoltLocations(routes, selectedRoute)
         let busDetails = await getBusLocations(routes, selectedRoute)
-        // console.log(busDetails,'busDetails')
         // ref.current = ref.current
         setHoltLocations([...result])
         setBusDetails([...busDetails])

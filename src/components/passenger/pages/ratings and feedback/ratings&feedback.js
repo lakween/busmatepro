@@ -9,7 +9,8 @@ import {
     createDocOfCollection,
     filterDocsFromCollection,
     getAllDocFromCollection,
-    getDocFromCollection, updateDoc
+    getDocFromCollection,
+    updateDocument
 } from "../../../../actions/common.action";
 import useFormController from "../../../../hooks/useFormController";
 import {
@@ -26,6 +27,7 @@ import {
 
 const RatingsFeedback = () => {
 
+    const [refetch, setRefetch] = useState(false);
     const [busList, setBusList] = useState([]);
     const [selectedBus, setSelectedBus] = useState();
     const [busRouteName, setBusRouteName] = useState();
@@ -38,7 +40,7 @@ const RatingsFeedback = () => {
     useEffect(() => {
         getbuslist()
         getAllFeedbacks()
-    }, [])
+    }, [refetch])
 
     const onChangeBusSelection = async (e) => {
         setForm({})
@@ -52,7 +54,6 @@ const RatingsFeedback = () => {
 
         let result = await filterDocsFromCollection('bus review', '', [['bus_id', '==', busID], ['user_id', '==', currentUser?.uid]])
         if (result.length > 0) {
-            console.log(result)
             setPrevious(result[0])
             setForm({...result[0]})
         }
@@ -78,7 +79,7 @@ const RatingsFeedback = () => {
             ...form
         }
         if (data?.id) {
-            await updateDoc('bus review', data.id, data)
+            await updateDocument('bus review', data.id, data)
             toast({
                 title: 'Saved',
                 // description:,

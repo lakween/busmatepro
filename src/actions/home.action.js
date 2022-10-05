@@ -18,7 +18,7 @@ export const getHoltLocations = async (routes, eventValue) => {
 
 export const getBusLocations = async (routes, eventValue) => {
         const db = firebase.firestore();
-        let result = await filterDocsFromCollection('bus', '', [['route_id', '==', eventValue]])
+        let result = await filterDocsFromCollection('bus', '', [["route_id", '==', eventValue]])
         let busDetails = []
         for (let doc of result) {
             if (doc.current_holt) {
@@ -34,7 +34,6 @@ export const getBusLocations = async (routes, eventValue) => {
             }
         }
         return busDetails
-
 }
 
 export const getHoltsByRoute = async (collec, id) => {

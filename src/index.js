@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 import {ChakraProvider} from '@chakra-ui/react'
@@ -19,7 +18,6 @@ import {
 import {createFirestoreInstance} from "redux-firestore";
 import SendRequestModal from "./components/passenger/dialog/send-request.modal";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import RequestHistory from "./components/passenger/pages/request-history/request-history";
 
 firebase.initializeApp(firebaseConfig)
 firebase.firestore();

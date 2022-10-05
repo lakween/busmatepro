@@ -30,7 +30,6 @@ const SignUp = (getNames) => {
 
     const signUpHandler = async () => {
         let res = await dispatch(emailAndPasswordAuth(form.email,form.password,toast))
-        console.log(res)
         let result = res ? await dispatch(createDoc('userProfile', toast, navigate("/passenger"), form)) : null
     }
 
