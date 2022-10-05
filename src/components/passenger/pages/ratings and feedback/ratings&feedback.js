@@ -167,12 +167,12 @@ const RatingsFeedback = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {allFeedbacks.map((item,index) => (
+                                {allFeedbacks.map((item, index) => (
                                     <Tr key={index}>
-                                        <Td>{item?.bus_id}</Td>
-                                        <Td>{'lll'}</Td>
-                                        <Td >{item?.rate}</Td>
-                                        <Td >{item?.comment}</Td>
+                                        <Td><BusNoAndRouteCell busId={item?.bus_id} type={'busNo'}/></Td>
+                                        <Td><BusNoAndRouteCell busId={item?.bus_id} type={'route'}/></Td>
+                                        <Td>{item?.rate}</Td>
+                                        <Td>{item?.comment}</Td>
                                     </Tr>
                                 ))
                                 }
@@ -220,6 +220,39 @@ const RatingStar = ({setForm, form}) => {
                 <Box sx={{ml: 2}}>{labels[hover !== -1 ? hover : value]}</Box>
             )}
         </>
+    )
+}
+
+const BusNoAndRouteCell = ({busId, type}) => {
+    const [busDetails, setBusDetails] = useState()
+
+    useEffect(() => {
+        switch (type) {
+            case 'busNo' : {
+                getBusNo()
+            }
+            case 'route' : {
+                getRoute()
+            }
+        }
+    }, [busId])
+
+    async function getBusNo() {
+        let result = await getDocFromCollection('bus', busId)
+        // let secondResult =await getDocFromCollection('bus routs', busId)
+        setBusDetails(result?.bus_no)
+        console.log(result, 'result')
+    }
+
+    async function getRoute() {
+        let result = await getDocFromCollection('bus', busId)
+        let secondResult = await getDocFromCollection('bus routs', result?.route_id)
+        console.log(secondResult, 'secondResult')
+        setBusDetails(secondResult?.name)
+    }
+
+    return (
+        <>{busDetails}</>
     )
 }
 

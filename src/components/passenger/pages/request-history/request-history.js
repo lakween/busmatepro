@@ -3,6 +3,7 @@ import {Box, Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from '@cha
 import {useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
 import {
+    deleteDocument,
     filterDocsFromCollection,
     getDocFromCollection,
     updateFieldsOnly
@@ -24,7 +25,12 @@ const RequestHistory = (theme) => {
     }
 
     const cancelHandler = async (id) => {
-        await updateFieldsOnly('user requests',id,{status:'Cancelled'})
+        await updateFieldsOnly('user requests', id, {status: 'Cancelled'})
+        setRefetch(!refetch)
+    }
+    
+    const deleteHandler = async (id) => {
+        await deleteDocument( "user requests", id);
         setRefetch(!refetch)
     }
 
@@ -69,11 +75,13 @@ const RequestHistory = (theme) => {
                                 <Tr>
                                     <CustomTdGroup busID={item?.bus_id} pickUpHolt={item?.pickUp_holt}/>
                                     <Td>{item?.status}</Td>
-                                    <Td><Button onClick={()=>cancelHandler(item?.id)} className={'me-2'} colorScheme='teal' size='xs'>
+                                    <Td><Button onClick={() => cancelHandler(item?.id)} className={'me-2'}
+                                                colorScheme='teal' size='xs'>
                                         Cancel
-                                    </Button><Button colorScheme='teal' size='xs'>
-                                        delete
-                                    </Button></Td>
+                                    </Button>
+                                        <Button onClick={()=>deleteHandler(item?.id)} colorScheme='teal' size='xs'>
+                                            delete
+                                        </Button></Td>
                                 </Tr>
                             ))}
                         </Tbody>
