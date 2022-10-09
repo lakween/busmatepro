@@ -49,7 +49,7 @@ const SendRequestModal = () => {
     }
 
     const RatingAndFeedBackCell = ({busId}) => {
-        const [rateAndFeedBack, SetRateAndFeedback] = useState([{rate:0}])
+        const [rateAndFeedBack, SetRateAndFeedback] = useState([{rate: 0}])
         useEffect(() => {
             if (busId) {
                 getBusRatingAndFeedBack()
@@ -58,6 +58,11 @@ const SendRequestModal = () => {
 
         async function getBusRatingAndFeedBack() {
             let result = await filterDocsFromCollection('bus review', '', [['bus_id', '==', busId]])
+            let FeedbacksWithUsers = []
+            for (let line of result) {
+                let userName = await getDocFromCollection('userProfile', line?.user_id)
+                console.log(userName, ';user Name')
+            }
             SetRateAndFeedback(result)
         }
 
@@ -75,7 +80,7 @@ const SendRequestModal = () => {
                     FeedBacks
                 </Text>
                 {
-                    rateAndFeedBack?.map((item)=>(<Text>{item?.comment}</Text>))
+                    rateAndFeedBack?.map((item) => (<Text>{item?.comment}</Text>))
                 }
             </>
         )
