@@ -23,7 +23,6 @@ const SendRequestModal = () => {
     const [holtList, setHoltList] = useState([])
     let [valueChangeHandler, setValue, form, setForm] = useFormController()
     let dispatch = useDispatch()
-    console.log(poperties, 'form')
 
     useEffect(() => {
         if (poperties.isOpen) {
@@ -61,9 +60,9 @@ const SendRequestModal = () => {
             let FeedbacksWithUsers = []
             for (let line of result) {
                 let userName = await getDocFromCollection('userProfile', line?.user_id)
-                console.log(userName, ';user Name')
+                FeedbacksWithUsers.push({...line, user_name: userName?.first_name + ' ' + userName?.last_name})
             }
-            SetRateAndFeedback(result)
+            SetRateAndFeedback(FeedbacksWithUsers)
         }
 
         return (
@@ -76,12 +75,22 @@ const SendRequestModal = () => {
                         {((rateAndFeedBack?.reduce((prev, item) => (item?.rate + prev), 0)) / rateAndFeedBack?.length)} stars
                     </Text>
                 </Flex>
-                <Text>
-                    FeedBacks
-                </Text>
-                {
-                    rateAndFeedBack?.map((item) => (<Text>{item?.comment}</Text>))
-                }
+                <div>
+                    <Text align={'center'} fontSize='md' color='tomato'>FeedBacks</Text>
+                    <div justifyContent={'space-between'}>
+                        {
+                            rateAndFeedBack?.map((item) => (
+                                    <Flex justifyContent={'space-between'}>
+                                        <Text>{item?.user_name}</Text>
+                                        <Text>{item?.comment}</Text>
+                                    </Flex>
+                                )
+                            )
+                        }
+
+                    </div>
+                </div>
+
             </>
         )
     }
