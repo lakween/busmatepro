@@ -44,7 +44,7 @@ const RatingsFeedback = () => {
 
     const onChangeBusSelection = async (e) => {
         setForm({})
-        let result = await getDocFromCollection('bus routs', 'SZFDerpHXuK1VWEP3rZZ')
+        let result = await getDocFromCollection('bus routs', e.target.value)
         let previousReatings = await getPreviousReatings(e?.target?.value)
         setBusRouteName(result?.name)
         setSelectedBus(e?.target?.value)
