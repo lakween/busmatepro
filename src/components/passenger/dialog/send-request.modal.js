@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {
     Modal,
     ModalOverlay,
@@ -50,11 +50,11 @@ const SendRequestModal = () => {
 
     const RatingAndFeedBackCell = ({busId}) => {
         const [rateAndFeedBack, SetRateAndFeedback] = useState([{rate: 0}])
-        useEffect(() => {
+        useMemo(() => {
             if (busId) {
                 getBusRatingAndFeedBack()
             }
-        }, [busId])
+        }, [])
 
         async function getBusRatingAndFeedBack() {
             let result = await filterDocsFromCollection('bus review', '', [['bus_id', '==', busId]])
@@ -121,7 +121,6 @@ const SendRequestModal = () => {
                                 }
                             </Select>
                         </Flex>
-                        {console.log(poperties)}
                         <RatingAndFeedBackCell busId={poperties?.data?.bus_id}/>
                     </ModalBody>
                     <ModalFooter>
