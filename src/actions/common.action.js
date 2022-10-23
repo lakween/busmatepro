@@ -1,5 +1,7 @@
 import firebase from "firebase/compat/app";
+import {getAuth, signOut, updateProfile} from "firebase/auth";
 import {collection, getDocs, addDoc, doc, where, query, getDoc, setDoc,updateDoc,deleteDoc } from "firebase/firestore";
+import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
 
 export const getDocFromCollection = async (coll, docum) => {
 
@@ -14,6 +16,10 @@ export const getDocFromCollection = async (coll, docum) => {
     }
 }
 
+export const updateAuthProfile = async (user, model) => {
+    let res = await updateProfile(user, model)
+}
+
 export const createDocOfCollection = async (collName, data) => {
     const db = firebase.firestore();
     const docRef = await addDoc(collection(db, collName), data);
@@ -23,6 +29,23 @@ export const createDocOfCollection = async (collName, data) => {
 export const deleteDocument = async (collection,document) => {
     const db = firebase.firestore();
     await deleteDoc(doc(db, collection, document));
+}
+
+export const updateProfilePhoto = async (file, currentUser) => {
+    const storage = getStorage();
+    const fileRef = ref(storage, `usersProfilePhotos/${currentUser.uid}.png`);
+
+    const snapshot = await uploadBytes(fileRef, file);
+    const photoURL = await getDownloadURL(fileRef);
+    await updateProfile(currentUser, {photoURL});
+    alert("Uploaded file!");
+}
+
+export const updateDoc = async (id,collec, model) => {
+    const db = firebase.firestore();
+    // await setDoc(doc(db, "accounts", id), model);
+    const accountRef = doc(db, collec, id);
+    await setDoc(accountRef, model, {merge: true});
 }
 
 export const updateFieldsOnly = async (collName,docu,data)=>{
