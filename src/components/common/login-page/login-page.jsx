@@ -20,6 +20,7 @@ import {useService} from "../../../hooks/useService";
 import {setCommonState} from "../../../store/reducers/common-slice";
 import useFormController from "../../../hooks/useFormController";
 import {FaLock, FaUserAlt} from "react-icons/fa";
+import {createDocOfCollectionWithId, getDocFromCollection} from "../../../actions/common.action";
 
 const Login = () => {
     let navigate = useNavigate();
@@ -28,10 +29,21 @@ const Login = () => {
     let [valueChangeHandler, setValue, form, setForm] = useFormController()
 
     async function signUpwithGoogle() {
-        // setIsLoading(true)
-        let res = await dispatch(googleSignUp(navigate))
-        console.log(res)
+        // setIsLoading(true
+        let res = await googleSignUp(navigate)
+        let document = await getDocFromCollection('userProfile', res?.reference_doc_id)
 
+        if (Object.keys(document).length === 0 && res?.reference_doc_id) {
+            console.log('bb')
+           let doc = await createDocOfCollectionWithId('userProfile', res?.reference_doc_id, {
+                ...res
+            })
+            navigate('signup')
+
+        } else if (res?.reference_doc_id) {
+
+            navigate('signup')
+        }
     }
 
     const loginHandler = async () => {
@@ -114,7 +126,7 @@ const Login = () => {
             >
                 <Avatar bg="teal.500"/>
                 <Heading color="teal.400">Welcome</Heading>
-                <Box minW={{base: "90%", md: "468px"}}  bg={useColorModeValue('white', 'gray.900')}>
+                <Box minW={{base: "90%", md: "468px"}} bg={useColorModeValue('white', 'gray.900')}>
 
                     <Stack
                         spacing={4}
@@ -139,6 +151,7 @@ const Login = () => {
                                     color="gray.300"
                                     children={<CFaLock color="gray.300"/>}
                                 />
+
                                 <Input
                                     type={showPassword ? "text" : "password"}
                                     placeholder="Password"

@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {
     Modal,
     ModalOverlay,
@@ -10,10 +10,11 @@ import {
 } from '@chakra-ui/react'
 import {useDispatch, useSelector} from "react-redux";
 import {setModalPoperty} from "../../../store/reducers/modal-slice";
-import {createDocOfCollection, getDocFromCollection} from "../../../actions/common.action";
+import {createDocOfCollection, filterDocsFromCollection, getDocFromCollection} from "../../../actions/common.action";
 import {getHoltsByRoute} from "../../../actions/home.action";
 import useFormController from "../../../hooks/useFormController";
 import firebase from "firebase/compat/app";
+import {login} from "../../../actions/user.actions";
 
 const SendRequestModal = () => {
 
@@ -22,7 +23,6 @@ const SendRequestModal = () => {
     const [holtList, setHoltList] = useState([])
     let [valueChangeHandler, setValue, form, setForm] = useFormController()
     let dispatch = useDispatch()
-    console.log(form,'form')
 
     useEffect(() => {
         if (poperties.isOpen) {
@@ -45,6 +45,54 @@ const SendRequestModal = () => {
         }
         let result = dispatch(createDocOfCollection('user requests', data))
         dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: false}))
+    }
+
+    const RatingAndFeedBackCell = ({busId}) => {
+        const [rateAndFeedBack, SetRateAndFeedback] = useState([{rate: 0}])
+        useMemo(() => {
+            if (busId) {
+                getBusRatingAndFeedBack()
+            }
+        }, [])
+
+        async function getBusRatingAndFeedBack() {
+            let result = await filterDocsFromCollection('bus review', '', [['bus_id', '==', busId]])
+            let FeedbacksWithUsers = []
+            for (let line of result) {
+                let userName = await getDocFromCollection('userProfile', line?.user_id)
+                FeedbacksWithUsers.push({...line, user_name: userName?.first_name + ' ' + userName?.last_name})
+            }
+            SetRateAndFeedback(FeedbacksWithUsers)
+        }
+
+        return (
+            <>
+                <Flex direction={'row'} justifyContent={"space-between"}>
+                    <Text>
+                        Rating
+                    </Text>
+                    <Text>
+                        {((rateAndFeedBack?.reduce((prev, item) => (item?.rate + prev), 0)) / rateAndFeedBack?.length)} stars
+                    </Text>
+                </Flex>
+                <div>
+                    <Text align={'center'} fontSize='md' color='tomato'>FeedBacks</Text>
+                    <div justifyContent={'space-between'}>
+                        {
+                            rateAndFeedBack?.map((item) => (
+                                    <Flex justifyContent={'space-between'}>
+                                        <Text>{item?.user_name}</Text>
+                                        <Text>{item?.comment}</Text>
+                                    </Flex>
+                                )
+                            )
+                        }
+
+                    </div>
+                </div>
+
+            </>
+        )
     }
 
     return (
@@ -82,6 +130,7 @@ const SendRequestModal = () => {
                                 }
                             </Select>
                         </Flex>
+                        <RatingAndFeedBackCell busId={poperties?.data?.bus_id}/>
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme='blue' mr={3} onClick={() => {

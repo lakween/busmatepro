@@ -1,17 +1,11 @@
 import firebase from "firebase/compat/app";
 import {collection, getDocs} from "firebase/firestore";
 
-export const googleSignUp =  (navigate) => {
-    return async (dispatch)=>{
-        let provider = new firebase.auth.GoogleAuthProvider();
-        let result = await firebase.auth().signInWithPopup(provider).then(function (result) {
-            navigate('signup')
-            return {email: result.user.email, user_name: result.user.displayName}
-        }).catch(function (error) {
-            return {success: false}
-        });
-        return result
-    }
+export const googleSignUp = async (navigate) => {
+    let provider = new firebase.auth.GoogleAuthProvider();
+    let result = await firebase.auth().signInWithPopup(provider)
+    const [first_name, last_name] = result.user.displayName ? result.user.displayName?.split(" ") : ['', '']
+    return {email: result.user.email, first_name: first_name, last_name: last_name, reference_doc_id: result?.user?.uid}
 }
 
 export const createDoc = (collection, toast, navigate, form) => {
@@ -89,7 +83,7 @@ export const checkEmailExist = (form) => {
     }
 }
 
-export const getAllDocuments =  (CollectionName) => {
+export const getAllDocuments = (CollectionName) => {
     return async (dispatch) => {
         let data = []
         const db = firebase.firestore();

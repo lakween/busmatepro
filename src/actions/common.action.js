@@ -26,6 +26,11 @@ export const createDocOfCollection = async (collName, data) => {
     return docRef.id
 }
 
+export const createDocOfCollectionWithId = async (collName, id, data) => {
+    const db = firebase.firestore();
+    const docRef = await setDoc(doc(db, collName, id), data);
+}
+
 export const deleteDocument = async (collection,document) => {
     const db = firebase.firestore();
     await deleteDoc(doc(db, collection, document));
