@@ -18,7 +18,7 @@ const SignUp = (getNames) => {
     const toast = useToast()
 
     function getNames() {
-        const [first_name, last_name] = displayName? displayName?.split(" "):['',''];
+        const [first_name, last_name] = displayName ? displayName?.split(" ") : ['', ''];
         return {first_name: first_name, last_name: last_name}
     }
 
@@ -29,13 +29,13 @@ const SignUp = (getNames) => {
     }
 
     const signUpHandler = async () => {
-        let res = await dispatch(emailAndPasswordAuth(form.email,form.password,toast))
+        let res = await dispatch(emailAndPasswordAuth(form.email, form.password, toast))
         let result = res ? await dispatch(createDoc('userProfile', toast, navigate("/passenger"), form)) : null
     }
 
     const signedButtonMarkup = (
         <Flex justifyContent={'right'} mt={3} columnGap={'20px'} direction={'row'}>
-            <Button onClick={ () => {
+            <Button onClick={() => {
                 navigate("/passenger")
             }} width={'100px'} colorScheme="teal" size="sm">
                 Skip
@@ -54,7 +54,8 @@ const SignUp = (getNames) => {
     )
 
     return (
-        <Container display={'flex'} justifyContent={"center"} height={'100vh'} centerContent padding={5} maxW='70%' backgroundColor={'#c8d8e5'}>
+        <Container display={'flex'} justifyContent={"center"} height={'100vh'} centerContent padding={5} maxW='70%'
+                   backgroundColor={'#c8d8e5'}>
             <Card inSideTitle={'Personal Informations'}>
                 <Flex gap={3} direction={'row'}>
                     <Box width={'100%'}>

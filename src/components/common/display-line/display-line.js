@@ -1,7 +1,7 @@
 import {Flex, Text} from "@chakra-ui/react";
 import {useState} from "react";
-import EditComponent from "../edite.componet";
 import {FaPencilAlt} from "react-icons/fa";
+import EditComponent from "./components/edite.component";
 
 const DisplayLine = ({
                          modelPath,

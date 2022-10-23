@@ -45,13 +45,13 @@ export const updateProfilePhoto = async (file, currentUser) => {
     await updateProfile(currentUser, {photoURL});
     alert("Uploaded file!");
 }
-
-export const updateDoc = async (id,collec, model) => {
-    const db = firebase.firestore();
-    // await setDoc(doc(db, "accounts", id), model);
-    const accountRef = doc(db, collec, id);
-    await setDoc(accountRef, model, {merge: true});
-}
+//
+// export const updateDoc = async (id,collec, model) => {
+//     const db = firebase.firestore();
+//     // await setDoc(doc(db, "accounts", id), model);
+//     const accountRef = doc(db, collec, id);
+//     await setDoc(accountRef, model, {merge: true});
+// }
 
 export const updateFieldsOnly = async (collName,docu,data)=>{
     const db = firebase.firestore();
@@ -64,7 +64,7 @@ export const updateFieldsOnly = async (collName,docu,data)=>{
 export const updateDocument = async (col, docum, data) => {
     const db = firebase.firestore();
     delete data.id
-    await setDoc(doc(db, col, docum), data);
+    await setDoc(doc(db, col, docum), data,{merge: true});
 }
 
 export const getAllDocFromCollection = async (collName) => {

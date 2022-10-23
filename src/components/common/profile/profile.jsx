@@ -1,5 +1,4 @@
 import {Avatar, Box, Flex, Text, useColorModeValue} from "@chakra-ui/react";
-import DisplayLine from "../../common/display-line/display-line.component";
 import {useEffect, useRef, useState} from "react";
 import {useDispatch} from "react-redux";
 import {getAuth} from "firebase/auth";
@@ -9,6 +8,8 @@ import {
     updateDocument,
     updateProfilePhoto
 } from "../../../actions/common.action";
+import {Card, Col, Row} from "react-bootstrap";
+import DisplayLine from "../display-line/display-line";
 
 const Profile = () => {
     const {currentUser} = getAuth();
@@ -21,7 +22,7 @@ const Profile = () => {
     }, [currentUser]);
 
     const getLocalProfileData = async () => {
-        let userData = await getDocFromCollection('userProfile',currentUser?.uid);
+        let userData = await getDocFromCollection('userProfile', currentUser?.uid);
         setModel({...currentUser, ...userData});
     };
 
@@ -39,22 +40,22 @@ const Profile = () => {
 
     const onUpdateHandler = async (path, form) => {
         setModel({...model, ...form});
-        await updateDocument('userProfile',currentUser.uid, form);
+        await updateDocument('userProfile', currentUser.uid, form);
     };
 
     return (
         <>
-            <section style={{marginBottom: "15rem"}}>
+            <div className={'container-fluidvh-100'}>
                 <Row>
                     <Col xs="12" md="6">
                         {/* --------------------------------------------------------------------------------*/}
                         {/* Card-1*/}
                         {/* --------------------------------------------------------------------------------*/}
                         <Card className="mb-2">
-                            <CardTitle tag="h6" className="border-bottom p-3 mb-0">
+                            <Card.Title tag="h6" className="border-bottom p-3 mb-0">
                                 Profile
-                            </CardTitle>
-                            <CardBody className="text=center">
+                            </Card.Title>
+                            <Card.Body className="text=center">
                                 <Col xs="12" md="6" className="offset-4 mb-4">
                                     <Avatar
                                         size="2xl"
@@ -90,16 +91,16 @@ const Profile = () => {
                                         value={model?.fullName ? model?.fullName : "Unknown"}
                                     />
                                 </Box>
-                            </CardBody>
+                            </Card.Body>
                         </Card>
                     </Col>
 
                     <Col xs="12" md="6">
                         <Card className="mb-2">
-                            <CardTitle tag="h6" className="border-bottom p-3 mb-0">
+                            <Card.Title tag="h6" className="border-bottom p-3 mb-0">
                                 Profile Details
-                            </CardTitle>
-                            <CardBody className="text=center">
+                            </Card.Title>
+                            <Card.Body className="text=center">
                                 <div className="row mt-2 mb-2">
                                     <div className="col-sm-3">
                                         <p className="mb-0">Full Name</p>
@@ -206,11 +207,11 @@ const Profile = () => {
                                 {/*    </p>*/}
                                 {/*  </div>*/}
                                 {/*</div>*/}
-                            </CardBody>
+                            </Card.Body>
                         </Card>
                     </Col>
                 </Row>
-            </section>
+            </div>
         </>
     );
 };

@@ -21,11 +21,8 @@ export let RouterConfig = () => {
                 {index: true, element: <Home/>},
                 {path: "history", element: <RequestHistory/>},
                 {path: "ratings&feedback", element: <RatingsFeedback/>},
+                {path: "profile", element: <Profile/>},
             ],
-        },
-        {
-            path: "profile",
-            element: <Profile/>,
         },
         {
             path: "signup",
