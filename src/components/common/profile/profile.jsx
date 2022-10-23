@@ -52,7 +52,7 @@ const Profile = () => {
                         {/* Card-1*/}
                         {/* --------------------------------------------------------------------------------*/}
                         <Card className="mb-2">
-                            <Card.Title tag="h6" className="border-bottom p-3 mb-0">
+                            <Card.Title tag="h6" className="border-bot tom p-3 mb-0">
                                 Profile
                             </Card.Title>
                             <Card.Body className="text=center">
@@ -171,42 +171,6 @@ const Profile = () => {
                                     </div>
                                 </div>
                                 <hr className="divider-horizontal"/>
-                                <div className="row mt-2 mb-2">
-                                    <div className="col-sm-3">
-                                        <p className="mb-0">School</p>
-                                    </div>
-                                    <div className="col-sm-9">
-                                        <p className="text-muted mb-0">
-                                            <DisplayLine
-                                                modelPath={"School"}
-                                                name={"School"}
-                                                onUpdate={onUpdateHandler}
-                                                value={model?.School ? model?.School : ""}/>
-                                        </p>
-                                    </div>
-                                </div>
-                                <hr className="divider-horizontal"/>
-                                <div className="row mt-2 mb-2">
-                                    <div className="col-sm-3">
-                                        <p className="mb-0">Student ID</p>
-                                    </div>
-                                    <div className="col-sm-9">
-                                        <p className="text-muted mb-0">
-                                            {model?.uid}
-                                        </p>
-                                    </div>
-                                </div>
-                                <hr className="divider-horizontal"/>
-                                {/*<div className="row mt-2 mb-2">*/}
-                                {/*  <div className="col-sm-3">*/}
-                                {/*    <p className="mb-0">Stdundet RAQ</p>*/}
-                                {/*  </div>*/}
-                                {/*  <div className="col-sm-9">*/}
-                                {/*    <p className="text-muted mb-0">*/}
-                                {/*      Bay Area, San Francisco, CA*/}
-                                {/*    </p>*/}
-                                {/*  </div>*/}
-                                {/*</div>*/}
                             </Card.Body>
                         </Card>
                     </Col>
