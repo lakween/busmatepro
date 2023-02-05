@@ -14,6 +14,7 @@ import {createDocOfCollection, filterDocsFromCollection, getDocFromCollection} f
 import {getHoltsByRoute} from "../../../actions/home.action";
 import useFormController from "../../../hooks/useFormController";
 import firebase from "firebase/compat/app";
+import passengerNotificationFactory from "../../common/notifications/notification-factory";
 
 const SendRequestModal = () => {
 
@@ -26,6 +27,7 @@ const SendRequestModal = () => {
     useEffect(() => {
         if (poperties.isOpen) {
             getHoltList()
+            let a  = new passengerNotificationFactory()
         }
     }, [poperties.isOpen])
 
@@ -43,12 +45,13 @@ const SendRequestModal = () => {
             status: 'waiting',
         }
         let result = await createDocOfCollection('user requests', data)
-        console.log(result,'result')
         dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: false}))
     }
 
     const RatingAndFeedBackCell = ({busId}) => {
         const [rateAndFeedBack, SetRateAndFeedback] = useState([{rate: 0}])
+
+        console.log(busId, 'busid')
 
         useMemo(() => {
             if (busId) {
@@ -80,7 +83,7 @@ const SendRequestModal = () => {
                     <Text align={'center'} fontSize='md' color='tomato'>FeedBacks</Text>
                     <div justifyContent={'space-between'}>
                         {
-                            rateAndFeedBack?.map((item,index) => (
+                            rateAndFeedBack?.map((item, index) => (
                                     <Flex justifyContent={'space-between'} key={index}>
                                         <Text>{item?.user_name}</Text>
                                         <Text>{item?.comment}</Text>
@@ -95,6 +98,9 @@ const SendRequestModal = () => {
             </>
         )
     }
+
+    const MemorizeRatingAndFeedBackCell = useMemo(() => (RatingAndFeedBackCell), [])
+
 
     return (
         <>
@@ -131,7 +137,7 @@ const SendRequestModal = () => {
                                 }
                             </Select>
                         </Flex>
-                        <RatingAndFeedBackCell busId={poperties?.data?.bus_id}/>
+                        <MemorizeRatingAndFeedBackCell busId={poperties?.data?.bus_id}/>
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme='blue' mr={3} onClick={() => {
