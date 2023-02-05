@@ -14,7 +14,6 @@ import {createDocOfCollection, filterDocsFromCollection, getDocFromCollection} f
 import {getHoltsByRoute} from "../../../actions/home.action";
 import useFormController from "../../../hooks/useFormController";
 import firebase from "firebase/compat/app";
-import {login} from "../../../actions/user.actions";
 
 const SendRequestModal = () => {
 
@@ -43,12 +42,14 @@ const SendRequestModal = () => {
             bus_id: poperties.data.bus_id,
             status: 'waiting',
         }
-        let result = dispatch(createDocOfCollection('user requests', data))
+        let result = await createDocOfCollection('user requests', data)
+        console.log(result,'result')
         dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: false}))
     }
 
     const RatingAndFeedBackCell = ({busId}) => {
         const [rateAndFeedBack, SetRateAndFeedback] = useState([{rate: 0}])
+
         useMemo(() => {
             if (busId) {
                 getBusRatingAndFeedBack()
@@ -72,15 +73,15 @@ const SendRequestModal = () => {
                         Rating
                     </Text>
                     <Text>
-                        {((rateAndFeedBack?.reduce((prev, item) => (item?.rate + prev), 0)) / rateAndFeedBack?.length)} stars
+                        {((rateAndFeedBack?.reduce((prev, item) => (item?.rate + prev), 0)) / rateAndFeedBack?.length) || 0} stars
                     </Text>
                 </Flex>
                 <div>
                     <Text align={'center'} fontSize='md' color='tomato'>FeedBacks</Text>
                     <div justifyContent={'space-between'}>
                         {
-                            rateAndFeedBack?.map((item) => (
-                                    <Flex justifyContent={'space-between'}>
+                            rateAndFeedBack?.map((item,index) => (
+                                    <Flex justifyContent={'space-between'} key={index}>
                                         <Text>{item?.user_name}</Text>
                                         <Text>{item?.comment}</Text>
                                     </Flex>

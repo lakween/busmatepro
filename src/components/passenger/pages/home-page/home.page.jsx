@@ -5,13 +5,13 @@ import {getAllDocuments} from "../../../../actions/user.actions";
 import MapComponent from "../../../common/map/map.component";
 import {useDispatch, useSelector} from "react-redux";
 import {getHoltLocations, getBusLocations} from "../../../../actions/home.action";
-import {collection, doc, getDocs, onSnapshot} from "firebase/firestore";
 import firebase from "firebase/compat/app";
+import Loading from "../../../common/loading/loading";
 
 const Home = () => {
     let dispatch = useDispatch()
     const [routes, setRoutes] = useState([])
-    const [holts, setHolts] = useState([])
+    const [loading, setLoading] = useState(false)
     const [holtLocations, setHoltLocations] = useState([])
     const [busDetails, setBusDetails] = useState([])
     const db = firebase.firestore();
@@ -37,11 +37,17 @@ const Home = () => {
     }
 
     async function getLocations() {
-        let result = await getHoltLocations(routes, selectedRoute)
-        let busDetails = await getBusLocations(routes, selectedRoute)
-        // ref.current = ref.current
-        setHoltLocations([...result])
-        setBusDetails([...busDetails])
+        setLoading(true)
+        try {
+            let result = await getHoltLocations(routes, selectedRoute)
+            let busDetails = await getBusLocations(routes, selectedRoute)
+            // ref.current = ref.current
+            setHoltLocations([...result])
+            setBusDetails([...busDetails])
+            setLoading(false)
+        } catch (e) {
+            setLoading(false)
+        }
     }
 
     return (
@@ -71,8 +77,9 @@ const Home = () => {
                     </Flex>
                 </Card>
                 <Card minHeight={"65vh"}>
-                    <MapComponent locations={holtLocations} busDetails={busDetails}/>
-                    {holtLocations.length > 0 ? null : <text>Loading....</text>}
+                    {   loading ?
+                        <Loading style={{minHeight:"65vh",display:"flex",justifyContent:"center",alignItems:"center"}}/>:  <MapComponent locations={holtLocations} busDetails={busDetails}/>
+                    }
                 </Card>
             </Box>
         </>
