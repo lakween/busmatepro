@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getHoltLocations, getBusLocations} from "../../../../actions/home.action";
 import firebase from "firebase/compat/app";
 import Loading from "../../../common/loading/loading";
+import Notifications from "../../../common/notifications/notifications";
 
 const Home = () => {
     let dispatch = useDispatch()
@@ -82,6 +83,7 @@ const Home = () => {
                     }
                 </Card>
             </Box>
+            <Notifications/>
         </>
     )
 }

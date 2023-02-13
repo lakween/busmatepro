@@ -1,28 +1,30 @@
 import {getAuth} from "firebase/auth";
 import {Box, Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useToast} from '@chakra-ui/react'
-import {useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
 import {
     deleteDocument,
-    filterDocsFromCollection,
+    filterDocsFromCollection, filterDocsFromCollectionRT,
     getDocFromCollection,
     updateFieldsOnly
 } from "../../../../actions/common.action";
 
 const RequestHistory = (theme) => {
-    const dispatch = useDispatch()
     const [requests, setRequest] = useState([])
-    const [refetch, setRefetch] = useState(false);
+    const {currentUser} = getAuth()
     const toast = useToast()
 
     useEffect(() => {
-        getData()
-    }, [refetch])
+        if (currentUser) {
+            getData()
+        }
+    }, [currentUser])
 
-    const getData = async () => {
-        const {currentUser} = getAuth()
-        let requests = await filterDocsFromCollection('user requests', '', [['user_id', '==', currentUser?.uid]])
-        setRequest(requests)
+    console.log('bb',requests)
+
+    const getData =  () => {
+        filterDocsFromCollectionRT('user requests', '', [['user_id', '==', currentUser?.uid]],(data)=>{
+            setRequest([...data])
+        })
     }
 
     const cancelHandler = async (id) => {
@@ -34,12 +36,10 @@ const RequestHistory = (theme) => {
             duration: 9000,
             isClosable: true,
         })
-        setRefetch(!refetch)
     }
-    
+
     const deleteHandler = async (id) => {
-        await deleteDocument( "user requests", id);
-        setRefetch(!refetch)
+        await deleteDocument("user requests", id);
         toast({
             title: 'Deleted',
             // description:,
@@ -95,7 +95,7 @@ const RequestHistory = (theme) => {
                                                 colorScheme='teal' size='xs'>
                                         Cancel
                                     </Button>
-                                        <Button onClick={()=>deleteHandler(item?.id)} colorScheme='teal' size='xs'>
+                                        <Button onClick={() => deleteHandler(item?.id)} colorScheme='teal' size='xs'>
                                             delete
                                         </Button></Td>
                                 </Tr>

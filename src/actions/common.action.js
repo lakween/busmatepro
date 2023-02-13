@@ -1,6 +1,18 @@
 import firebase from "firebase/compat/app";
 import {getAuth, signOut, updateProfile} from "firebase/auth";
-import {collection, getDocs, addDoc, doc, where, query, getDoc, setDoc,updateDoc,deleteDoc } from "firebase/firestore";
+import {
+    collection,
+    getDocs,
+    addDoc,
+    doc,
+    where,
+    query,
+    getDoc,
+    setDoc,
+    updateDoc,
+    deleteDoc,
+    onSnapshot
+} from "firebase/firestore";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
 
 export const getDocFromCollection = async (coll, docum) => {
@@ -15,6 +27,20 @@ export const getDocFromCollection = async (coll, docum) => {
         return {}
     }
 }
+
+export const getDocFromCollectionRT= async (coll, docum) => {
+    //realtime update
+    const db = firebase.firestore();
+    const docRef = await doc(db, coll, docum);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        return docSnap.data()
+    } else {
+        return {}
+    }
+}
+
 
 export const updateAuthProfile = async (user, model) => {
     let res = await updateProfile(user, model)
@@ -96,4 +122,25 @@ export const filterDocsFromCollection = async (coll, fields, filters) => {
     return array
 }
 
+export const filterDocsFromCollectionRT = async (coll, fields, filters,callBack) => {
+    //real time update
+    const db = firebase.firestore();
+    let filterArray = []
+    for (let item of filters) {
+        if (item[2] == '') {
+            continue
+        }
+        filterArray.push(where(item[0], item[1], item[2]))
+    }
+    const collRef = await collection(db, coll);
+    const queryData = await query(collRef, ...filterArray);
+
+    onSnapshot(queryData, (querySnapshot) => {
+        let array = []
+        for (let document of querySnapshot.docs) {
+                array.push({...document.data(), id: document.id})
+            }
+        callBack(array)
+    });
+}
 

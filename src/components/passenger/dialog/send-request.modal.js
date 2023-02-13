@@ -51,8 +51,6 @@ const SendRequestModal = () => {
     const RatingAndFeedBackCell = ({busId}) => {
         const [rateAndFeedBack, SetRateAndFeedback] = useState([{rate: 0}])
 
-        console.log(busId, 'busid')
-
         useMemo(() => {
             if (busId) {
                 getBusRatingAndFeedBack()

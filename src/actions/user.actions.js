@@ -36,7 +36,6 @@ export const emailAndPasswordAuth = (email, password, toast) => {
                 return true
             })
             .catch((error) => {
-                console.log((JSON.stringify(error)))
                 toast({
                     title: 'Something wrong',
                     description: [...error.message.split(":")][1],
@@ -73,7 +72,6 @@ export const checkEmailExist = (form) => {
         firebase.auth().signInWithEmailAndPassword(form.username, form.password)
             .then((userCredential) => {
                 // Signed in
-                console.log('succ')
                 // ...
             })
             .catch((error) => {

@@ -34,9 +34,7 @@ export const getBus = (form) => {
                     .collection('bus')
                     .where('rou', '==', busRoutRef)
                     .get().then((querySnapshot) => {
-                        console.log(querySnapshot, 'querySnapshot')
                         querySnapshot.forEach((doc) => {
-                            console.log(doc.id, 'adadad')
                         })
                     })
             })

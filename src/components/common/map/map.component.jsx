@@ -151,7 +151,7 @@ const BusMarker = (options) => {
     let dispatch = useDispatch()
 
     useEffect(() => {
-        console.log(options,'llllwwww')
+
         if (!marker) {
             // eslint-disable-next-line no-undef
             setMarker(new google.maps.Marker({

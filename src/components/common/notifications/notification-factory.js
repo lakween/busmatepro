@@ -4,6 +4,7 @@ import {filterDocsFromCollection, getDocFromCollection} from "../../../actions/c
 class passengerNotificationFactory {
 
     constructor() {
+
         let {currentUser} = getAuth()
         this.id = currentUser?.uid;
         this.start()
@@ -24,8 +25,9 @@ class passengerNotificationFactory {
     }
 
     async getCurrentProgessingRequest() {
-        let result = await filterDocsFromCollection('user requests', '', [['user_id' == this.id]])
-        console.log(result, 'User')
+        console.log(this.id,'his.id')
+        let result = await filterDocsFromCollection('user requests', [], [["user_id", "==", String(this.id)]])
+        console.log(result,'result')
     }
 }
 

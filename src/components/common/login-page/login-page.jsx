@@ -34,7 +34,6 @@ const Login = () => {
         let document = await getDocFromCollection('userProfile', res?.reference_doc_id)
 
         if (Object.keys(document).length === 0 && res?.reference_doc_id) {
-            console.log('bb')
            let doc = await createDocOfCollectionWithId('userProfile', res?.reference_doc_id, {
                 ...res
             })
