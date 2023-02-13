@@ -149,11 +149,10 @@ const HoltMarker = (options) => {
 };
 
 const BusMarker = (options) => {
-    const [marker, setMarker] = useState();
     let dispatch = useDispatch()
     const db = firebase.firestore();
+    const [marker, setMarker] = useState();
     const [location,setLocation] = useState({})
-    console.log(options)
 
     useEffect(()=>{
         onSnapshot(
@@ -192,7 +191,7 @@ const BusMarker = (options) => {
                 marker.setMap(null);
             }
         };
-    }, [marker]);
+    }, [marker,options]);
 
     useEffect(() => {
         if (marker) {

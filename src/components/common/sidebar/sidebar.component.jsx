@@ -16,6 +16,7 @@ import {useDispatch, useSelector} from "react-redux";
 import React from "react";
 import {FiBell, FiChevronDown, FiHome, FiMenu} from "react-icons/fi";
 import RequestHistory from "../../passenger/pages/request-history/request-history";
+import Notifications from "../notifications/notifications";
 
 // const Sidebar = () => {
 //     let displayName = useSelector((store) => (store.firebase.auth.displayName))
@@ -210,13 +211,7 @@ const MobileNav = ({onOpen, ...rest}) => {
                 <Button onClick={toggleColorMode}>
                     Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
                 </Button>
-
-                <IconButton
-                    size="lg"
-                    variant="ghost"
-                    aria-label="open menu"
-                    icon={<FiBell/>}
-                />
+                <Notifications/>
                 <Flex alignItems={'center'}>
                     <Menu>
                         <MenuButton
