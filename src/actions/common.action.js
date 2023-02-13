@@ -141,6 +141,8 @@ export const filterDocsFromCollectionRT = async (coll, fields, filters,callBack)
                 array.push({...document.data(), id: document.id})
             }
         callBack(array)
+
+
     });
 }
 
