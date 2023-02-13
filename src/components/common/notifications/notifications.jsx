@@ -6,13 +6,13 @@ const Notifications = () => {
     const q = query(collection(db, "user requests"), where("status", "==", "waiting"));
     const unsubscribe = ''
 
-    useEffect(()=>{
-        onSnapshot(q, { includeMetadataChanges: true },  (snapshot) => {
-            snapshot.docChanges().forEach((change) => {
-                    console.log("New city: ", change.doc.data());
-            });
-        });
-    })
+    // useEffect(()=>{
+    //     onSnapshot(q, { includeMetadataChanges: true },  (snapshot) => {
+    //         snapshot.docChanges().forEach((change) => {
+    //                 console.log("New city: ", change.doc.data());
+    //         });
+    //     });
+    // })
 
 
     return (
