@@ -5,6 +5,8 @@ import {isLatLngLiteral} from "@googlemaps/typescript-guards";
 import {createCustomEqual} from "fast-equals";
 import {useDispatch} from "react-redux";
 import {setModalPoperty} from "../../../store/reducers/modal-slice";
+import {doc, onSnapshot} from "firebase/firestore";
+import firebase from "firebase/compat/app";
 
 const render = (status) => {
     return <h1>{status}</h1>;
@@ -147,8 +149,18 @@ const HoltMarker = (options) => {
 };
 
 const BusMarker = (options) => {
-    const [marker, setMarker] = useState();
     let dispatch = useDispatch()
+    const db = firebase.firestore();
+    const [marker, setMarker] = useState();
+    const [location,setLocation] = useState({})
+
+    useEffect(()=>{
+        onSnapshot(
+            doc(db, "bus", options?.data?.bus_id),
+            (doc) => {
+                setLocation(doc?.data()?.current_location ? JSON.parse(doc?.data()?.current_location): {})
+            });
+    },[])
 
     useEffect(() => {
 
@@ -179,13 +191,15 @@ const BusMarker = (options) => {
                 marker.setMap(null);
             }
         };
-    }, [marker,options?.data]);
+    }, [marker,options]);
 
     useEffect(() => {
         if (marker) {
-            marker.setOptions(options);
+            marker.setOptions({
+               ...options,position:location
+            });
         }
-    }, [marker, options?.data]);
+    }, [marker,location]);
 
     return null
 };

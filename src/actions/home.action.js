@@ -28,7 +28,6 @@ export const getBusLocations = async (routes, eventValue) => {
                     bus_no: doc.bus_no,
                     available: doc.available,
                     available_seats: doc?.available_seats,
-                    current_holt: data?.location ? JSON.parse(data?.location) : '',
                     selectedRoute: eventValue
                 })
             }
