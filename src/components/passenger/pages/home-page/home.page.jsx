@@ -1,22 +1,21 @@
 import Card from "../../../common/card/card.component";
 import {Box, Flex, Select, Text, useColorModeValue} from "@chakra-ui/react";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {getAllDocuments} from "../../../../actions/user.actions";
 import MapComponent from "../../../common/map/map.component";
-import {useDispatch, useSelector} from "react-redux";
-import {getHoltLocations, getBusLocations} from "../../../../actions/home.action";
+import {useDispatch} from "react-redux";
+import {getBusLocations, getHoltLocations} from "../../../../actions/home.action";
 import firebase from "firebase/compat/app";
 import Loading from "../../../common/loading/loading";
-import Notifications from "../../../common/notifications/notifications";
 
 const Home = () => {
     let dispatch = useDispatch()
-    const [routes, setRoutes] = useState([])
-    const [loading, setLoading] = useState(false)
-    const [holtLocations, setHoltLocations] = useState([])
-    const [busDetails, setBusDetails] = useState([])
     const db = firebase.firestore();
+    const [routes, setRoutes] = useState([])
     let [selectedRoute, setSelectedRoute] = useState()
+    const [loading, setLoading] = useState(false)
+    const [busDetails, setBusDetails] = useState([])
+    const [holtLocations, setHoltLocations] = useState([])
 
     const onChnageHandler = async (event) => {
         setSelectedRoute(event.target.value)
@@ -78,12 +77,16 @@ const Home = () => {
                     </Flex>
                 </Card>
                 <Card minHeight={"65vh"}>
-                    {   loading ?
-                        <Loading style={{minHeight:"65vh",display:"flex",justifyContent:"center",alignItems:"center"}}/>:  <MapComponent locations={holtLocations} busDetails={busDetails}/>
+                    {loading ?
+                        <Loading style={{
+                            minHeight: "65vh",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }}/> : <MapComponent locations={holtLocations} busDetails={busDetails}/>
                     }
                 </Card>
             </Box>
-            <Notifications/>
         </>
     )
 }

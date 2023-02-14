@@ -1,9 +1,8 @@
 import {getAuth} from "firebase/auth";
 import {Box, Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useToast} from '@chakra-ui/react'
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {
-    deleteDocument,
-    filterDocsFromCollection, filterDocsFromCollectionRT,
+    deleteDocument, filterDocsFromCollectionRT,
     getDocFromCollection,
     updateFieldsOnly
 } from "../../../../actions/common.action";
@@ -19,10 +18,10 @@ const RequestHistory = (theme) => {
         }
     }, [currentUser])
 
-    console.log('bb',requests)
+    console.log('bb', requests)
 
-    const getData =  () => {
-        filterDocsFromCollectionRT('user requests', '', [['user_id', '==', currentUser?.uid]],(data)=>{
+    const getData = () => {
+        filterDocsFromCollectionRT('user requests', '', [['user_id', '==', currentUser?.uid]], (data) => {
             setRequest([...data])
         })
     }
@@ -31,7 +30,6 @@ const RequestHistory = (theme) => {
         await updateFieldsOnly('user requests', id, {status: 'Cancelled'})
         toast({
             title: 'Cancelled',
-            // description:,
             status: 'success',
             duration: 9000,
             isClosable: true,
@@ -42,7 +40,6 @@ const RequestHistory = (theme) => {
         await deleteDocument("user requests", id);
         toast({
             title: 'Deleted',
-            // description:,
             status: 'success',
             duration: 9000,
             isClosable: true,
@@ -72,6 +69,8 @@ const RequestHistory = (theme) => {
         )
     }
 
+    const MemorizeCustomTdGroup = useMemo(() => (CustomTdGroup), [])
+
     return (
         <>
             <Box mt={10} maxH={'100vh'}>
@@ -87,9 +86,9 @@ const RequestHistory = (theme) => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {requests.map((item) => (
+                            {requests?.map((item) => (
                                 <Tr>
-                                    <CustomTdGroup busID={item?.bus_id} pickUpHolt={item?.pickUp_holt}/>
+                                    <MemorizeCustomTdGroup busID={item?.bus_id} pickUpHolt={item?.pickUp_holt}/>
                                     <Td>{item?.status}</Td>
                                     <Td><Button onClick={() => cancelHandler(item?.id)} className={'me-2'}
                                                 colorScheme='teal' size='xs'>

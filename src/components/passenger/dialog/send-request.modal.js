@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useRef, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {
     Modal,
     ModalOverlay,
@@ -6,7 +6,7 @@ import {
     ModalHeader,
     ModalFooter,
     ModalBody,
-    ModalCloseButton, Button, Input, FormLabel, FormControl, useDisclosure, Text, Flex, Select,
+    ModalCloseButton, Button, Input, FormLabel, FormControl, useDisclosure, Text, Flex, Select, toast,
 } from '@chakra-ui/react'
 import {useDispatch, useSelector} from "react-redux";
 import {setModalPoperty} from "../../../store/reducers/modal-slice";
@@ -14,20 +14,23 @@ import {createDocOfCollection, filterDocsFromCollection, getDocFromCollection} f
 import {getHoltsByRoute} from "../../../actions/home.action";
 import useFormController from "../../../hooks/useFormController";
 import firebase from "firebase/compat/app";
+import {useToast} from '@chakra-ui/react'
 import passengerNotificationFactory from "../../common/notifications/notification-factory";
+import {execute} from "bootstrap/js/src/util";
 
 const SendRequestModal = () => {
 
-    const poperties = useSelector((state) => (state?.modalSlice.sendRequestModel))
-    let authData = useSelector((store) => (store?.firebase.auth))
+    const toast = useToast()
+    let dispatch = useDispatch()
     const [holtList, setHoltList] = useState([])
     let [valueChangeHandler, setValue, form, setForm] = useFormController()
-    let dispatch = useDispatch()
+    let authData = useSelector((store) => (store?.firebase.auth))
+    const poperties = useSelector((state) => (state?.modalSlice.sendRequestModel))
 
     useEffect(() => {
         if (poperties.isOpen) {
             getHoltList()
-            let a  = new passengerNotificationFactory()
+            let a = new passengerNotificationFactory()
         }
     }, [poperties.isOpen])
 
@@ -37,7 +40,21 @@ const SendRequestModal = () => {
     }
 
     async function sendRequest() {
-        const db = firebase.firestore();
+        let result = await checkRequestAvailability()
+
+        if (result) executeRequest()
+        else {
+            dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: false}))
+            toast({
+                title: 'Please cansel the waiting request',
+                status: 'warning',
+                duration: 9000,
+                isClosable: true,
+            })
+        }
+    }
+
+    const executeRequest = async () => {
         let data = {
             ...form,
             user_id: authData.uid,
@@ -46,6 +63,20 @@ const SendRequestModal = () => {
         }
         let result = await createDocOfCollection('user requests', data)
         dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: false}))
+
+        toast({
+            title: 'Request sent',
+            status: 'success',
+            duration: 9000,
+            isClosable: true,
+        })
+    }
+
+    const checkRequestAvailability = async () => {
+        let result = await filterDocsFromCollection('user requests', '', [["status", '==', "waiting"],["user_id", "==", authData.uid]])
+        console.log(result, 'rererer')
+        if (result?.length > 0) return false
+        else return true
     }
 
     const RatingAndFeedBackCell = ({busId}) => {
