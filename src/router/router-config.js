@@ -1,4 +1,4 @@
-import {Outlet, Link, useRoutes, useParams} from "react-router-dom";
+import {useRoutes} from "react-router-dom";
 import Login from "../components/common/login-page/login-page";
 import Sidebar from "../components/common/sidebar/sidebar.component";
 import Home from "../components/passenger/pages/home-page/home.page";

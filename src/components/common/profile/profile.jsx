@@ -10,6 +10,7 @@ import {
 } from "../../../actions/common.action";
 import {Card, Col, Row} from "react-bootstrap";
 import DisplayLine from "../display-line/display-line";
+import firebase from "firebase/compat/app";
 
 const Profile = () => {
     const {currentUser} = getAuth();
@@ -17,12 +18,20 @@ const Profile = () => {
     const [model, setModel] = useState({});
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        getLocalProfileData();
-    }, [currentUser]);
 
-    const getLocalProfileData = async () => {
-        let userData = await getDocFromCollection('userProfile', currentUser?.uid);
+    useEffect(() => {
+        firebase.auth().onAuthStateChanged(async function(user) {
+            if (user) {
+                console.log(user,'user')
+                getLocalProfileData(user?.uid)
+            } else {
+                // navigate('/')
+            }
+        });
+    }, []);
+
+    const getLocalProfileData = async (uid) => {
+        let userData = await getDocFromCollection('userProfile', uid);
         setModel({...currentUser, ...userData});
     };
 
@@ -43,6 +52,7 @@ const Profile = () => {
         await updateDocument('userProfile', currentUser.uid, form);
     };
 
+    console.log(currentUser,'currentUser')
     return (
         <>
             <div className={'container-fluidvh-100'}>
