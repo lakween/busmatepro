@@ -1,29 +1,19 @@
-import {Button, color, Select, Textarea, useToast} from "@chakra-ui/react";
-import {getAuth} from "firebase/auth";
+import {Button, Select, Table, TableContainer, Tbody, Td, Textarea, Th, Thead, Tr, useToast} from "@chakra-ui/react";
 import {Rating} from "@mui/material";
 import * as React from 'react';
+import {useEffect, useRef, useState} from 'react';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
-import {useEffect, useState} from "react";
 import {
-    createDocOfCollection, deleteDocument,
+    createDocOfCollection,
+    deleteDocument,
     filterDocsFromCollection,
     getAllDocFromCollection,
     getDocFromCollection,
-    updateDocument, updateFieldsOnly
+    updateDocument
 } from "../../../../actions/common.action";
 import useFormController from "../../../../hooks/useFormController";
-import {
-    Table,
-    Thead,
-    Tbody,
-    Tfoot,
-    Tr,
-    Th,
-    Td,
-    TableCaption,
-    TableContainer,
-} from '@chakra-ui/react'
+import firebase from "firebase/compat/app";
 
 const RatingsFeedback = () => {
 
@@ -35,12 +25,20 @@ const RatingsFeedback = () => {
     const [allFeedbacks, setAllFeedbacks] = useState([]);
     let [valueChangeHandler, setValue, form, setForm] = useFormController({})
     const toast = useToast()
-    const {currentUser} = getAuth()
+    let currentUser = useRef()
 
     useEffect(() => {
-        getbuslist()
-        getAllFeedbacks()
-    }, [refetch])
+        firebase.auth().onAuthStateChanged(async function (user) {
+            if (user) {
+                currentUser.current = user?.uid
+                console.log(user ,'user')
+                getbuslist()
+                getAllFeedbacks()
+            } else {
+                // navigate('/')
+            }
+        });
+    }, [])
 
     const onChangeBusSelection = async (e) => {
         setForm({})
@@ -52,7 +50,7 @@ const RatingsFeedback = () => {
 
     const getPreviousReatings = async (busID) => {
 
-        let result = await filterDocsFromCollection('bus review', '', [['bus_id', '==', busID], ['user_id', '==', currentUser?.uid]])
+        let result = await filterDocsFromCollection('bus review', '', [['bus_id', '==', busID], ['user_id', '==', currentUser?.current]])
         if (result.length > 0) {
             setPrevious(result[0])
             setForm({...result[0]})
@@ -61,7 +59,7 @@ const RatingsFeedback = () => {
 
     const getAllFeedbacks = async () => {
 
-        let result = await filterDocsFromCollection('bus review', '', [['user_id', '==', currentUser?.uid]])
+        let result = await filterDocsFromCollection('bus review', '', [['user_id', '==', currentUser?.current]])
         if (result.length > 0) {
             setAllFeedbacks(result)
         }
@@ -87,7 +85,7 @@ const RatingsFeedback = () => {
     async function onSaveHandler() {
         let data = {
             bus_id: selectedBus,
-            user_id: currentUser?.uid,
+            user_id: currentUser?.current,
             ...form
         }
         if (data?.id) {

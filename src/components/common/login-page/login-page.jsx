@@ -1,14 +1,18 @@
 import {
     Avatar,
     Box,
-    Button, chakra,
+    Button,
+    chakra,
     Flex,
-    FormControl, FormHelperText,
+    FormControl,
+    FormHelperText,
     Heading,
     Input,
-    InputGroup, InputLeftElement, InputRightElement, Link,
+    InputGroup,
+    InputLeftElement,
+    InputRightElement,
+    Link,
     Stack,
-    Text,
     useColorModeValue
 } from '@chakra-ui/react'
 import {FcGoogle} from "react-icons/fc";
@@ -16,8 +20,6 @@ import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {googleSignUp, login} from "../../../actions/user.actions";
 import {useState} from "react";
-import {useService} from "../../../hooks/useService";
-import {setCommonState} from "../../../store/reducers/common-slice";
 import useFormController from "../../../hooks/useFormController";
 import {FaLock, FaUserAlt} from "react-icons/fa";
 import {createDocOfCollectionWithId, getDocFromCollection} from "../../../actions/common.action";

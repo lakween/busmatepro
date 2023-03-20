@@ -6,22 +6,24 @@ import {
     getDocFromCollection,
     updateFieldsOnly
 } from "../../../../actions/common.action";
+import firebase from "firebase/compat/app";
 
 const RequestHistory = (theme) => {
     const [requests, setRequest] = useState([])
-    const {currentUser} = getAuth()
     const toast = useToast()
 
     useEffect(() => {
-        if (currentUser) {
-            getData()
-        }
-    }, [currentUser])
+        firebase.auth().onAuthStateChanged(async function (user) {
+            if (user) {
+                getData(user?.uid)
+            } else {
+                // navigate('/')
+            }
+        });
+    }, [])
 
-    console.log('bb', requests)
-
-    const getData = () => {
-        filterDocsFromCollectionRT('user requests', '', [['user_id', '==', currentUser?.uid]], (data) => {
+    const getData = (uid) => {
+        filterDocsFromCollectionRT('user requests', '', [['user_id', '==', uid]], (data) => {
             setRequest([...data])
         })
     }
