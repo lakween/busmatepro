@@ -1,17 +1,21 @@
 import {getAuth} from "firebase/auth";
 import {filterDocsFromCollection, getDocFromCollection} from "../../../actions/common.action";
+import firebase from "firebase/compat/app";
 
 class passengerNotificationFactory {
-
+    id = ''
     constructor() {
-
-        let {currentUser} = getAuth()
-        this.id = currentUser?.uid;
-        this.start()
+        firebase.auth().onAuthStateChanged(async function (user) {
+            if (user) {
+                // this.id = user.uid
+                // this.start()
+                this.start(user.uid)
+            }
+        });
     }
 
-    start() {
-        this.getUserType().then((user) => {
+    start(uid) {
+        this.getUserType(uid).then((user) => {
                 if (user == 'passenger') {
                     this.getCurrentProgessingRequest().then()
                 }
@@ -19,8 +23,8 @@ class passengerNotificationFactory {
         )
     }
 
-    async getUserType() {
-        let user = await getDocFromCollection('userProfile', this.id)
+    async getUserType(uid) {
+        let user = await getDocFromCollection('userProfile', uid)
         return user?.type
     }
 

@@ -31,7 +31,6 @@ const RatingsFeedback = () => {
         firebase.auth().onAuthStateChanged(async function (user) {
             if (user) {
                 currentUser.current = user?.uid
-                console.log(user ,'user')
                 getbuslist()
                 getAllFeedbacks()
             } else {

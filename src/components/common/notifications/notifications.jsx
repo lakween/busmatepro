@@ -3,16 +3,17 @@ import firebase from "firebase/compat/app";
 import React, {useEffect} from "react";
 import {Menu, Button, MenuButton, MenuItem, MenuList, Image, IconButton} from "@chakra-ui/react";
 import {FiBell} from "react-icons/fi";
+import passengerNotificationFactory from "./notification-factory";
 
 function ChevronDownIcon() {
     return null;
 }
 
 const Notifications = () => {
-    const db = firebase.firestore();
-    const q = query(collection(db, "user requests"), where("status", "==", "waiting"));
-    const unsubscribe = ''
-
+    // const db = firebase.firestore();
+    // const q = query(collection(db, "user requests"), where("status", "==", "waiting"));
+    // const unsubscribe = ''
+   new passengerNotificationFactory()
     // useEffect(()=>{
     //     onSnapshot(q, { includeMetadataChanges: true },  (snapshot) => {
     //         snapshot.docChanges().forEach((change) => {
