@@ -1,4 +1,4 @@
-import RequestHistory from "../components/request-history";
+import RequestHistory from "./components/request-history";
 
 const DriverHomePage = () => {
 
