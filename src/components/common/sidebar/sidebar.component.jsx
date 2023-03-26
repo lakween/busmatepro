@@ -97,7 +97,6 @@ function Sidebar({children}) {
 const SidebarContent = ({onClose}) => {
 
     let navigate = useNavigate();
-    const dispatch = useDispatch()
     let userDetails = useUserLoginInfo()
     const [linkItems, setLinkItems] = useState([])
 
@@ -109,7 +108,7 @@ const SidebarContent = ({onClose}) => {
         FiHome: FiHome
     }
 
-   async function getSideBarLinks() {
+    async function getSideBarLinks() {
         if (userDetails?.type == 'passenger') {
             let data = await getAllDocFromCollection('passengerSideBarLinks')
             setLinkItems(data)
@@ -118,24 +117,6 @@ const SidebarContent = ({onClose}) => {
             setLinkItems(data)
         }
     }
-
-    console.log(linkItems)
-
-    // let LinkItems = [
-    //     {name: 'Home', link: "/passenger"},
-    //     {name: 'Request History', link: "/passenger/history"},
-    //     {name: "Ratings & Feedback", link: "/passenger/ratings&feedback"},
-    // ]
-
-
-    // useEffect(() => {
-    //     getData()
-    // }, [])
-    //
-    // async function getData() {
-    //     // let res = await dispatch(getAllDocFromCollection('userRoutes'))
-    //     // setLinkItems([...res])
-    // }
 
     return (
 
