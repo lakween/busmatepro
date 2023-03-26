@@ -5,7 +5,6 @@ import {useNavigate} from "react-router-dom";
 import {getDocFromCollection} from "../actions/common.action";
 
 const useUserLoginInfo = () => {
-    let dispatch = useDispatch()
     let navigate = useNavigate()
     let [model, setModel] = useState()
 
@@ -17,9 +16,10 @@ const useUserLoginInfo = () => {
         firebase.auth().onAuthStateChanged(async function (user) {
             if (user) {
                 let userData = await getDocFromCollection('userProfile', user?.uid);
-                setModel({...userData, id: user?.uid});
+                setModel({...userData, id: user?.uid, isLogged: true});
             } else {
-                // navigate('/')
+                setModel({isLogged: false});
+                navigate('/')
             }
         });
     }

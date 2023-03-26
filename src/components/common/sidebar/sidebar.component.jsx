@@ -17,6 +17,7 @@ import React from "react";
 import {FiBell, FiChevronDown, FiHome, FiMenu} from "react-icons/fi";
 import RequestHistory from "../../passenger/pages/request-history/request-history";
 import Notifications from "../notifications/notifications";
+import {signOut} from "../../../actions/user.actions";
 
 // const Sidebar = () => {
 //     let displayName = useSelector((store) => (store.firebase.auth.displayName))
@@ -103,7 +104,7 @@ const SidebarContent = ({onClose}) => {
     let LinkItems = [
         {name: 'Home', link: "/passenger"},
         {name: 'Request History', link: "/passenger/history"},
-        {name: "Ratings & Feedback", link:"/passenger/ratings&feedback"},
+        {name: "Ratings & Feedback", link: "/passenger/ratings&feedback"},
     ]
 
     // useEffect(() => {
@@ -247,7 +248,9 @@ const MobileNav = ({onOpen, ...rest}) => {
                             <MenuItem>Settings</MenuItem>
                             <MenuItem>Billing</MenuItem>
                             <MenuDivider/>
-                            <MenuItem onClick={() => navigate('/login')}>Sign out</MenuItem>
+                            <MenuItem onClick={() => {
+                                signOut(navigate)
+                            }}>Sign out</MenuItem>
                         </MenuList>
                     </Menu>
                 </Flex>

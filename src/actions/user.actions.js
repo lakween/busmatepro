@@ -48,8 +48,9 @@ export const emailAndPasswordAuth = (email, password, toast) => {
     }
 }
 
-export const signOut = () => {
+export const signOut = (navigate) => {
     return firebase.auth().signOut().then(() => {
+        navigate("/")
     }).catch((error) => {
     });
 }
