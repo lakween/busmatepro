@@ -22,8 +22,8 @@ const Profile = () => {
     useEffect(() => {
         firebase.auth().onAuthStateChanged(async function(user) {
             if (user) {
-                console.log(user,'user')
                 getLocalProfileData(user?.uid)
+
             } else {
                 // navigate('/')
             }
@@ -52,7 +52,6 @@ const Profile = () => {
         await updateDocument('userProfile', currentUser.uid, form);
     };
 
-    console.log(currentUser,'currentUser')
     return (
         <>
             <div className={'container-fluidvh-100'}>

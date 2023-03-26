@@ -17,6 +17,9 @@ import React from "react";
 import {FiBell, FiChevronDown, FiHome, FiMenu} from "react-icons/fi";
 import RequestHistory from "../../passenger/pages/request-history/request-history";
 import Notifications from "../notifications/notifications";
+import {signOut} from "../../../actions/user.actions";
+import useUserLoginInfo from "../../../hooks/useLoginInfor";
+import {filterDocsFromCollection, getAllDocFromCollection, getDocFromCollection} from "../../../actions/common.action";
 
 // const Sidebar = () => {
 //     let displayName = useSelector((store) => (store.firebase.auth.displayName))
@@ -94,26 +97,26 @@ function Sidebar({children}) {
 const SidebarContent = ({onClose}) => {
 
     let navigate = useNavigate();
-    const dispatch = useDispatch()
+    let userDetails = useUserLoginInfo()
+    const [linkItems, setLinkItems] = useState([])
+
+    useEffect(() => {
+        getSideBarLinks()
+    }, [userDetails])
 
     let icons = {
         FiHome: FiHome
     }
 
-    let LinkItems = [
-        {name: 'Home', link: "/passenger"},
-        {name: 'Request History', link: "/passenger/history"},
-        {name: "Ratings & Feedback", link:"/passenger/ratings&feedback"},
-    ]
-
-    // useEffect(() => {
-    //     getData()
-    // }, [])
-    //
-    // async function getData() {
-    //     // let res = await dispatch(getAllDocFromCollection('userRoutes'))
-    //     // setLinkItems([...res])
-    // }
+    async function getSideBarLinks() {
+        if (userDetails?.type == 'passenger') {
+            let data = await getAllDocFromCollection('passengerSideBarLinks')
+            setLinkItems(data)
+        } else if (userDetails?.type == 'driver') {
+            let data = await getAllDocFromCollection('driverSidebarLinks')
+            setLinkItems(data)
+        }
+    }
 
     return (
 
@@ -132,7 +135,7 @@ const SidebarContent = ({onClose}) => {
                 <CloseButton display={{base: 'flex', md: 'none'}} onClick={onClose}/>
 
             </Flex>
-            {LinkItems.map((link) => (
+            {linkItems?.map((link) => (
                 <NavItem key={link.name} link={link.link} navigate={navigate} icon={icons[link.icon]}>
                     {link.name}
                 </NavItem>
@@ -247,7 +250,9 @@ const MobileNav = ({onOpen, ...rest}) => {
                             <MenuItem>Settings</MenuItem>
                             <MenuItem>Billing</MenuItem>
                             <MenuDivider/>
-                            <MenuItem onClick={() => navigate('/login')}>Sign out</MenuItem>
+                            <MenuItem onClick={() => {
+                                signOut(navigate)
+                            }}>Sign out</MenuItem>
                         </MenuList>
                     </Menu>
                 </Flex>

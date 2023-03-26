@@ -48,8 +48,9 @@ export const emailAndPasswordAuth = (email, password, toast) => {
     }
 }
 
-export const signOut = () => {
+export const signOut = (navigate) => {
     return firebase.auth().signOut().then(() => {
+        navigate("/")
     }).catch((error) => {
     });
 }
@@ -58,7 +59,7 @@ export const login = (form, navigate) => {
     return async (dispatch) => {
         firebase.auth().signInWithEmailAndPassword(form.username, form.password)
             .then((userCredential) => {
-                navigate('/passenger')
+                navigate('/user')
             })
             .catch((error) => {
                 var errorCode = error.code;
