@@ -24,19 +24,19 @@ const SignUp = (getNames) => {
 
     const updateHandler = async () => {
         setIsLoading(true)
-        let res = await dispatch(createDoc('userProfile', toast, navigate("/passenger"), form))
+        let res = await dispatch(createDoc('userProfile', toast, navigate("/user"), form))
         setIsLoading(false)
     }
 
     const signUpHandler = async () => {
         let res = await dispatch(emailAndPasswordAuth(form.email, form.password, toast))
-        let result = res ? await dispatch(createDoc('userProfile', toast, navigate("/passenger"), form)) : null
+        let result = res ? await dispatch(createDoc('userProfile', toast, navigate("/user"), form)) : null
     }
 
     const signedButtonMarkup = (
         <Flex justifyContent={'right'} mt={3} columnGap={'20px'} direction={'row'}>
             <Button onClick={() => {
-                navigate("/passenger")
+                navigate("/user")
             }} width={'100px'} colorScheme="teal" size="sm">
                 Skip
             </Button>

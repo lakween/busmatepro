@@ -59,7 +59,7 @@ export const login = (form, navigate) => {
     return async (dispatch) => {
         firebase.auth().signInWithEmailAndPassword(form.username, form.password)
             .then((userCredential) => {
-                navigate('/passenger')
+                navigate('/user')
             })
             .catch((error) => {
                 var errorCode = error.code;
