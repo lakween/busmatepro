@@ -1,6 +1,28 @@
 import {Box, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
+import {useEffect, useState} from "react";
+import {
+    filterDocsFromCollection,
+    getAllDocFromCollection,
+    getDocFromCollection
+} from "../../../../actions/common.action";
+import useUserLoginInfo from "../../../../hooks/useLoginInfor";
+import {rebuildUserRequsets} from "../../../../actions/driver.action";
 
 const RequestHistory = () => {
+    const [requestList, setRequestList] = useState()
+    let userDetails = useUserLoginInfo()
+
+    useEffect(() => {
+        getUserRequest()
+    }, [userDetails])
+
+    async function getUserRequest() {
+        let {busId} = await getDocFromCollection('driverByBus', userDetails?.id)
+        let userRequests = await filterDocsFromCollection('user requests', '', [['bus_id', '==', busId], ['status', '==', 'waiting']])
+        let rebuildedUserRequests = await rebuildUserRequsets(userRequests)
+        setRequestList(rebuildedUserRequests.length > 0 ? rebuildedUserRequests : [])
+    }
+
     return (
         <div className={'flex w-full bg-amber-50 border border-sky-400 flex-row bg-white'}>
             <div className={'text-center'}>
