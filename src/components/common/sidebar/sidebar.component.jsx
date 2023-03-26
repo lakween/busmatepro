@@ -18,6 +18,8 @@ import {FiBell, FiChevronDown, FiHome, FiMenu} from "react-icons/fi";
 import RequestHistory from "../../passenger/pages/request-history/request-history";
 import Notifications from "../notifications/notifications";
 import {signOut} from "../../../actions/user.actions";
+import useUserLoginInfo from "../../../hooks/useLoginInfor";
+import {filterDocsFromCollection, getAllDocFromCollection, getDocFromCollection} from "../../../actions/common.action";
 
 // const Sidebar = () => {
 //     let displayName = useSelector((store) => (store.firebase.auth.displayName))
@@ -96,16 +98,35 @@ const SidebarContent = ({onClose}) => {
 
     let navigate = useNavigate();
     const dispatch = useDispatch()
+    let userDetails = useUserLoginInfo()
+    const [linkItems, setLinkItems] = useState([])
+
+    useEffect(() => {
+        getSideBarLinks()
+    }, [userDetails])
 
     let icons = {
         FiHome: FiHome
     }
 
-    let LinkItems = [
-        {name: 'Home', link: "/passenger"},
-        {name: 'Request History', link: "/passenger/history"},
-        {name: "Ratings & Feedback", link: "/passenger/ratings&feedback"},
-    ]
+   async function getSideBarLinks() {
+        if (userDetails?.type == 'passenger') {
+            let data = await getAllDocFromCollection('passengerSideBarLinks')
+            setLinkItems(data)
+        } else if (userDetails?.type == 'driver') {
+            let data = await getAllDocFromCollection('driverSidebarLinks')
+            setLinkItems(data)
+        }
+    }
+
+    console.log(linkItems)
+
+    // let LinkItems = [
+    //     {name: 'Home', link: "/passenger"},
+    //     {name: 'Request History', link: "/passenger/history"},
+    //     {name: "Ratings & Feedback", link: "/passenger/ratings&feedback"},
+    // ]
+
 
     // useEffect(() => {
     //     getData()
@@ -133,7 +154,7 @@ const SidebarContent = ({onClose}) => {
                 <CloseButton display={{base: 'flex', md: 'none'}} onClick={onClose}/>
 
             </Flex>
-            {LinkItems.map((link) => (
+            {linkItems?.map((link) => (
                 <NavItem key={link.name} link={link.link} navigate={navigate} icon={icons[link.icon]}>
                     {link.name}
                 </NavItem>
