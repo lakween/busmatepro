@@ -57,9 +57,9 @@ const RequestHistory = () => {
             </div>
 
             <div className="flex overflow-x-auto shadow-md sm:rounded-lg w-full">
-                <Box mt={10} maxH={'100vh'}>
-                    <TableContainer>
-                        <Table size='sm'>
+                <Box className={'w-full relative'} mt={10} maxH={'100vh'}>
+                    <TableContainer className={'w-full'}>
+                        <Table size='sm' className={'w-full '}>
                             <Thead>
                                 <Tr>
                                     <Th>Passenger Name</Th>
@@ -68,31 +68,43 @@ const RequestHistory = () => {
                                     <Th>Action</Th>
                                 </Tr>
                             </Thead>
-                            <Tbody>
-                                {
-                                    isLoading ? <Loading style={{
-                                        minHeight: "65vh",
-                                        display: "flex",
+
+
+                            {
+                                isLoading ?
+                                    <Loading style={{
+                                        backgroundColor: 'white',
+                                        minHeight: "78vh",
+                                        width:'82vw',
+                                        display:'flex',
                                         justifyContent: "center",
-                                        alignItems: "center"
-                                    }}/> : requestList?.map((request, index) => (
-                                        <Tr>
-                                            <Td>{request?.userName}</Td>
-                                            <Td>{request?.holt_name}</Td>
-                                            <Td>{request?.status}</Td>
-                                            <Td>
-                                                <Button className={'me-2'} onClick={() => {
-                                                    rejectHandler()
-                                                }}
-                                                        colorScheme='teal' size='xs'>
-                                                    Reject
-                                                </Button>
-                                                <Button colorScheme='teal' size='xs'>
-                                                    Accept
-                                                </Button></Td>
-                                        </Tr>
-                                    ))
-                                }</Tbody>
+                                        alignItems: "center",
+                                        position: "absolute",
+
+                                    }}/>
+                                    :
+                                    <Tbody className={'w-full'}>
+                                        {
+                                            requestList?.map((request, index) => (
+                                                <Tr key={index}>
+                                                    <Td>{request?.userName}</Td>
+                                                    <Td>{request?.holt_name}</Td>
+                                                    <Td>{request?.status}</Td>
+                                                    <Td>
+                                                        <Button className={'me-2'} onClick={() => {
+                                                            rejectHandler(request)
+                                                        }}
+                                                                colorScheme='teal' size='xs'>
+                                                            Reject
+                                                        </Button>
+                                                        <Button colorScheme='teal' size='xs'>
+                                                            Accept
+                                                        </Button></Td>
+                                                </Tr>
+                                            ))
+                                        }</Tbody>
+                            }
+
                         </Table>
                     </TableContainer>
                 </Box>
