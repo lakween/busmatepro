@@ -1,9 +1,9 @@
-import {Box, Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
+import {Box, Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useToast} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {
     filterDocsFromCollection, filterDocsFromCollectionRT,
     getAllDocFromCollection,
-    getDocFromCollection
+    getDocFromCollection, updateDocument, updateFieldsOnly
 } from "../../../../../actions/common.action";
 import useUserLoginInfo from "../../../../../hooks/useLoginInfor";
 import {rebuildUserRequsets} from "../../../../../actions/driver.action";
@@ -11,6 +11,7 @@ import Loading from "../../../../common/loading/loading";
 
 const RequestHistory = () => {
     const [requestList, setRequestList] = useState()
+    const toast = useToast()
     const [isLoading, setIsLoading] = useState(false)
     let userDetails = useUserLoginInfo()
 
@@ -28,6 +29,25 @@ const RequestHistory = () => {
         setIsLoading(true)
         let {busId} = await getDocFromCollection('driverByBus', userDetails?.id)
         filterDocsFromCollectionRT('user requests', '', [['bus_id', '==', busId], ['status', '==', 'waiting']], callBackForRealtime)
+    }
+
+    async function rejectHandler(rowData) {
+        try {
+            await updateFieldsOnly('user requests', rowData?.id, {status: 'Cancelled'})
+            toast({
+                title: 'Cancelled',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            })
+        } catch (e) {
+            toast({
+                title: 'Failed',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            })
+        }
     }
 
     return (
@@ -61,7 +81,9 @@ const RequestHistory = () => {
                                             <Td>{request?.holt_name}</Td>
                                             <Td>{request?.status}</Td>
                                             <Td>
-                                                <Button className={'me-2'}
+                                                <Button className={'me-2'} onClick={() => {
+                                                    rejectHandler()
+                                                }}
                                                         colorScheme='teal' size='xs'>
                                                     Reject
                                                 </Button>
