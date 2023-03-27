@@ -13,13 +13,13 @@ const SignUp = (getNames) => {
     let {email, displayName, uid} = useSelector((store) => (store.firebase.auth))
     let [valueChangeHandler, setValue, form, setForm] = useFormController({
         email: email, ...getNames(),
-        reference_doc_id: uid,
+        reference_doc_id: uid ? uid : '',
     })
     const toast = useToast()
 
     function getNames() {
         const [first_name, last_name] = displayName ? displayName?.split(" ") : ['', ''];
-        return {first_name: first_name, last_name: last_name}
+        return {first_name: first_name ? first_name : '', last_name: last_name ? last_name : ''}
     }
 
     const updateHandler = async () => {
@@ -29,8 +29,9 @@ const SignUp = (getNames) => {
     }
 
     const signUpHandler = async () => {
-        let res = await dispatch(emailAndPasswordAuth(form.email, form.password, toast))
-        let result = res ? await dispatch(createDoc('userProfile', toast, navigate("/user"), form)) : null
+        let res = await emailAndPasswordAuth(form.email, form.password, toast)
+        let result = res ? await createDoc('userProfile', toast, navigate("/user"), {id: res, ...form}) : null
+        console.log(res)
     }
 
     const signedButtonMarkup = (

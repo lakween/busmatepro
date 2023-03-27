@@ -28,6 +28,7 @@ const RequestHistory = () => {
     async function getUserRequest() {
         setIsLoading(true)
         let {busId} = await getDocFromCollection('driverByBus', userDetails?.id)
+        console.log(userDetails?.id,'ahahah')
         filterDocsFromCollectionRT('user requests', '', [['bus_id', '==', busId], ['status', '==', 'waiting']], callBackForRealtime)
     }
 
@@ -52,8 +53,8 @@ const RequestHistory = () => {
 
     return (
         <div className={'flex w-full bg-amber-50 border border-sky-400 flex-row bg-white'}>
-            <div className={'text-center'}>
-                Request List
+            <div className={'text-center pt-4 font-bold'}>
+                Waiting Request List
             </div>
 
             <div className="flex overflow-x-auto shadow-md sm:rounded-lg w-full">
@@ -75,8 +76,8 @@ const RequestHistory = () => {
                                     <Loading style={{
                                         backgroundColor: 'white',
                                         minHeight: "78vh",
-                                        width:'82vw',
-                                        display:'flex',
+                                        width: '82vw',
+                                        display: 'flex',
                                         justifyContent: "center",
                                         alignItems: "center",
                                         position: "absolute",
@@ -85,6 +86,7 @@ const RequestHistory = () => {
                                     :
                                     <Tbody className={'w-full'}>
                                         {
+
                                             requestList?.map((request, index) => (
                                                 <Tr key={index}>
                                                     <Td>{request?.userName}</Td>
