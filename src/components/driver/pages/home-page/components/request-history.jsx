@@ -19,6 +19,25 @@ const RequestHistory = () => {
         getUserRequest()
     }, [userDetails])
 
+    async function acceptHandler(rowData) {
+        try {
+            await updateFieldsOnly('user requests', rowData?.id, {status: 'Accept'})
+            toast({
+                title: 'Cancelled',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            })
+        } catch (e) {
+            toast({
+                title: 'Failed',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            })
+        }
+    }
+
     async function callBackForRealtime(userRequests) {
         let rebuildedUserRequests = await rebuildUserRequsets(userRequests)
         setRequestList(rebuildedUserRequests.length > 0 ? rebuildedUserRequests : [])
@@ -28,7 +47,7 @@ const RequestHistory = () => {
     async function getUserRequest() {
         setIsLoading(true)
         let {busId} = await getDocFromCollection('driverByBus', userDetails?.id)
-        console.log(userDetails?.id,'ahahah')
+        console.log(userDetails?.id, 'ahahah')
         filterDocsFromCollectionRT('user requests', '', [['bus_id', '==', busId], ['status', '==', 'waiting']], callBackForRealtime)
     }
 
@@ -87,27 +106,30 @@ const RequestHistory = () => {
                                     <Tbody className={'w-full'}>
                                         {
 
-                                            requestList?.map((request, index) => (
-                                                <Tr key={index}>
-                                                    <Td>{request?.userName}</Td>
-                                                    <Td>{request?.holt_name}</Td>
-                                                    <Td>{request?.status}</Td>
-                                                    <Td>
-                                                        <Button className={'me-2'} onClick={() => {
-                                                            rejectHandler(request)
-                                                        }}
-                                                                colorScheme='teal' size='xs'>
-                                                            Reject
-                                                        </Button>
-                                                        <Button colorScheme='teal' size='xs'>
-                                                            Accept
-                                                        </Button></Td>
-                                                </Tr>
-                                            ))
+                                            requestList?.length > 0 ? requestList?.map((request, index) => (
+                                            <Tr key={index}>
+                                            <Td>{request?.userName}</Td>
+                                            <Td>{request?.holt_name}</Td>
+                                            <Td>{request?.status}</Td>
+                                            <Td>
+                                            <Button className={'me-2'} onClick={() => {
+                                            rejectHandler(request)
+                                        }}
+                                            colorScheme='teal' size='xs'>
+                                            Reject
+                                            </Button>
+                                            <Button onClick={() => {
+                                            acceptHandler(request)
+                                        }} colorScheme='teal' size='xs'>
+                                            Accept
+                                            </Button></Td>
+                                            </Tr>
+                                            )) : ''
                                         }</Tbody>
                             }
 
                         </Table>
+                        { requestList?.length== 0 && <div className={'w-full p-2 text-center'}>No Data</div>}
                     </TableContainer>
                 </Box>
             </div>
