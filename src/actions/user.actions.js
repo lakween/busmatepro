@@ -11,9 +11,7 @@ export const googleSignUp = async (navigate) => {
 
 export const createDoc = async (collection, toast, navigate, form) => {
     try {
-        console.log(form,form)
         let result = await createDocOfCollectionWithId('userProfile', form?.id, form)
-
         navigate()
         toast({
             title: 'Account created.',
