@@ -47,7 +47,6 @@ const RatingsFeedback = () => {
                                         <Th>Passenger Name</Th>
                                         <Th>Comment</Th>
                                         <Th>Rate</Th>
-                                        <Th>Action</Th>
                                     </Tr>
                                 </Thead>
 
@@ -71,20 +70,8 @@ const RatingsFeedback = () => {
                                                 allFeedbacks?.length > 0 ? allFeedbacks?.map((feedback, index) => (
                                                     <Tr key={index}>
                                                         <Td>{feedback?.userName}</Td>
-                                                        <Td>{feedback?.rate}</Td>
                                                         <Td>{feedback?.comment}</Td>
-                                                        <Td>
-                                                            <Button className={'me-2'} onClick={() => {
-                                                                // rejectHandler(request)
-                                                            }}
-                                                                    colorScheme='teal' size='xs'>
-                                                                Reject
-                                                            </Button>
-                                                            <Button onClick={() => {
-                                                                // acceptHandler(request)
-                                                            }} colorScheme='teal' size='xs'>
-                                                                Accept
-                                                            </Button></Td>
+                                                        <Td>{feedback?.rate}</Td>
                                                     </Tr>
                                                 )) : ''
                                             }</Tbody>
