@@ -55,7 +55,7 @@ const RatingsFeedback = () => {
                                     isLoading ?
                                         <Loading style={{
                                             backgroundColor: 'white',
-                                            minHeight: "78vh",
+                                            minHeight: "30vh",
                                             width: '82vw',
                                             display: 'flex',
                                             justifyContent: "center",

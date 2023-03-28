@@ -14,7 +14,7 @@ export const rebuildUserFeedBack = async (feedBacks) => {
     let array = []
     for (let feedback of feedBacks) {
         let userName = (await getDocFromCollection('userProfile', feedback?.user_id))?.fullName || ''
-        array.push({ userName: userName, ...feedback})
+        array.push({userName: userName, ...feedback})
     }
     return array
 }
