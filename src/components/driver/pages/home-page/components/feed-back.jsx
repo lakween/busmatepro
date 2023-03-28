@@ -35,12 +35,12 @@ const RatingsFeedback = () => {
         <>
             <div className={'flex mt-3 w-full bg-amber-50 border border-sky-400 flex-row bg-white'}>
                 <div className={'text-center pt-4 font-bold'}>
-                    Waiting Request List
+                    Feedbacks and Ratings
                 </div>
 
                 <div className="flex overflow-x-auto shadow-md sm:rounded-lg w-full">
                     <Box className={'w-full relative'} mt={10} maxH={'100vh'}>
-                        <TableContainer className={'w-full'}>
+                        <TableContainer className={'w-full'}  style={{height:'50vh',overflowY:'auto'}}>
                             <Table size='sm' className={'w-full '}>
                                 <Thead>
                                     <Tr>
@@ -56,7 +56,7 @@ const RatingsFeedback = () => {
                                         <Loading style={{
                                             backgroundColor: 'white',
                                             minHeight: "30vh",
-                                            width: '82vw',
+                                            width: '75vw',
                                             display: 'flex',
                                             justifyContent: "center",
                                             alignItems: "center",

@@ -78,8 +78,8 @@ const RequestHistory = () => {
 
             <div className="flex overflow-x-auto shadow-md sm:rounded-lg w-full">
                 <Box className={'w-full relative'} mt={10} maxH={'100vh'}>
-                    <TableContainer className={'w-full'}>
-                        <Table size='sm' className={'w-full '}>
+                    <TableContainer className={'w-full'} style={{height:'50vh',overflowY:'auto'}}>
+                        <Table size='sm' className={'w-full'}>
                             <Thead>
                                 <Tr>
                                     <Th>Passenger Name</Th>
@@ -88,14 +88,12 @@ const RequestHistory = () => {
                                     <Th>Action</Th>
                                 </Tr>
                             </Thead>
-
-
                             {
                                 isLoading ?
                                     <Loading style={{
                                         backgroundColor: 'white',
-                                        minHeight: "78vh",
-                                        width: '82vw',
+                                        minHeight: "20vh",
+                                        width: '75vw',
                                         display: 'flex',
                                         justifyContent: "center",
                                         alignItems: "center",
@@ -107,29 +105,29 @@ const RequestHistory = () => {
                                         {
 
                                             requestList?.length > 0 ? requestList?.map((request, index) => (
-                                            <Tr key={index}>
-                                            <Td>{request?.userName}</Td>
-                                            <Td>{request?.holt_name}</Td>
-                                            <Td>{request?.status}</Td>
-                                            <Td>
-                                            <Button className={'me-2'} onClick={() => {
-                                            rejectHandler(request)
-                                        }}
-                                            colorScheme='teal' size='xs'>
-                                            Reject
-                                            </Button>
-                                            <Button onClick={() => {
-                                            acceptHandler(request)
-                                        }} colorScheme='teal' size='xs'>
-                                            Accept
-                                            </Button></Td>
-                                            </Tr>
+                                                <Tr key={index}>
+                                                    <Td>{request?.userName}</Td>
+                                                    <Td>{request?.holt_name}</Td>
+                                                    <Td>{request?.status}</Td>
+                                                    <Td>
+                                                        <Button className={'me-2'} onClick={() => {
+                                                            rejectHandler(request)
+                                                        }}
+                                                                colorScheme='teal' size='xs'>
+                                                            Reject
+                                                        </Button>
+                                                        <Button onClick={() => {
+                                                            acceptHandler(request)
+                                                        }} colorScheme='teal' size='xs'>
+                                                            Accept
+                                                        </Button></Td>
+                                                </Tr>
                                             )) : ''
                                         }</Tbody>
                             }
 
                         </Table>
-                        { requestList?.length== 0 && <div className={'w-full p-2 text-center'}>No Data</div>}
+                        {requestList?.length == 0 && <div className={'w-full p-2 text-center'}>No Data</div>}
                     </TableContainer>
                 </Box>
             </div>
