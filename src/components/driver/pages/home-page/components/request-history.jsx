@@ -22,7 +22,6 @@ const RequestHistory = () => {
         getUserRequest()
     }, [userDetails])
 
-
     function sendMessageHandler(rawData) {
         dispatch(setModalPoperty({model: 'sendMessageModal', poperty: 'isOpen', value: true}))
     }
@@ -129,10 +128,10 @@ const RequestHistory = () => {
                                                         }} colorScheme='teal' size='xs'>
                                                             Accept
                                                         </Button>
-                                                        <Button onClick={() => {
+                                                        <Button className={'ms-2'} onClick={() => {
                                                             sendMessageHandler(request)
                                                         }} colorScheme='teal' size='xs'>
-                                                            Accept
+                                                            Send Message
                                                         </Button>
                                                     </Td>
                                                 </Tr>
