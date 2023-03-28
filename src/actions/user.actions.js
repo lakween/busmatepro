@@ -1,5 +1,6 @@
 import firebase from "firebase/compat/app";
 import {collection, getDocs} from "firebase/firestore";
+import {createDocOfCollectionWithId} from "./common.action";
 
 export const googleSignUp = async (navigate) => {
     let provider = new firebase.auth.GoogleAuthProvider();
@@ -8,44 +9,40 @@ export const googleSignUp = async (navigate) => {
     return {email: result.user.email, first_name: first_name, last_name: last_name, reference_doc_id: result?.user?.uid}
 }
 
-export const createDoc = (collection, toast, navigate, form) => {
-    return async (dispatch) => {
-        const db = firebase.firestore();
-        db.collection(collection).add(form)
-            .then((docRef) => {
-                toast({
-                    title: 'Account created.',
-                    description: "We've update your account for you.",
-                    status: 'success',
-                    duration: 9000,
-                    isClosable: true,
-                })
-                navigate()
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-                return {}
-            });
+export const createDoc = async (collection, toast, navigate, form) => {
+    try {
+        let result = await createDocOfCollectionWithId('userProfile', form?.id, form)
+        navigate()
+        toast({
+            title: 'Account created.',
+            description: "We've update your account for you.",
+            status: 'success',
+            duration: 9000,
+            isClosable: true,
+        })
+    } catch (e) {
+        console.error("Error adding document: ", e);
     }
 }
 
-export const emailAndPasswordAuth = (email, password, toast) => {
-    return async (dispatch) => {
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-                return true
-            })
-            .catch((error) => {
-                toast({
-                    title: 'Something wrong',
-                    description: [...error.message.split(":")][1],
-                    status: 'error',
-                    duration: 9000,
-                    isClosable: true,
-                })
-                return false
-            });
+export const emailAndPasswordAuth = async (email, password, toast) => {
+    try {
+        let result = await firebase.auth().createUserWithEmailAndPassword(email, password)
+        return result?.user?.uid
+    } catch (e) {
+        toast({
+            title: 'Something wrong',
+            description: [...e.message.split(":")][1],
+            status: 'error',
+            duration: 9000,
+            isClosable: true,
+        })
+        return false
     }
+    // catch((error) => {
+    //
+    //     return false
+    // });
 }
 
 export const signOut = (navigate) => {

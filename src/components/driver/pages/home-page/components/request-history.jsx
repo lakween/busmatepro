@@ -19,6 +19,25 @@ const RequestHistory = () => {
         getUserRequest()
     }, [userDetails])
 
+    async function acceptHandler(rowData) {
+        try {
+            await updateFieldsOnly('user requests', rowData?.id, {status: 'Accept'})
+            toast({
+                title: 'Cancelled',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            })
+        } catch (e) {
+            toast({
+                title: 'Failed',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            })
+        }
+    }
+
     async function callBackForRealtime(userRequests) {
         let rebuildedUserRequests = await rebuildUserRequsets(userRequests)
         setRequestList(rebuildedUserRequests.length > 0 ? rebuildedUserRequests : [])
@@ -28,6 +47,7 @@ const RequestHistory = () => {
     async function getUserRequest() {
         setIsLoading(true)
         let {busId} = await getDocFromCollection('driverByBus', userDetails?.id)
+        console.log(userDetails?.id, 'ahahah')
         filterDocsFromCollectionRT('user requests', '', [['bus_id', '==', busId], ['status', '==', 'waiting']], callBackForRealtime)
     }
 
@@ -52,14 +72,14 @@ const RequestHistory = () => {
 
     return (
         <div className={'flex w-full bg-amber-50 border border-sky-400 flex-row bg-white'}>
-            <div className={'text-center'}>
-                Request List
+            <div className={'text-center pt-4 font-bold'}>
+                Waiting Request List
             </div>
 
             <div className="flex overflow-x-auto shadow-md sm:rounded-lg w-full">
                 <Box className={'w-full relative'} mt={10} maxH={'100vh'}>
-                    <TableContainer className={'w-full'}>
-                        <Table size='sm' className={'w-full '}>
+                    <TableContainer className={'w-full'} style={{height:'50vh',overflowY:'auto'}}>
+                        <Table size='sm' className={'w-full'}>
                             <Thead>
                                 <Tr>
                                     <Th>Passenger Name</Th>
@@ -68,15 +88,13 @@ const RequestHistory = () => {
                                     <Th>Action</Th>
                                 </Tr>
                             </Thead>
-
-
                             {
                                 isLoading ?
                                     <Loading style={{
                                         backgroundColor: 'white',
-                                        minHeight: "78vh",
-                                        width:'82vw',
-                                        display:'flex',
+                                        minHeight: "20vh",
+                                        width: '75vw',
+                                        display: 'flex',
                                         justifyContent: "center",
                                         alignItems: "center",
                                         position: "absolute",
@@ -85,7 +103,8 @@ const RequestHistory = () => {
                                     :
                                     <Tbody className={'w-full'}>
                                         {
-                                            requestList?.map((request, index) => (
+
+                                            requestList?.length > 0 ? requestList?.map((request, index) => (
                                                 <Tr key={index}>
                                                     <Td>{request?.userName}</Td>
                                                     <Td>{request?.holt_name}</Td>
@@ -97,15 +116,18 @@ const RequestHistory = () => {
                                                                 colorScheme='teal' size='xs'>
                                                             Reject
                                                         </Button>
-                                                        <Button colorScheme='teal' size='xs'>
+                                                        <Button onClick={() => {
+                                                            acceptHandler(request)
+                                                        }} colorScheme='teal' size='xs'>
                                                             Accept
                                                         </Button></Td>
                                                 </Tr>
-                                            ))
+                                            )) : ''
                                         }</Tbody>
                             }
 
                         </Table>
+                        {requestList?.length == 0 && <div className={'w-full p-2 text-center'}>No Data</div>}
                     </TableContainer>
                 </Box>
             </div>
