@@ -8,16 +8,24 @@ import {
 import useUserLoginInfo from "../../../../../hooks/useLoginInfor";
 import {rebuildUserRequsets} from "../../../../../actions/driver.action";
 import Loading from "../../../../common/loading/loading";
+import {useDispatch} from "react-redux";
+import {setModalPoperty} from "../../../../../store/reducers/modal-slice";
 
 const RequestHistory = () => {
     const [requestList, setRequestList] = useState()
     const toast = useToast()
     const [isLoading, setIsLoading] = useState(false)
     let userDetails = useUserLoginInfo()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         getUserRequest()
     }, [userDetails])
+
+
+    function sendMessageHandler(rawData) {
+        dispatch(setModalPoperty({model: 'sendMessageModal', poperty: 'isOpen', value: true}))
+    }
 
     async function acceptHandler(rowData) {
         try {
@@ -78,7 +86,7 @@ const RequestHistory = () => {
 
             <div className="flex overflow-x-auto shadow-md sm:rounded-lg w-full">
                 <Box className={'w-full relative'} mt={10} maxH={'100vh'}>
-                    <TableContainer className={'w-full'} style={{height:'50vh',overflowY:'auto'}}>
+                    <TableContainer className={'w-full'} style={{height: '50vh', overflowY: 'auto'}}>
                         <Table size='sm' className={'w-full'}>
                             <Thead>
                                 <Tr>
@@ -120,7 +128,13 @@ const RequestHistory = () => {
                                                             acceptHandler(request)
                                                         }} colorScheme='teal' size='xs'>
                                                             Accept
-                                                        </Button></Td>
+                                                        </Button>
+                                                        <Button onClick={() => {
+                                                            sendMessageHandler(request)
+                                                        }} colorScheme='teal' size='xs'>
+                                                            Accept
+                                                        </Button>
+                                                    </Td>
                                                 </Tr>
                                             )) : ''
                                         }</Tbody>

@@ -6,6 +6,10 @@ const modalSlice = createSlice({
         sendRequestModel:{
             isOpen:false,
             data:{}
+        },
+        sendMessageModal:{
+            isOpen:false,
+            data:{}
         }
     },
     reducers: {
