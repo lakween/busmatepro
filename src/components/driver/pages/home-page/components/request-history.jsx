@@ -24,6 +24,7 @@ const RequestHistory = () => {
 
     function sendMessageHandler(rawData) {
         dispatch(setModalPoperty({model: 'sendMessageModal', poperty: 'isOpen', value: true}))
+        dispatch(setModalPoperty({model: 'sendMessageModal', poperty: 'data', value: rawData}))
     }
 
     async function acceptHandler(rowData) {

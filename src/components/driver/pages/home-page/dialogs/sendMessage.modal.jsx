@@ -16,6 +16,9 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import useFormController from "../../../../../hooks/useFormController";
 import {setModalPoperty} from "../../../../../store/reducers/modal-slice";
+import useUserLoginInfo from "../../../../../hooks/useLoginInfor";
+import {createDoc} from "../../../../../actions/user.actions";
+import {createDocOfCollection} from "../../../../../actions/common.action";
 
 ;
 
@@ -23,14 +26,34 @@ const SendMessageModal = () => {
 
     const toast = useToast()
     let dispatch = useDispatch()
-    let [valueChangeHandler, setValue, form, setForm] = useFormController()
+    let userDetails = useUserLoginInfo()
     const poperties = useSelector((state) => (state?.modalSlice.sendMessageModal))
+    let [valueChangeHandler, setValue, form, setForm] = useFormController()
 
-    useEffect(() => {
-        if (poperties.isOpen) {
-
-        }
-    }, [poperties.isOpen])
+    async function sendMessageHandler() {
+        createDocOfCollection('messages', {
+            ...form,
+            to: poperties?.data?.user_id,
+            from: userDetails?.id ?? ''
+        }).then(() => {
+            toast({
+                title: 'Message Sent',
+                status: 'success',
+                duration: 9000,
+                isClosable: true,
+            })
+        }).catch(() => {
+            toast({
+                title: 'Something Went Wrong',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            })
+        }).finally(() => {
+            dispatch(setModalPoperty({model: 'sendMessageModal', poperty: 'isOpen', value: false}))
+            dispatch(setModalPoperty({model: 'sendMessageModal', poperty: 'data', value: {}}))
+        })
+    }
 
     return (
         <>
@@ -48,23 +71,22 @@ const SendMessageModal = () => {
                         <div className={'d-flex flex-row gap-2'}>
                             <FormControl>
                                 <FormLabel>To</FormLabel>
-                                <Input type='text' size={'sm'} disabled/>
+                                <Input type='text' value={poperties?.data?.userName} size={'sm'} disabled/>
                             </FormControl>
                         </div>
                         <div className={'d-flex flex-row gap-2'}>
                             <FormControl>
                                 <FormLabel>Message</FormLabel>
-                                <Textarea
-                                    placeholder='Here is a sample placeholder'
-                                    size='sm'
-                                    rows={5}
+                                <Textarea name={'message'} onChange={valueChangeHandler}
+                                          placeholder='Here is a sample placeholder'
+                                          size='sm'
+                                          rows={5}
                                 />
                             </FormControl>
                         </div>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={() => {
-                        }}>
+                        <Button colorScheme='blue' mr={3} onClick={sendMessageHandler}>
                             Send Message
                         </Button>
                         <Button onClick={() => {
