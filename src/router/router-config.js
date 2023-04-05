@@ -8,6 +8,7 @@ import RatingsFeedback from "../components/passenger/pages/ratings and feedback/
 import Profile from "../components/common/profile/profile";
 import useUserLoginInfo from "../hooks/useLoginInfor";
 import DriverHomePage from "../components/driver/pages/home-page/home-page";
+import MessagePage from "../components/driver/pages/message/message-page";
 
 export let RouterConfig = () => {
     let userDetails = useUserLoginInfo()
@@ -21,6 +22,7 @@ export let RouterConfig = () => {
                 {path: "history", element: <RequestHistory/>},
                 {path: "ratings&feedback", element: <RatingsFeedback/>},
                 {path: "profile", element: <Profile/>},
+                {path:"message",element: <MessagePage/>}
             ],
         }]
 
@@ -30,6 +32,7 @@ export let RouterConfig = () => {
             element: <Sidebar/>,
             children: [
                 {index: true, element: <DriverHomePage/>},
+                {path: "messages", element: <MessagePage/>},
                 {path: "history", element: <RequestHistory/>},
                 {path: "ratings&feedback", element: <RatingsFeedback/>},
                 {path: "profile", element: <Profile/>},
