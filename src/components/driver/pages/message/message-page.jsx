@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {filterDocsFromCollectionRT, getAllDocFromCollection} from "../../../../actions/common.action";
 import useUserLoginInfo from "../../../../hooks/useLoginInfor";
+import {rebuildMessage} from "../../../../actions/passenger.action";
 
 const MessagePage = () => {
 
@@ -13,26 +14,27 @@ const MessagePage = () => {
 
     }, [])
 
-    console.log(messages, 'message')
-
     const inboxHandler = () => {
         currectSelection.current = 'inbox'
-        filterDocsFromCollectionRT('messages', '', [['to', '==', userDetails?.id]], (messagelist) => {
-            setMessages(messagelist)
+        filterDocsFromCollectionRT('messages', '', [['to', '==', userDetails?.id]], async (messagelist) => {
+            let rebulitMessages = await rebuildMessage(messagelist)
+            setMessages(rebulitMessages)
         })
     }
 
     const sentboxHandler = () => {
         currectSelection.current = 'sent'
-        filterDocsFromCollectionRT('messages', '', [['from', '==', userDetails?.id]], (messagelist) => {
+        filterDocsFromCollectionRT('messages', '', [['from', '==', userDetails?.id]], async (messagelist) => {
             currectSelection.current = 'sent'
-            setMessages(messagelist)
+            let rebulitMessages = await rebuildMessage(messagelist)
+            setMessages(rebulitMessages)
         })
     }
 
     async function getMessageList() {
-        filterDocsFromCollectionRT('messages', '', [['to', '==', userDetails?.id]], (messagelist) => {
-            setMessages(messagelist)
+        filterDocsFromCollectionRT('messages', '', [['to', '==', userDetails?.id]], async (messagelist) => {
+            let rebulitMessages = await rebuildMessage(messagelist)
+            setMessages(rebulitMessages)
         })
     }
 
@@ -68,13 +70,10 @@ const MessagePage = () => {
                                 backgroundColor: `${currectSelection.current == 'inbox' ? '#faf8f7' : ''}`
                             }} onClick={inboxHandler}
                                  className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
-                                <div>
-                                    {message?.to}
-                                </div>
-                                <div>
+                                <div className={'text-center w-100 text-truncate text-info font-weight-bold'} style={{fontWeight:'bold'}}>
                                     {message?.from}
                                 </div>
-                                <div>
+                                <div className={'text-truncate'}>
                                     {message?.message}
                                 </div>
                             </div>
