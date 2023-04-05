@@ -9,7 +9,7 @@ import firebase from 'firebase/compat/app';
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import {store} from "./store/store";
-import { Provider } from "react-redux";
+import {Provider} from "react-redux";
 import {RouterConfig} from "./router/router-config";
 import {
     ReactReduxFirebaseProvider,
@@ -18,13 +18,14 @@ import {
 import {createFirestoreInstance} from "redux-firestore";
 import SendRequestModal from "./components/passenger/dialog/send-request.modal";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import SendMessageModal from "./components/driver/pages/home-page/dialogs/sendMessage.modal";
 
 firebase.initializeApp(firebaseConfig)
 firebase.firestore();
 
 const rrfConfig = {
-  userProfile: "passengers",
-  useFirestoreForProfile: true,
+    userProfile: "passengers",
+    useFirestoreForProfile: true,
 };
 
 const rrfProps = {
@@ -38,12 +39,13 @@ ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
             <ReactReduxFirebaseProvider {...rrfProps}>
-            <BrowserRouter>
-                <ChakraProvider theme={theme}>
-                    <RouterConfig/>
-                    <SendRequestModal/>
-                </ChakraProvider>
-            </BrowserRouter>
+                <BrowserRouter>
+                    <ChakraProvider theme={theme}>
+                        <RouterConfig/>
+                        <SendRequestModal/>
+                        <SendMessageModal/>
+                    </ChakraProvider>
+                </BrowserRouter>
             </ReactReduxFirebaseProvider>
         </Provider>
     </React.StrictMode>,
