@@ -8,14 +8,14 @@ const MessagePage = () => {
     let userDetails = useUserLoginInfo()
     let [messages, setMessages] = useState()
     let [selectedMessage, setSelectedMessage] = useState(0)
-    let currectSelection = useRef('')
+    let [messageType, setMessageType] = useState('inbox')
 
     useEffect(() => {
         if (userDetails?.id) inboxHandler()
     }, [userDetails?.id])
 
     const inboxHandler = () => {
-        currectSelection.current = 'inbox'
+        setMessageType('inbox')
         filterDocsFromCollectionRT('messages', '', [['to', '==', userDetails?.id]], async (messagelist) => {
             let rebulitMessages = await rebuildMessage(messagelist)
             setMessages(rebulitMessages)
@@ -23,9 +23,8 @@ const MessagePage = () => {
     }
 
     const sentboxHandler = () => {
-        currectSelection.current = 'sent'
+        setMessageType('sent')
         filterDocsFromCollectionRT('messages', '', [['from', '==', userDetails?.id]], async (messagelist) => {
-            currectSelection.current = 'sent'
             let rebulitMessages = await rebuildMessage(messagelist)
             setMessages(rebulitMessages)
         })
@@ -34,7 +33,7 @@ const MessagePage = () => {
     return (
         <div className={"w-full"} style={{width: '100%'}}>
             <div className={' bg-white '}>
-                <div className={'text-center pt-3'} style={{fontSize:'30px'}}>
+                <div className={'text-center pt-3'} style={{fontSize: '30px'}}>
                     Message List
                 </div>
                 <div className={'row gx-0 p-3'} style={{height: '81vh'}}>
@@ -42,14 +41,14 @@ const MessagePage = () => {
                         <div className={'border'} style={{height: '100%'}}>
                             <div style={{
                                 cursor: 'pointer',
-                                backgroundColor: `${currectSelection.current == 'inbox' ? '#faf8f7' : ''}`
+                                backgroundColor: `${messageType == 'inbox' ? '#faf8f7' : ''}`
                             }} onClick={inboxHandler}
                                  className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
                                 Inbox
                             </div>
                             <div style={{
                                 cursor: 'pointer',
-                                backgroundColor: `${currectSelection.current == 'sent' ? '#faf8f7' : ''}`
+                                backgroundColor: `${messageType == 'sent' ? '#faf8f7' : ''}`
                             }} onClick={sentboxHandler}
                                  className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
                                 Sent
@@ -61,11 +60,11 @@ const MessagePage = () => {
                             <div style={{
                                 cursor: 'pointer',
                                 backgroundColor: `${selectedMessage == index ? '#faf8f7' : ''}`
-                            }} onClick={inboxHandler}
+                            }} onClick={() => setSelectedMessage(index)}
                                  className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
                                 <div className={'text-center w-100 text-truncate text-info font-weight-bold'}
                                      style={{fontWeight: 'bold'}}>
-                                    {message?.from}
+                                    {messageType == "inbox" ? message?.from : message?.to}
                                 </div>
                                 <div className={'text-truncate'}>
                                     {message?.message}
