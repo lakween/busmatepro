@@ -23,6 +23,7 @@ const MessagePage = () => {
         setMessages([])
         filterDocsFromCollectionRT('messages', '', [['to', '==', userDetails?.id]], async (messagelist) => {
             let rebulitMessages = await rebuildMessage(messagelist)
+            setMessageType('inbox')
             setMessages(rebulitMessages)
         })
     }
@@ -32,6 +33,7 @@ const MessagePage = () => {
         setMessages([])
         filterDocsFromCollectionRT('messages', '', [['from', '==', userDetails?.id]], async (messagelist) => {
             let rebulitMessages = await rebuildMessage(messagelist)
+            setMessageType('sent')
             setMessages(rebulitMessages)
         })
     }

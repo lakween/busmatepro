@@ -49,8 +49,8 @@ const SendReplyModal = () => {
                 isClosable: true,
             })
         }).finally(() => {
-            dispatch(setModalPoperty({model: 'sendMessageModal', poperty: 'isOpen', value: false}))
-            dispatch(setModalPoperty({model: 'sendMessageModal', poperty: 'data', value: {}}))
+            dispatch(setModalPoperty({model: 'sendReplyMessageModal', poperty: 'isOpen', value: false}))
+            dispatch(setModalPoperty({model: 'sendReplyMessageModal', poperty: 'data', value: {}}))
         })
     }
 
@@ -89,7 +89,7 @@ const SendReplyModal = () => {
                             Send Message
                         </Button>
                         <Button onClick={() => {
-                            dispatch(setModalPoperty({model: 'sendMessageModal', poperty: 'isOpen', value: false}))
+                            dispatch(setModalPoperty({model: 'sendReplyMessageModal', poperty: 'isOpen', value: false}))
                         }}>Cancel</Button>
                     </ModalFooter>
                 </ModalContent>
