@@ -36,8 +36,15 @@ const MessagePage = () => {
         })
     }
 
-    const openReplyModal = ()=>{
-        dispatch(setModalPoperty({model: 'sendReplyMessageModal', poperty: 'isOpen', value: true}))
+    const openReplyModal = () => {
+        if (messages[selectedMessage]) {
+            dispatch(setModalPoperty({model: 'sendReplyMessageModal', poperty: 'isOpen', value: true}))
+            dispatch(setModalPoperty({
+                model: 'sendReplyMessageModal',
+                poperty: 'data',
+                value: messages[selectedMessage]
+            }))
+        }
     }
 
     return (
@@ -74,7 +81,7 @@ const MessagePage = () => {
                                  className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
                                 <div className={'text-center w-100 text-truncate text-info font-weight-bold'}
                                      style={{fontWeight: 'bold'}}>
-                                    {messageType == "inbox" ? message?.from : message?.to}
+                                    {messageType == "inbox" ? message?.fromName : message?.toName}
                                 </div>
                                 <div className={'text-truncate'}>
                                     {message?.message}
@@ -89,11 +96,14 @@ const MessagePage = () => {
                                     messages ? messages[selectedMessage]?.message : ''
                                 }
                             </div>
-                            <div className={'position-absolute bottom-0 start-50 translate-middle-x mb-2'}>
-                                <Button colorScheme='teal' size='sm' onClick={openReplyModal}>
-                                    Replay
-                                </Button>
-                            </div>
+                            {
+                                (messageType == 'inbox') && (
+                                    <div className={'position-absolute bottom-0 start-50 translate-middle-x mb-2'}>
+                                        <Button colorScheme='teal' size='sm' onClick={openReplyModal}>
+                                            Replay
+                                        </Button>
+                                    </div>)
+                            }
                         </div>
                     </div>
                 </div>

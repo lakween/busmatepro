@@ -27,10 +27,12 @@ const SendReplyModal = () => {
     const poperties = useSelector((state) => (state?.modalSlice.sendReplyMessageModal));
     let [valueChangeHandler, setValue, form, setForm] = useFormController()
 
+    console.log(poperties, 'prop')
+
     async function sendMessageHandler() {
         createDocOfCollection('messages', {
             ...form,
-            to: poperties?.data?.user_id,
+            to: poperties?.data?.from,
             from: userDetails?.id ?? ''
         }).then(() => {
             toast({
@@ -68,7 +70,7 @@ const SendReplyModal = () => {
                         <div className={'d-flex flex-row gap-2'}>
                             <FormControl>
                                 <FormLabel>To</FormLabel>
-                                <Input type='text' value={poperties?.data?.userName} size={'sm'} disabled/>
+                                <Input type='text' value={poperties?.data?.fromName} size={'sm'} disabled/>
                             </FormControl>
                         </div>
                         <div className={'d-flex flex-row gap-2'}>
