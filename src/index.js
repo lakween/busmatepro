@@ -19,6 +19,7 @@ import {createFirestoreInstance} from "redux-firestore";
 import SendRequestModal from "./components/passenger/dialog/send-request.modal";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SendMessageModal from "./components/driver/pages/home-page/dialogs/sendMessage.modal";
+import SendReplyModal from "./components/driver/pages/message/dialogs/send-reply-modal/send-reply-moda";
 
 firebase.initializeApp(firebaseConfig)
 firebase.firestore();
@@ -44,6 +45,7 @@ ReactDOM.render(
                         <RouterConfig/>
                         <SendRequestModal/>
                         <SendMessageModal/>
+                        <SendReplyModal/>
                     </ChakraProvider>
                 </BrowserRouter>
             </ReactReduxFirebaseProvider>

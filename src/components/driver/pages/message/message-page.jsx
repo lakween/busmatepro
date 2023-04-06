@@ -2,10 +2,14 @@ import {useEffect, useRef, useState} from "react";
 import {filterDocsFromCollectionRT, getAllDocFromCollection} from "../../../../actions/common.action";
 import useUserLoginInfo from "../../../../hooks/useLoginInfor";
 import {rebuildMessage} from "../../../../actions/passenger.action";
+import {Button} from "@chakra-ui/react";
+import {setModalPoperty} from "../../../../store/reducers/modal-slice";
+import {useDispatch} from "react-redux";
 
 const MessagePage = () => {
 
     let userDetails = useUserLoginInfo()
+    let dispatch = useDispatch()
     let [messages, setMessages] = useState()
     let [selectedMessage, setSelectedMessage] = useState(0)
     let [messageType, setMessageType] = useState('inbox')
@@ -16,18 +20,33 @@ const MessagePage = () => {
 
     const inboxHandler = () => {
         setMessageType('inbox')
+        setMessages([])
         filterDocsFromCollectionRT('messages', '', [['to', '==', userDetails?.id]], async (messagelist) => {
             let rebulitMessages = await rebuildMessage(messagelist)
+            setMessageType('inbox')
             setMessages(rebulitMessages)
         })
     }
 
     const sentboxHandler = () => {
         setMessageType('sent')
+        setMessages([])
         filterDocsFromCollectionRT('messages', '', [['from', '==', userDetails?.id]], async (messagelist) => {
             let rebulitMessages = await rebuildMessage(messagelist)
+            setMessageType('sent')
             setMessages(rebulitMessages)
         })
+    }
+
+    const openReplyModal = () => {
+        if (messages[selectedMessage]) {
+            dispatch(setModalPoperty({model: 'sendReplyMessageModal', poperty: 'isOpen', value: true}))
+            dispatch(setModalPoperty({
+                model: 'sendReplyMessageModal',
+                poperty: 'data',
+                value: messages[selectedMessage]
+            }))
+        }
     }
 
     return (
@@ -64,7 +83,7 @@ const MessagePage = () => {
                                  className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
                                 <div className={'text-center w-100 text-truncate text-info font-weight-bold'}
                                      style={{fontWeight: 'bold'}}>
-                                    {messageType == "inbox" ? message?.from : message?.to}
+                                    {messageType == "inbox" ? message?.fromName : message?.toName}
                                 </div>
                                 <div className={'text-truncate'}>
                                     {message?.message}
@@ -73,12 +92,20 @@ const MessagePage = () => {
                         ))}
                     </div>
                     <div className={'col-6'} style={{height: '100%'}}>
-                        <div className={'border mx-2 p-2'} style={{height: '100%'}}>
+                        <div className={'position-relative border mx-2 p-2'} style={{height: '100%'}}>
                             <div className={'text-center'}>
                                 {
                                     messages ? messages[selectedMessage]?.message : ''
                                 }
                             </div>
+                            {
+                                (messageType == 'inbox') && (
+                                    <div className={'position-absolute bottom-0 start-50 translate-middle-x mb-2'}>
+                                        <Button colorScheme='teal' size='sm' onClick={openReplyModal}>
+                                            Replay
+                                        </Button>
+                                    </div>)
+                            }
                         </div>
                     </div>
                 </div>
