@@ -2,10 +2,14 @@ import {useEffect, useRef, useState} from "react";
 import {filterDocsFromCollectionRT, getAllDocFromCollection} from "../../../../actions/common.action";
 import useUserLoginInfo from "../../../../hooks/useLoginInfor";
 import {rebuildMessage} from "../../../../actions/passenger.action";
+import {Button} from "@chakra-ui/react";
+import {setModalPoperty} from "../../../../store/reducers/modal-slice";
+import {useDispatch} from "react-redux";
 
 const MessagePage = () => {
 
     let userDetails = useUserLoginInfo()
+    let dispatch = useDispatch()
     let [messages, setMessages] = useState()
     let [selectedMessage, setSelectedMessage] = useState(0)
     let [messageType, setMessageType] = useState('inbox')
@@ -16,6 +20,7 @@ const MessagePage = () => {
 
     const inboxHandler = () => {
         setMessageType('inbox')
+        setMessages([])
         filterDocsFromCollectionRT('messages', '', [['to', '==', userDetails?.id]], async (messagelist) => {
             let rebulitMessages = await rebuildMessage(messagelist)
             setMessages(rebulitMessages)
@@ -24,10 +29,15 @@ const MessagePage = () => {
 
     const sentboxHandler = () => {
         setMessageType('sent')
+        setMessages([])
         filterDocsFromCollectionRT('messages', '', [['from', '==', userDetails?.id]], async (messagelist) => {
             let rebulitMessages = await rebuildMessage(messagelist)
             setMessages(rebulitMessages)
         })
+    }
+
+    const openReplyModal = ()=>{
+        dispatch(setModalPoperty({model: 'sendReplyMessageModal', poperty: 'isOpen', value: true}))
     }
 
     return (
@@ -73,11 +83,16 @@ const MessagePage = () => {
                         ))}
                     </div>
                     <div className={'col-6'} style={{height: '100%'}}>
-                        <div className={'border mx-2 p-2'} style={{height: '100%'}}>
+                        <div className={'position-relative border mx-2 p-2'} style={{height: '100%'}}>
                             <div className={'text-center'}>
                                 {
                                     messages ? messages[selectedMessage]?.message : ''
                                 }
+                            </div>
+                            <div className={'position-absolute bottom-0 start-50 translate-middle-x mb-2'}>
+                                <Button colorScheme='teal' size='sm' onClick={openReplyModal}>
+                                    Replay
+                                </Button>
                             </div>
                         </div>
                     </div>
