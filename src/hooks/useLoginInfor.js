@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import firebase from "firebase/compat/app";
 import {useNavigate} from "react-router-dom";
 import {getDocFromCollection} from "../actions/common.action";
@@ -17,7 +17,9 @@ const useUserLoginInfo = () => {
             if (user) {
                 let userData = await getDocFromCollection('userProfile', user?.uid);
                 setModel({...userData, id: user?.uid, isLogged: true});
+
             } else {
+
                 setModel({isLogged: false});
                 navigate('/')
             }
