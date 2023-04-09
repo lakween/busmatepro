@@ -74,7 +74,7 @@ const MessagePage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className={'col-3 border'}>
+                    <div className={'col-3 border'} style={{height:"76vh",overflowY:"auto"}}>
                         {messages?.map((message, index) => (
                             <div style={{
                                 cursor: 'pointer',
