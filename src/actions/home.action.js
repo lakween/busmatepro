@@ -4,10 +4,10 @@ import {collection, getDocs, query, where, getDoc} from "firebase/firestore";
 
 export const getHoltLocations = async (routes, eventValue) => {
     let holtsRef = await routes?.find((route) => route.id == eventValue).holts
-    let holtsKey = await getDocFromCollection('bus routs', eventValue)
+    let holtsKey = await getDocFromCollection('busRoutss', eventValue)
     let holtLocations = []
     for (let holt of holtsKey?.holts) {
-        let result = await getDocFromCollection('bus holts', holt)
+        let result = await getDocFromCollection('busHolts', holt)
         if (result?.location) {
             holtLocations.push({latLng: JSON.parse(result?.location)})
         }
@@ -22,7 +22,7 @@ export const getBusLocations = async (routes, eventValue) => {
         let busDetails = []
         for (let doc of result) {
             if (doc.current_holt) {
-                let data = await getDocFromCollection('bus holts', doc.current_holt)
+                let data = await getDocFromCollection('busHolts', doc.current_holt)
                 busDetails.push({
                     bus_id: doc.id,
                     bus_no: doc.bus_no,
@@ -40,7 +40,7 @@ export const getHoltsByRoute = async (collec, id) => {
     let holts = []
     if (result.holts) {
         for (let holt of result?.holts) {
-            let result = await getDocFromCollection('bus holts', holt)
+            let result = await getDocFromCollection('busHolts', holt)
             holts.push({...result, holt_id: holt})
         }
     }

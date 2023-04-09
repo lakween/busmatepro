@@ -5,7 +5,7 @@ export const getRequests = () => {
     return async (dispatch) => {
         const db = firebase.firestore();
         let arr = []
-        const user_requests = await collection(db, "user requests");
+        const user_requests = await collection(db, "userRequests");
         const queryData = await query(user_requests, where("user_id", "==", 'WlpOBZh8loaBrhkoENh16xjGSrQ2'));
         const querySnapshot = await getDocs(queryData)
         for (let doc of querySnapshot.docs) {

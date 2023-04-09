@@ -32,7 +32,7 @@ const Home = () => {
     }, [selectedRoute])
 
     async function getData() {
-        let data = await dispatch(getAllDocuments("bus routs"))
+        let data = await dispatch(getAllDocuments("busRouts"))
         setRoutes(data || [])
     }
 

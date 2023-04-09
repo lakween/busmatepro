@@ -41,7 +41,7 @@ const RatingsFeedback = () => {
 
     const onChangeBusSelection = async (e) => {
         setForm({})
-        let result = await getDocFromCollection('bus routs', e.target.value)
+        let result = await getDocFromCollection('busRouts', e.target.value)
         let previousReatings = await getPreviousReatings(e?.target?.value)
         setBusRouteName(result?.name)
         setSelectedBus(e?.target?.value)
@@ -49,7 +49,7 @@ const RatingsFeedback = () => {
 
     const getPreviousReatings = async (busID) => {
 
-        let result = await filterDocsFromCollection('bus review', '', [['bus_id', '==', busID], ['user_id', '==', currentUser?.current]])
+        let result = await filterDocsFromCollection('busReview', '', [['bus_id', '==', busID], ['user_id', '==', currentUser?.current]])
         if (result.length > 0) {
             setPrevious(result[0])
             setForm({...result[0]})
@@ -58,7 +58,7 @@ const RatingsFeedback = () => {
 
     const getAllFeedbacks = async () => {
 
-        let result = await filterDocsFromCollection('bus review', '', [['user_id', '==', currentUser?.current]])
+        let result = await filterDocsFromCollection('busReview', '', [['user_id', '==', currentUser?.current]])
         if (result.length > 0) {
             setAllFeedbacks(result)
         }
@@ -70,7 +70,7 @@ const RatingsFeedback = () => {
     }
 
     const deleteHandler = async (id) => {
-        await deleteDocument("bus review", id);
+        await deleteDocument("busReview", id);
         toast({
             title: 'Deleted',
             // description:,
@@ -88,7 +88,7 @@ const RatingsFeedback = () => {
             ...form
         }
         if (data?.id) {
-            await updateDocument('bus review', data.id, data)
+            await updateDocument('busReview', data.id, data)
             toast({
                 title: 'Saved',
                 // description:,
@@ -97,7 +97,7 @@ const RatingsFeedback = () => {
                 isClosable: true,
             })
         } else {
-            let result = await createDocOfCollection('bus review', data)
+            let result = await createDocOfCollection('busReview', data)
             if (result)
                 toast({
                     title: 'Saved',
@@ -266,7 +266,7 @@ const RouteCell = ({busId}) => {
 
     async function getRoute() {
         let result = await getDocFromCollection('bus', busId)
-        let secondResult = await getDocFromCollection('bus routs', result?.route_id)
+        let secondResult = await getDocFromCollection('busRouts', result?.route_id)
         setBusDetails(secondResult?.name)
     }
 

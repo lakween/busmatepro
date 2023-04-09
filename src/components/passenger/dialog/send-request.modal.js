@@ -1,22 +1,24 @@
 import {useEffect, useMemo, useState} from "react";
 import {
+    Button,
+    Flex,
     Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
     ModalBody,
-    ModalCloseButton, Button, Input, FormLabel, FormControl, useDisclosure, Text, Flex, Select, toast,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Select,
+    Text,
+    useToast,
 } from '@chakra-ui/react'
 import {useDispatch, useSelector} from "react-redux";
 import {setModalPoperty} from "../../../store/reducers/modal-slice";
 import {createDocOfCollection, filterDocsFromCollection, getDocFromCollection} from "../../../actions/common.action";
 import {getHoltsByRoute} from "../../../actions/home.action";
 import useFormController from "../../../hooks/useFormController";
-import firebase from "firebase/compat/app";
-import {useToast} from '@chakra-ui/react'
 import passengerNotificationFactory from "../../common/notifications/notification-factory";
-import {execute} from "bootstrap/js/src/util";
 
 const SendRequestModal = () => {
 
@@ -35,7 +37,7 @@ const SendRequestModal = () => {
     }, [poperties.isOpen])
 
     async function getHoltList() {
-        let data = await getHoltsByRoute('bus routs', poperties.data.selectedRoute)
+        let data = await getHoltsByRoute('busRouts', poperties.data.selectedRoute)
         setHoltList(data)
     }
 
@@ -61,7 +63,7 @@ const SendRequestModal = () => {
             bus_id: poperties.data.bus_id,
             status: 'waiting',
         }
-        let result = await createDocOfCollection('user requests', data)
+        let result = await createDocOfCollection('userRequests', data)
         dispatch(setModalPoperty({model: 'sendRequestModel', poperty: 'isOpen', value: false}))
 
         toast({
@@ -73,8 +75,7 @@ const SendRequestModal = () => {
     }
 
     const checkRequestAvailability = async () => {
-        let result = await filterDocsFromCollection('user requests', '', [["status", '==', "waiting"],["user_id", "==", authData.uid]])
-        console.log(result, 'rererer')
+        let result = await filterDocsFromCollection('userRequests', '', [["status", '==', "waiting"],["user_id", "==", authData.uid]])
         if (result?.length > 0) return false
         else return true
     }
@@ -89,7 +90,7 @@ const SendRequestModal = () => {
         }, [])
 
         async function getBusRatingAndFeedBack() {
-            let result = await filterDocsFromCollection('bus review', '', [['bus_id', '==', busId]])
+            let result = await filterDocsFromCollection('busReview', '', [['bus_id', '==', busId]])
             let FeedbacksWithUsers = []
             for (let line of result) {
                 let userName = await getDocFromCollection('userProfile', line?.user_id)
