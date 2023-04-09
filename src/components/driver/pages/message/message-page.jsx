@@ -5,6 +5,7 @@ import {rebuildMessage} from "../../../../actions/passenger.action";
 import {Button} from "@chakra-ui/react";
 import {setModalPoperty} from "../../../../store/reducers/modal-slice";
 import {useDispatch} from "react-redux";
+import Loading from "../../../common/loading/loading"
 
 const MessagePage = () => {
 
@@ -13,6 +14,7 @@ const MessagePage = () => {
     let [messages, setMessages] = useState()
     let [selectedMessage, setSelectedMessage] = useState(0)
     let [messageType, setMessageType] = useState('inbox')
+    let [loading, setLoading] = useState(false)
 
     useEffect(() => {
         if (userDetails?.id) inboxHandler()
@@ -21,10 +23,13 @@ const MessagePage = () => {
     const inboxHandler = () => {
         setMessageType('inbox')
         setMessages([])
+        setLoading(true)
         filterDocsFromCollectionRT('messages', '', [['to', '==', userDetails?.id]], async (messagelist) => {
+            setLoading(true)
             let rebulitMessages = await rebuildMessage(messagelist)
             setMessageType('inbox')
             setMessages(rebulitMessages)
+            setLoading(false)
         })
     }
 
@@ -32,9 +37,11 @@ const MessagePage = () => {
         setMessageType('sent')
         setMessages([])
         filterDocsFromCollectionRT('messages', '', [['from', '==', userDetails?.id]], async (messagelist) => {
+            setLoading(true)
             let rebulitMessages = await rebuildMessage(messagelist)
             setMessageType('sent')
             setMessages(rebulitMessages)
+            setLoading(false)
         })
     }
 
@@ -74,8 +81,13 @@ const MessagePage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className={'col-3 border'} style={{height:"76vh",overflowY:"auto"}}>
-                        {messages?.map((message, index) => (
+                    <div className={'col-3 border'} style={{height: "76vh", overflowY: "auto"}}>
+                        {loading ? <Loading style={{
+                            height: "75vh",
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}/> : messages?.map((message, index) => (
                             <div style={{
                                 cursor: 'pointer',
                                 backgroundColor: `${selectedMessage == index ? '#faf8f7' : ''}`
