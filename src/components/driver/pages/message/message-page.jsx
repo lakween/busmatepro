@@ -60,7 +60,7 @@ const MessagePage = () => {
 
     const onClickMessage = (index, row) => {
         setSelectedMessage(index)
-        updateFieldsOnly('messages', row?.id, {read: true})
+        if (messageType == 'inbox') updateFieldsOnly('messages', row?.id, {read: true})
 
     }
 
@@ -78,7 +78,12 @@ const MessagePage = () => {
                                 backgroundColor: `${messageType == 'inbox' ? '#faf8f7' : ''}`
                             }} onClick={inboxHandler}
                                  className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
-                                <div style={{display:'flex',justifyContent:'center',gap:'10px'}}>Inbox<span style={{backgroundColor:'red',padding:'0px 5px 0px 5px',borderRadius:'100px'}}>{totalUnreadedMessages()}</span></div>
+                                <div style={{display: 'flex', justifyContent: 'center', gap: '10px'}}>Inbox<span
+                                    style={{
+                                        backgroundColor: 'red',
+                                        padding: '0px 5px 0px 5px',
+                                        borderRadius: '100px'
+                                    }}>{totalUnreadedMessages()}</span></div>
                             </div>
                             <div style={{
                                 cursor: 'pointer',
