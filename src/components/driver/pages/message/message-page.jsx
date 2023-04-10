@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from "react";
-import {filterDocsFromCollectionRT, getAllDocFromCollection} from "../../../../actions/common.action";
+import {filterDocsFromCollectionRT, getAllDocFromCollection, updateFieldsOnly} from "../../../../actions/common.action";
 import useUserLoginInfo from "../../../../hooks/useLoginInfor";
 import {rebuildMessage} from "../../../../actions/passenger.action";
 import {Button} from "@chakra-ui/react";
@@ -56,6 +56,13 @@ const MessagePage = () => {
         }
     }
 
+    const onClickMessage = (index, row) => {
+        setSelectedMessage(index)
+        updateFieldsOnly('messages', row?.id, {read: true})
+        console.log(row, 'row')
+
+    }
+
     return (
         <div className={"w-full"} style={{width: '100%'}}>
             <div className={' bg-white '}>
@@ -91,13 +98,16 @@ const MessagePage = () => {
                             <div style={{
                                 cursor: 'pointer',
                                 backgroundColor: `${selectedMessage == index ? '#faf8f7' : ''}`
-                            }} onClick={() => setSelectedMessage(index)}
+                            }} onClick={() => {
+                                onClickMessage(index, message)
+                            }}
                                  className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
                                 <div className={'text-center w-100 text-truncate text-info font-weight-bold'}
                                      style={{fontWeight: 'bold'}}>
+                                    {!message?.read &&( < div > unread < /div>)}
                                     {messageType == "inbox" ? message?.fromName : message?.toName}
-                                </div>
-                                <div className={'text-truncate'}>
+                                        </div>
+                                        <div className={'text-truncate'}>
                                     {message?.message}
                                 </div>
                             </div>
