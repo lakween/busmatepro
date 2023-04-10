@@ -11,10 +11,12 @@ const MessagePage = () => {
 
     let userDetails = useUserLoginInfo()
     let dispatch = useDispatch()
-    let [messages, setMessages] = useState()
+    let [messages, setMessages] = useState([])
     let [selectedMessage, setSelectedMessage] = useState(0)
     let [messageType, setMessageType] = useState('inbox')
     let [loading, setLoading] = useState(false)
+
+    const totalUnreadedMessages = () => messages?.filter((message) =>! message?.read)?.length
 
     useEffect(() => {
         if (userDetails?.id) inboxHandler()
@@ -77,6 +79,7 @@ const MessagePage = () => {
                                 backgroundColor: `${messageType == 'inbox' ? '#faf8f7' : ''}`
                             }} onClick={inboxHandler}
                                  className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
+                                <div>{totalUnreadedMessages()}</div>
                                 Inbox
                             </div>
                             <div style={{
