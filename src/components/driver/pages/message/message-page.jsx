@@ -104,10 +104,16 @@ const MessagePage = () => {
                                  className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
                                 <div className={'text-center w-100 text-truncate text-info font-weight-bold'}
                                      style={{fontWeight: 'bold'}}>
-                                    {!message?.read &&( < div > unread < /div>)}
+
+                                    <div style={{display: 'flex', width: '100%', justifyContent: 'end'}}>
+                                        {messageType == "inbox" && (!message?.read ? (<img
+                                            width={'20px'} height={'20px'}
+                                            src={process.env.PUBLIC_URL + '/images/unread.png'}/>) : <img
+                                            width={'20px'} height={'20px'}
+                                            src={process.env.PUBLIC_URL + '/images/read.png'}/>)}< /div>
                                     {messageType == "inbox" ? message?.fromName : message?.toName}
-                                        </div>
-                                        <div className={'text-truncate'}>
+                                </div>
+                                <div className={'text-truncate'}>
                                     {message?.message}
                                 </div>
                             </div>
