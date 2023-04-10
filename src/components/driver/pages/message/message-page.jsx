@@ -16,7 +16,7 @@ const MessagePage = () => {
     let [messageType, setMessageType] = useState('inbox')
     let [loading, setLoading] = useState(false)
 
-    const totalUnreadedMessages = () => messages?.filter((message) =>! message?.read)?.length
+    const totalUnreadedMessages = () => messages?.filter((message) => !message?.read)?.length
 
     useEffect(() => {
         if (userDetails?.id) inboxHandler()
@@ -61,7 +61,6 @@ const MessagePage = () => {
     const onClickMessage = (index, row) => {
         setSelectedMessage(index)
         updateFieldsOnly('messages', row?.id, {read: true})
-        console.log(row, 'row')
 
     }
 
@@ -79,8 +78,7 @@ const MessagePage = () => {
                                 backgroundColor: `${messageType == 'inbox' ? '#faf8f7' : ''}`
                             }} onClick={inboxHandler}
                                  className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
-                                <div>{totalUnreadedMessages()}</div>
-                                Inbox
+                                <div style={{display:'flex',justifyContent:'center',gap:'10px'}}>Inbox<span style={{backgroundColor:'red',padding:'0px 5px 0px 5px',borderRadius:'100px'}}>{totalUnreadedMessages()}</span></div>
                             </div>
                             <div style={{
                                 cursor: 'pointer',
