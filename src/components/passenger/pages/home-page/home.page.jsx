@@ -17,6 +17,9 @@ const Home = () => {
     const [busDetails, setBusDetails] = useState([])
     const [holtLocations, setHoltLocations] = useState([])
 
+    console.log(holtLocations,'holts')
+    console.log(busDetails,'busdetails')
+
     const onChnageHandler = async (event) => {
         setSelectedRoute(event.target.value)
     }

@@ -8,11 +8,11 @@ export const getBus = (form) => {
             let busRroutes = []
 
             const startHoltRef = firebase.firestore()
-                .collection('busHolts')
+                .collection('bus holts')
                 .doc(form.start);
 
             const endHoltRef = firebase.firestore()
-                .collection('busHolts')
+                .collection('bus holts')
                 .doc(form.start);
 
             const files = await firebase
