@@ -58,7 +58,7 @@ const RequestHistory = (theme) => {
         const getBusDetails = async () => {
             let result = await getDocFromCollection('bus', busID)
             let routeName = await getDocFromCollection('busRoutes', result?.route_id)
-            let pickUpHoltDetails = await getDocFromCollection('bus holts', pickUpHolt)
+            let pickUpHoltDetails = await getDocFromCollection('busHolts', pickUpHolt)
             setState({...result, routeName: routeName?.name, pickUpHoltName: pickUpHoltDetails?.holt_name})
         }
 
