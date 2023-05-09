@@ -22,8 +22,7 @@ export const getBusLocations = async (routes, eventValue) => {
         let result = await filterDocsFromCollection('bus', '', [["route_id", '==', eventValue]])
         let busDetails = []
         for (let doc of result) {
-            if (doc.current_holt) {
-                let data = await getDocFromCollection('busHolts', doc.current_holt)
+            if (doc?.current_location) {
                 busDetails.push({
                     bus_id: doc.id,
                     bus_no: doc.bus_no,
@@ -33,7 +32,6 @@ export const getBusLocations = async (routes, eventValue) => {
                 })
             }
         }
-    console.log(busDetails,'busdetails')
         return busDetails
 }
 

@@ -49,7 +49,7 @@ const MapComponent = ({locations, busDetails}) => {
                     (<BusMarker
                         key={i}
                         position={
-                            obj?.current_holt
+                            obj?.current_location
                         }
                         data={obj}
                     />))}
@@ -158,6 +158,7 @@ const BusMarker = (options) => {
         onSnapshot(
             doc(db, "bus", options?.data?.bus_id),
             (doc) => {
+                console.log(doc?.data(),'doc?.data()')
                 setLocation(doc?.data()?.current_location ? JSON.parse(doc?.data()?.current_location): {})
             });
     },[])
