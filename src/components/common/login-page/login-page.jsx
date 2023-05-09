@@ -43,7 +43,8 @@ const Login = () => {
 
         if (Object.keys(document).length === 0 && res?.reference_doc_id) {
             let doc = await createDocOfCollectionWithId('userProfile', res?.reference_doc_id, {
-                ...res
+                ...res,
+                type:'passenger'
             })
             navigate('signup')
 

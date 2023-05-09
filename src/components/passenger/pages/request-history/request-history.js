@@ -23,13 +23,13 @@ const RequestHistory = (theme) => {
     }, [])
 
     const getData = (uid) => {
-        filterDocsFromCollectionRT('user requests', '', [['user_id', '==', uid]], (data) => {
+        filterDocsFromCollectionRT('userRequests', '', [['user_id', '==', uid]], (data) => {
             setRequest([...data])
         })
     }
 
     const cancelHandler = async (id) => {
-        await updateFieldsOnly('user requests', id, {status: 'Cancelled'})
+        await updateFieldsOnly('userRequests', id, {status: 'Cancelled'})
         toast({
             title: 'Cancelled',
             status: 'success',
@@ -39,7 +39,7 @@ const RequestHistory = (theme) => {
     }
 
     const deleteHandler = async (id) => {
-        await deleteDocument("user requests", id);
+        await deleteDocument("userRequests", id);
         toast({
             title: 'Deleted',
             status: 'success',
@@ -57,8 +57,8 @@ const RequestHistory = (theme) => {
 
         const getBusDetails = async () => {
             let result = await getDocFromCollection('bus', busID)
-            let routeName = await getDocFromCollection('bus routs', result?.route_id)
-            let pickUpHoltDetails = await getDocFromCollection('bus holts', pickUpHolt)
+            let routeName = await getDocFromCollection('busRoutes', result?.route_id)
+            let pickUpHoltDetails = await getDocFromCollection('busHolts', pickUpHolt)
             setState({...result, routeName: routeName?.name, pickUpHoltName: pickUpHoltDetails?.holt_name})
         }
 

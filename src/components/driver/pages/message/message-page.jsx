@@ -1,18 +1,22 @@
 import {useEffect, useRef, useState} from "react";
-import {filterDocsFromCollectionRT, getAllDocFromCollection} from "../../../../actions/common.action";
+import {filterDocsFromCollectionRT, getAllDocFromCollection, updateFieldsOnly} from "../../../../actions/common.action";
 import useUserLoginInfo from "../../../../hooks/useLoginInfor";
 import {rebuildMessage} from "../../../../actions/passenger.action";
 import {Button} from "@chakra-ui/react";
 import {setModalPoperty} from "../../../../store/reducers/modal-slice";
 import {useDispatch} from "react-redux";
+import Loading from "../../../common/loading/loading"
 
 const MessagePage = () => {
 
     let userDetails = useUserLoginInfo()
     let dispatch = useDispatch()
-    let [messages, setMessages] = useState()
+    let [messages, setMessages] = useState([])
     let [selectedMessage, setSelectedMessage] = useState(0)
     let [messageType, setMessageType] = useState('inbox')
+    let [loading, setLoading] = useState(false)
+
+    const totalUnreadedMessages = () => messages?.filter((message) => !message?.read)?.length
 
     useEffect(() => {
         if (userDetails?.id) inboxHandler()
@@ -21,10 +25,13 @@ const MessagePage = () => {
     const inboxHandler = () => {
         setMessageType('inbox')
         setMessages([])
+        setLoading(true)
         filterDocsFromCollectionRT('messages', '', [['to', '==', userDetails?.id]], async (messagelist) => {
+            setLoading(true)
             let rebulitMessages = await rebuildMessage(messagelist)
             setMessageType('inbox')
             setMessages(rebulitMessages)
+            setLoading(false)
         })
     }
 
@@ -32,9 +39,11 @@ const MessagePage = () => {
         setMessageType('sent')
         setMessages([])
         filterDocsFromCollectionRT('messages', '', [['from', '==', userDetails?.id]], async (messagelist) => {
+            setLoading(true)
             let rebulitMessages = await rebuildMessage(messagelist)
             setMessageType('sent')
             setMessages(rebulitMessages)
+            setLoading(false)
         })
     }
 
@@ -47,6 +56,12 @@ const MessagePage = () => {
                 value: messages[selectedMessage]
             }))
         }
+    }
+
+    const onClickMessage = (index, row) => {
+        setSelectedMessage(index)
+        if (messageType == 'inbox') updateFieldsOnly('messages', row?.id, {read: true})
+
     }
 
     return (
@@ -63,7 +78,12 @@ const MessagePage = () => {
                                 backgroundColor: `${messageType == 'inbox' ? '#faf8f7' : ''}`
                             }} onClick={inboxHandler}
                                  className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
-                                Inbox
+                                <div style={{display: 'flex', justifyContent: 'center', gap: '10px'}}>Inbox<span
+                                    style={{
+                                        backgroundColor: 'red',
+                                        padding: '0px 5px 0px 5px',
+                                        borderRadius: '100px'
+                                    }}>{totalUnreadedMessages()}</span></div>
                             </div>
                             <div style={{
                                 cursor: 'pointer',
@@ -74,15 +94,29 @@ const MessagePage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className={'col-3 border'} style={{height:"76vh",overflowY:"auto"}}>
-                        {messages?.map((message, index) => (
+                    <div className={'col-3 border'} style={{height: "76vh", overflowY: "auto"}}>
+                        {loading ? <Loading style={{
+                            height: "75vh",
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}/> : messages?.map((message, index) => (
                             <div style={{
                                 cursor: 'pointer',
                                 backgroundColor: `${selectedMessage == index ? '#faf8f7' : ''}`
-                            }} onClick={() => setSelectedMessage(index)}
+                            }} onClick={() => {
+                                onClickMessage(index, message)
+                            }}
                                  className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
                                 <div className={'text-center w-100 text-truncate text-info font-weight-bold'}
                                      style={{fontWeight: 'bold'}}>
+
+                                    <div style={{display: 'flex', width: '100%', justifyContent: 'end'}}>
+                                        {messageType == "inbox" && (!message?.read ? (<img
+                                            width={'20px'} height={'20px'}
+                                            src={process.env.PUBLIC_URL + '/images/unread.png'}/>) : <img
+                                            width={'20px'} height={'20px'}
+                                            src={process.env.PUBLIC_URL + '/images/read.png'}/>)}< /div>
                                     {messageType == "inbox" ? message?.fromName : message?.toName}
                                 </div>
                                 <div className={'text-truncate'}>

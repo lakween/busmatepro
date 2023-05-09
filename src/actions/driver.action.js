@@ -3,7 +3,7 @@ import {getDocFromCollection} from "./common.action";
 export const rebuildUserRequsets = async (requestList) => {
     let array = []
     for (let request of requestList) {
-        let holtnameAndLocation = request?.pickUp_holt ? await getDocFromCollection('bus holts', request?.pickUp_holt) : ''
+        let holtnameAndLocation = request?.pickUp_holt ? await getDocFromCollection('busHolts', request?.pickUp_holt) : ''
         let userName = (await getDocFromCollection('userProfile', request?.user_id))?.fullName || ''
         array.push({...holtnameAndLocation, userName: userName, ...request})
     }

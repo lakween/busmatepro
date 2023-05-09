@@ -8,16 +8,16 @@ export const getBus = (form) => {
             let busRroutes = []
 
             const startHoltRef = firebase.firestore()
-                .collection('bus holts')
+                .collection('busHolts')
                 .doc(form.start);
 
             const endHoltRef = firebase.firestore()
-                .collection('bus holts')
+                .collection('busHolts')
                 .doc(form.start);
 
             const files = await firebase
                 .firestore()
-                .collection('bus routs')
+                .collection('busRoutes')
                 .where('holts', 'array-contains-any', [startHoltRef, endHoltRef])
                 .get().then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
@@ -27,7 +27,7 @@ export const getBus = (form) => {
 
             busRroutes.map((item) => {
                 const busRoutRef = firebase.firestore()
-                    .collection('bus routs')
+                    .collection('busRoutes')
                     .doc(item);
                 const files = firebase
                     .firestore()

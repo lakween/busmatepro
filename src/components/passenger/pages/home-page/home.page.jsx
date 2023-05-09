@@ -7,6 +7,7 @@ import {useDispatch} from "react-redux";
 import {getBusLocations, getHoltLocations} from "../../../../actions/home.action";
 import firebase from "firebase/compat/app";
 import Loading from "../../../common/loading/loading";
+import {getDocFromCollection} from "../../../../actions/common.action";
 
 const Home = () => {
     let dispatch = useDispatch()
@@ -16,6 +17,9 @@ const Home = () => {
     const [loading, setLoading] = useState(false)
     const [busDetails, setBusDetails] = useState([])
     const [holtLocations, setHoltLocations] = useState([])
+
+    console.log(holtLocations,'holts')
+    console.log(busDetails,'busdetails')
 
     const onChnageHandler = async (event) => {
         setSelectedRoute(event.target.value)
@@ -32,8 +36,14 @@ const Home = () => {
     }, [selectedRoute])
 
     async function getData() {
-        let data = await dispatch(getAllDocuments("bus routs"))
-        setRoutes(data || [])
+        let data = await dispatch(getAllDocuments("busRoutes"))
+        let array = []
+        for(let route of data){
+            let end =( await (getDocFromCollection('busHolts',route?.end)))?.holt_name
+            let start = (await (getDocFromCollection('busHolts',route?.start)))?.holt_name
+            array.push({...route,start:start,end:end})
+        }
+        setRoutes(array || [])
     }
 
     async function getLocations() {
