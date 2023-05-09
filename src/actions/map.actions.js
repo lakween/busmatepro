@@ -17,7 +17,7 @@ export const getBus = (form) => {
 
             const files = await firebase
                 .firestore()
-                .collection('busRouts')
+                .collection('busRoutes')
                 .where('holts', 'array-contains-any', [startHoltRef, endHoltRef])
                 .get().then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
@@ -27,7 +27,7 @@ export const getBus = (form) => {
 
             busRroutes.map((item) => {
                 const busRoutRef = firebase.firestore()
-                    .collection('busRouts')
+                    .collection('busRoutes')
                     .doc(item);
                 const files = firebase
                     .firestore()

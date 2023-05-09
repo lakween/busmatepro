@@ -41,7 +41,7 @@ const RatingsFeedback = () => {
 
     const onChangeBusSelection = async (e) => {
         setForm({})
-        let result = await getDocFromCollection('busRouts', e.target.value)
+        let result = await getDocFromCollection('busRoutes', e.target.value)
         let previousReatings = await getPreviousReatings(e?.target?.value)
         setBusRouteName(result?.name)
         setSelectedBus(e?.target?.value)
@@ -266,7 +266,7 @@ const RouteCell = ({busId}) => {
 
     async function getRoute() {
         let result = await getDocFromCollection('bus', busId)
-        let secondResult = await getDocFromCollection('busRouts', result?.route_id)
+        let secondResult = await getDocFromCollection('busRoutes', result?.route_id)
         setBusDetails(secondResult?.name)
     }
 

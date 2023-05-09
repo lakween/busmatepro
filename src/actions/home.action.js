@@ -4,7 +4,7 @@ import {collection, getDocs, query, where, getDoc} from "firebase/firestore";
 
 export const getHoltLocations = async (routes, eventValue) => {
     let holtsRef = await routes?.find((route) => route.id == eventValue).holts
-    let holtsKey = await getDocFromCollection('busRoutss', eventValue)
+    let holtsKey = await getDocFromCollection('busRoutes', eventValue)
     let holtLocations = []
     for (let holt of holtsKey?.holts) {
         let result = await getDocFromCollection('bus holts', holt)
@@ -16,6 +16,7 @@ export const getHoltLocations = async (routes, eventValue) => {
     return holtLocations || []
 
 }
+
 
 export const getBusLocations = async (routes, eventValue) => {
         const db = firebase.firestore();

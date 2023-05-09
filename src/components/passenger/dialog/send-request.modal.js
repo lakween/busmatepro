@@ -37,7 +37,7 @@ const SendRequestModal = () => {
     }, [poperties.isOpen])
 
     async function getHoltList() {
-        let data = await getHoltsByRoute('busRouts', poperties.data.selectedRoute)
+        let data = await getHoltsByRoute('busRoutes', poperties.data.selectedRoute)
         setHoltList(data)
     }
 
