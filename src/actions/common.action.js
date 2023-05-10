@@ -28,6 +28,10 @@ export const getDocFromCollection = async (coll, docum) => {
     }
 }
 
+export const getState = ()=>(
+     async (dispatch,getState)=>(getState())
+)
+
 export const getDocFromCollectionRT= async (coll, docum) => {
     //realtime update
     const db = firebase.firestore();

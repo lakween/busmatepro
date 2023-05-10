@@ -4,6 +4,7 @@ import React, {useEffect} from "react";
 import {Menu, Button, MenuButton, MenuItem, MenuList, Image, IconButton} from "@chakra-ui/react";
 import {FiBell} from "react-icons/fi";
 import passengerNotificationFactory from "./notification-factory";
+import {useDispatch} from "react-redux";
 
 function ChevronDownIcon() {
     return null;
@@ -11,9 +12,10 @@ function ChevronDownIcon() {
 
 const Notifications = () => {
     // const db = firebase.firestore();
+    const dispatch = useDispatch()
     // const q = query(collection(db, "user requests"), where("status", "==", "waiting"));
     // const unsubscribe = ''
-   new passengerNotificationFactory()
+   let notification  = new passengerNotificationFactory(dispatch)
     // useEffect(()=>{
     //     onSnapshot(q, { includeMetadataChanges: true },  (snapshot) => {
     //         snapshot.docChanges().forEach((change) => {
