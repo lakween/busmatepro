@@ -1,6 +1,7 @@
 import {getAuth} from "firebase/auth";
 import {filterDocsFromCollection, getDocFromCollection} from "../../../actions/common.action";
 import firebase from "firebase/compat/app";
+import {json} from "react-router-dom";
 
 class passengerNotificationFactory {
     id = ''
@@ -41,9 +42,17 @@ class passengerNotificationFactory {
     }
 
     async getCurrentProgessingRequest() {
-        let pickupHolt = (await filterDocsFromCollection('userRequests', [], [["user_id", "==", String(this.id)],["status","==","waiting"]]))[0]?.pickUp_holt
-        let holts_locations =
-        console.log(pickupHolt,'"waiting"')
+        try {
+            let pickupHolt = (await filterDocsFromCollection('userRequests', [], [["user_id", "==", String(this.id)],["status","==","waiting"]]))
+            let holts_locations = (await getDocFromCollection('busHolts',pickupHolt[0]?.pickUp_holt))?.location
+            let holt_location_object = holts_locations ? JSON.parse(holts_locations):{}
+            let current_bus_location = (await getDocFromCollection('bus',pickupHolt[0]?.bus_id))?.current_location
+            let current_location_obect_bus = current_bus_location ? JSON?.parse(current_bus_location):{}
+            return {holt_location_object:holt_location_object,current_location_obect_bus:current_location_obect_bus}
+        } catch (e){
+            console.log(e)
+        }
+
     }
 
 
