@@ -30,6 +30,8 @@ const SendMessageModal = () => {
     const poperties = useSelector((state) => (state?.modalSlice.sendMessageModal))
     let [valueChangeHandler, setValue, form, setForm] = useFormController()
 
+    console.log(poperties,'poperties')
+
     async function sendMessageHandler() {
         createDocOfCollection('messages', {
             ...form,

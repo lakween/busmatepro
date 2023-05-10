@@ -29,7 +29,7 @@ const RequestHistory = () => {
 
     async function acceptHandler(rowData) {
         try {
-            await updateFieldsOnly('user requests', rowData?.id, {status: 'Accept'})
+            await updateFieldsOnly('userRequests', rowData?.id, {status: 'Accept'})
             toast({
                 title: 'Cancelled',
                 status: 'success',
@@ -54,14 +54,13 @@ const RequestHistory = () => {
 
     async function getUserRequest() {
         setIsLoading(true)
-        let {busId} = await getDocFromCollection('driverByBus', userDetails?.id)
-        console.log(userDetails?.id, 'ahahah')
-        filterDocsFromCollectionRT('user requests', '', [['bus_id', '==', busId], ['status', '==', 'waiting']], callBackForRealtime)
+        let {bus_id} = await getDocFromCollection('driverByBus', userDetails?.id?.trim())
+        filterDocsFromCollectionRT('userRequests', '', [['bus_id', '==', bus_id?.trim()], ['status', '==', 'waiting']], callBackForRealtime)
     }
 
     async function rejectHandler(rowData) {
         try {
-            await updateFieldsOnly('user requests', rowData?.id, {status: 'Cancelled'})
+            await updateFieldsOnly('userRequests', rowData?.id, {status: 'Cancelled'})
             toast({
                 title: 'Cancelled',
                 status: 'success',
