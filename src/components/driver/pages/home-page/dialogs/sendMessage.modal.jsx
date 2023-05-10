@@ -17,10 +17,7 @@ import {useDispatch, useSelector} from "react-redux";
 import useFormController from "../../../../../hooks/useFormController";
 import {setModalPoperty} from "../../../../../store/reducers/modal-slice";
 import useUserLoginInfo from "../../../../../hooks/useLoginInfor";
-import {createDoc} from "../../../../../actions/user.actions";
 import {createDocOfCollection} from "../../../../../actions/common.action";
-
-;
 
 const SendMessageModal = () => {
 
@@ -29,7 +26,6 @@ const SendMessageModal = () => {
     let userDetails = useUserLoginInfo()
     const poperties = useSelector((state) => (state?.modalSlice.sendMessageModal))
     let [valueChangeHandler, setValue, form, setForm] = useFormController()
-
     async function sendMessageHandler() {
         createDocOfCollection('messages', {
             ...form,
