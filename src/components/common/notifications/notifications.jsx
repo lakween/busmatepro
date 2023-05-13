@@ -1,31 +1,9 @@
-import { collection, query, where, onSnapshot } from "firebase/firestore";
-import firebase from "firebase/compat/app";
-import React, {useEffect} from "react";
-import {Menu, Button, MenuButton, MenuItem, MenuList, Image, IconButton} from "@chakra-ui/react";
+import React from "react";
+import {IconButton, Image, Menu, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
 import {FiBell} from "react-icons/fi";
-import passengerNotificationFactory from "./notification-factory";
-import {useDispatch, useSelector} from "react-redux";
-
-function ChevronDownIcon() {
-    return null;
-}
-
 const Notifications = () => {
 
-
-    // const q = query(collection(db, "user requests"), where("status", "==", "waiting"));
-    // const unsubscribe = ''
-    // useEffect(()=>{
-    //     onSnapshot(q, { includeMetadataChanges: true },  (snapshot) => {
-    //         snapshot.docChanges().forEach((change) => {
-    //                 console.log("New city: ", change.doc.data());
-    //         });
-    //     });
-    // })
-
-
-    return (
-        <Menu>
+    return (<Menu>
             <MenuButton>
                 <IconButton
                     size="lg"
@@ -56,8 +34,7 @@ const Notifications = () => {
                     <span>Simon the pensive</span>
                 </MenuItem>
             </MenuList>
-        </Menu>
-    )
+        </Menu>)
 }
 
 export default Notifications

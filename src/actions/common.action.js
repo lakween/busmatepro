@@ -62,7 +62,6 @@ export const getBusArriveState = async (dispatch,setState)=>{
                            setState({busno:bus_no,arravi:true})
                         }
                     })
-                console.log(abc,'return')
                 }
         }
     });
