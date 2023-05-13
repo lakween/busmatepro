@@ -14,6 +14,7 @@ import {
     onSnapshot
 } from "firebase/firestore";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
+import {setCommonState} from "../store/reducers/common-slice";
 
 export const getDocFromCollection = async (coll, docum) => {
 
@@ -50,6 +51,22 @@ export const updateAuthProfile = async (user, model) => {
     let res = await updateProfile(user, model)
 }
 
+export const getBusArriveState = async (dispatch,setState)=>{
+    firebase.auth().onAuthStateChanged(async (user) => {
+        if (user) {
+            let {type} = await getDocFromCollection('userProfile', user?.uid)
+            if (type == 'passenger') {
+                let abc = getLongAndLatOfUserRequest(user?.uid).then(({holt_location_object, current_location_obect_bus,bus_no}) => {
+                        let abc = getDistanceFromLatLonInm(holt_location_object?.lat, holt_location_object?.lng, current_location_obect_bus?.lat, current_location_obect_bus?.lng)
+                        if (abc < 200) {
+                           setState({busno:bus_no,arravi:true})
+                        }
+                    })
+                console.log(abc,'return')
+                }
+        }
+    });
+}
 export const createDocOfCollection = async (collName, data) => {
     const db = firebase.firestore();
     const docRef = await addDoc(collection(db, collName), data);
@@ -146,5 +163,42 @@ export const filterDocsFromCollectionRT = async (coll, fields, filters,callBack)
             }
         callBack(array)
     });
+}
+
+function getDistanceFromLatLonInm(lat1, lon1, lat2, lon2) {
+    const earthRadiusM = 6371000;
+
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const distance = earthRadiusM * c;
+
+    return distance;
+}
+
+function deg2rad(deg) {
+    return deg * (Math.PI / 180)
+}
+
+async function getLongAndLatOfUserRequest(id) {
+    try {
+        let pickupHolt = (await filterDocsFromCollection('userRequests', [], [["user_id", "==", String(id)], ["status", "==", "waiting"]]))
+        let holts_locations = (await getDocFromCollection('busHolts', pickupHolt[0]?.pickUp_holt))?.location
+        let holt_location_object = holts_locations ? JSON.parse(holts_locations) : {}
+        let {current_location:current_bus_location,bus_no=''} = (await getDocFromCollection('bus', pickupHolt[0]?.bus_id))
+        let current_location_obect_bus = current_bus_location ? JSON?.parse(current_bus_location) : {}
+        return {holt_location_object: holt_location_object, current_location_obect_bus: current_location_obect_bus,bus_no}
+
+    } catch (e) {
+        console.log(e)
+    }
+
 }
 

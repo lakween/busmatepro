@@ -19,7 +19,12 @@ import RequestHistory from "../../passenger/pages/request-history/request-histor
 import Notifications from "../notifications/notifications";
 import {signOut} from "../../../actions/user.actions";
 import useUserLoginInfo from "../../../hooks/useLoginInfor";
-import {filterDocsFromCollection, getAllDocFromCollection, getDocFromCollection} from "../../../actions/common.action";
+import {
+    filterDocsFromCollection,
+    getAllDocFromCollection,
+    getBusArriveState,
+    getDocFromCollection
+} from "../../../actions/common.action";
 
 // const Sidebar = () => {
 //     let displayName = useSelector((store) => (store.firebase.auth.displayName))
@@ -89,10 +94,31 @@ function Sidebar({children}) {
             <MobileNav onOpen={onOpen}/>
             <Box ml={{base: 0, md: 60}} p="4">
                 <Outlet/>
+                <div>
+                    <BusArrav/>
+                </div>
             </Box>
         </Box>
     );
 }
+
+const BusArrav = ()=>{
+    const [state,setState] = useState()
+    const dispatch =useDispatch()
+
+    useEffect(()=>{
+        getBusArriveState(dispatch,setState)
+    },[])
+
+return(
+    <>
+        {state && (<>EFRFEERFERG</>)}
+    </>
+)
+
+}
+
+
 
 const SidebarContent = ({onClose}) => {
 
@@ -183,7 +209,6 @@ const NavItem = ({icon, link, navigate, children, ...rest}) => {
 const MobileNav = ({onOpen, ...rest}) => {
     const {colorMode, toggleColorMode} = useColorMode()
     let userDetails = useUserLoginInfo()
-    console.log(userDetails,'ud')
     let navigate = useNavigate();
     return (
         <Flex
@@ -226,7 +251,7 @@ const MobileNav = ({onOpen, ...rest}) => {
                             <HStack>
                                 <Avatar
                                     size={'sm'}
-                                    src={userDetails?.photoURL}
+                                    src={userDetails?.photoURL ?? ''}
                                 />
                                 <VStack
                                     display={{base: 'none', md: 'flex'}}

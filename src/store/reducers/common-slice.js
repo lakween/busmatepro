@@ -2,9 +2,11 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const commonSlice = createSlice({
     name: 'commonSlice',
-    initialState: {},
+    initialState: {
+        yourBusArrive:{}
+    },
     reducers: {
-        setCommonState:(state,{payload}) =>( state = {...payload})
+        setCommonState:(state,{payload}) =>( state = {...state,yourBusArrive:payload?.yourBusArrive})
     },
 })
 
