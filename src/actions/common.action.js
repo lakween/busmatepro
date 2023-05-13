@@ -14,6 +14,7 @@ import {
     onSnapshot
 } from "firebase/firestore";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
+import {setCommonState} from "../store/reducers/common-slice";
 
 export const getDocFromCollection = async (coll, docum) => {
 
@@ -28,7 +29,11 @@ export const getDocFromCollection = async (coll, docum) => {
     }
 }
 
-export const getDocFromCollectionRT= async (coll, docum) => {
+export const getState = () => (
+    async (dispatch, getState) => (getState())
+)
+
+export const getDocFromCollectionRT = async (coll, docum) => {
     //realtime update
     const db = firebase.firestore();
     const docRef = await doc(db, coll, docum);
@@ -46,6 +51,20 @@ export const updateAuthProfile = async (user, model) => {
     let res = await updateProfile(user, model)
 }
 
+export const getBusArriveState = async (userDetails, dispatch, setState) => {
+    if (userDetails?.type == 'passenger') {
+        getLongAndLatOfUserRequest(userDetails?.id).then(({
+                                                              holt_location_object,
+                                                              current_location_obect_bus,
+                                                              bus_no
+                                                          }) => {
+            let abc = getDistanceFromLatLonInm(holt_location_object?.lat, holt_location_object?.lng, current_location_obect_bus?.lat, current_location_obect_bus?.lng)
+            if (abc < 200) {
+                setState({busno: bus_no, arravi: true})
+            }
+        })
+    }
+}
 export const createDocOfCollection = async (collName, data) => {
     const db = firebase.firestore();
     const docRef = await addDoc(collection(db, collName), data);
@@ -57,7 +76,7 @@ export const createDocOfCollectionWithId = async (collName, id, data) => {
     const docRef = await setDoc(doc(db, collName, id), data);
 }
 
-export const deleteDocument = async (collection,document) => {
+export const deleteDocument = async (collection, document) => {
     const db = firebase.firestore();
     await deleteDoc(doc(db, collection, document));
 }
@@ -79,18 +98,18 @@ export const updateProfilePhoto = async (file, currentUser) => {
 //     await setDoc(accountRef, model, {merge: true});
 // }
 
-export const updateFieldsOnly = async (collName,docu,data)=>{
+export const updateFieldsOnly = async (collName, docu, data) => {
     const db = firebase.firestore();
     const ref = doc(db, collName, docu)
     await updateDoc(ref, {
-      ...data
+        ...data
     });
 }
 
 export const updateDocument = async (col, docum, data) => {
     const db = firebase.firestore();
     delete data.id
-    await setDoc(doc(db, col, docum), data,{merge: true});
+    await setDoc(doc(db, col, docum), data, {merge: true});
 }
 
 export const getAllDocFromCollection = async (collName) => {
@@ -122,7 +141,7 @@ export const filterDocsFromCollection = async (coll, fields, filters) => {
     return array
 }
 
-export const filterDocsFromCollectionRT = async (coll, fields, filters,callBack) => {
+export const filterDocsFromCollectionRT = async (coll, fields, filters, callBack) => {
     //real time update
     const db = firebase.firestore();
     let filterArray = []
@@ -138,9 +157,53 @@ export const filterDocsFromCollectionRT = async (coll, fields, filters,callBack)
     onSnapshot(queryData, (querySnapshot) => {
         let array = []
         for (let document of querySnapshot.docs) {
-                array.push({...document.data(), id: document.id})
-            }
+            array.push({...document.data(), id: document.id})
+        }
         callBack(array)
     });
+}
+
+function getDistanceFromLatLonInm(lat1, lon1, lat2, lon2) {
+    const earthRadiusM = 6371000;
+
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const distance = earthRadiusM * c;
+
+    return distance;
+}
+
+function deg2rad(deg) {
+    return deg * (Math.PI / 180)
+}
+
+async function getLongAndLatOfUserRequest(id) {
+    try {
+        let pickupHolt = (await filterDocsFromCollection('userRequests', [], [["user_id", "==", String(id)], ["status", "==", "waiting"]]))
+        let holts_locations = (await getDocFromCollection('busHolts', pickupHolt[0]?.pickUp_holt))?.location
+        let holt_location_object = holts_locations ? JSON.parse(holts_locations) : {}
+        let {
+            current_location: current_bus_location,
+            bus_no = ''
+        } = (await getDocFromCollection('bus', pickupHolt[0]?.bus_id))
+        let current_location_obect_bus = current_bus_location ? JSON?.parse(current_bus_location) : {}
+        return {
+            holt_location_object: holt_location_object,
+            current_location_obect_bus: current_location_obect_bus,
+            bus_no
+        }
+
+    } catch (e) {
+        console.log(e)
+    }
+
 }
 

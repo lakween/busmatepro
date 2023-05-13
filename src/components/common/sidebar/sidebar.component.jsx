@@ -1,71 +1,36 @@
 import {
     Avatar,
-    Box, Button, CloseButton, DrawerContent,
-    Flex, HStack, Icon,
+    Box,
+    Button,
+    CloseButton,
+    Drawer,
+    DrawerContent,
+    Flex,
+    HStack,
+    Icon,
     IconButton,
-    Link, Menu, MenuButton, MenuDivider, MenuItem, MenuList,
-    Text, useColorMode,
-    useColorModeValue, Drawer,
-    useDisclosure, VStack,
-    Wrap,
-    WrapItem
+    Link,
+    Menu,
+    MenuButton,
+    MenuDivider,
+    MenuItem,
+    MenuList,
+    Text,
+    useColorMode,
+    useColorModeValue,
+    useDisclosure,
+    VStack
 } from "@chakra-ui/react";
-import {Outlet, Link as ReachLink, useRoutes, useParams, useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import React from "react";
-import {FiBell, FiChevronDown, FiHome, FiMenu} from "react-icons/fi";
-import RequestHistory from "../../passenger/pages/request-history/request-history";
-import Notifications from "../notifications/notifications";
+import {Outlet, useNavigate} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
+import {FiChevronDown, FiHome, FiMenu} from "react-icons/fi";
 import {signOut} from "../../../actions/user.actions";
 import useUserLoginInfo from "../../../hooks/useLoginInfor";
-import {filterDocsFromCollection, getAllDocFromCollection, getDocFromCollection} from "../../../actions/common.action";
+import {getAllDocFromCollection, getBusArriveState} from "../../../actions/common.action";
 
-// const Sidebar = () => {
-//     let displayName = useSelector((store) => (store.firebase.auth.displayName))
-//     return (
-//         <Flex maxH={'100vh'} flexDirection={'row'} gap={'20px'} overflowY={'hidden'} >
-//             <Box gap={5} display={'flex'} bg={'aliceblue'} borderStyle={'solid'} borderRadius={'5px'} borderWidth={2}
-//                  flexDirection={'column'} width={'20vw'} height={'100vh'}>
-//                 <Box gap={2} bgGradient='linear(to-r, #1d82d0, #0e436d)' flexDirection={"column"} display={'Flex'}
-//                      justifyContent={'center'} alignItems={'center'} height={'30vh'}>
-//
-//                     <Text
-//                         bgGradient='linear(to-l, #7928CA, #FF0080)'
-//                         bgClip='text'
-//                         fontSize='3xl'
-//                         fontWeight='extrabold'>Busmate Sri Lanka </Text>
-//                 </Box>
-//                 <Flex justifyContent={'center'} alignItems={'center'} direction={"column"} gap={3}>
-//                     <Avatar mt={'-30%'} size='2xl' name='Segun Adebayo' src='https://bit.ly/sage-adebayo'/>
-//                     <Text>{displayName}</Text>
-//                 </Flex>
-//                 <NavLink/>
-//             </Box>
-//             <Box width={'100%'} maxH={'100vh'}  overflowY={'scroll'}>
-//                 <Outlet/>
-//             </Box>
-//         </Flex>
-//     )
-// }
-//
-// const NavLink = () => (
-//     <Box display={'Flex'} flexDirection={"column"} justifyContent={'center'} alignItems={'center'}>
-//         <Link as={ReachLink} cursor={'pointer'} to='/home'>
-//             Profile
-//         </Link>
-//         <Link as={ReachLink} cursor={'pointer'} to='/passenger'>
-//             Pickng
-//         </Link>
-//         <Link as={ReachLink} cursor={'pointer'} to='/passenger/history'>
-//             Request History
-//         </Link>
-//     </Box>
-//
-// )
 function Sidebar({children}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
-    const data = useSelector(state => state)
 
     return (
         <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
@@ -88,11 +53,34 @@ function Sidebar({children}) {
             </Drawer>
             <MobileNav onOpen={onOpen}/>
             <Box ml={{base: 0, md: 60}} p="4">
+                <div className={'d-flex flex-row justify-content-center align-content-center'} style={{marginRight:'20%'}}>
+                        <BusArriveAlert/>
+                </div>
                 <Outlet/>
             </Box>
         </Box>
     );
 }
+
+const BusArriveAlert = () => {
+    const [state, setState] = useState()
+    const dispatch = useDispatch()
+    const userDetails = useUserLoginInfo()
+
+    useEffect(() => {
+        if (userDetails?.id) setInterval(() => {
+            // getBusArriveState(userDetails, dispatch, setState)
+        }, [5000])
+    }, [userDetails])
+
+    return (
+        <>{state?.arravi && (<div className={'bg-success p-2 rounded rounded-md'}>
+            <>Your Bus {state?.busno ? state?.busno : ''} arrived</>
+        </div>)}</>
+    )
+
+}
+
 
 const SidebarContent = ({onClose}) => {
 
@@ -140,8 +128,6 @@ const SidebarContent = ({onClose}) => {
                     {link.name}
                 </NavItem>
             ))}
-
-
         </Box>
     );
 };
@@ -183,7 +169,6 @@ const NavItem = ({icon, link, navigate, children, ...rest}) => {
 const MobileNav = ({onOpen, ...rest}) => {
     const {colorMode, toggleColorMode} = useColorMode()
     let userDetails = useUserLoginInfo()
-    console.log(userDetails,'ud')
     let navigate = useNavigate();
     return (
         <Flex
@@ -216,7 +201,6 @@ const MobileNav = ({onOpen, ...rest}) => {
                 <Button onClick={toggleColorMode}>
                     Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
                 </Button>
-                <Notifications/>
                 <Flex alignItems={'center'}>
                     <Menu>
                         <MenuButton
@@ -226,14 +210,14 @@ const MobileNav = ({onOpen, ...rest}) => {
                             <HStack>
                                 <Avatar
                                     size={'sm'}
-                                    src={userDetails?.photoURL}
+                                    src={userDetails?.photoURL ?? ''}
                                 />
                                 <VStack
                                     display={{base: 'none', md: 'flex'}}
                                     alignItems="flex-start"
                                     spacing="1px"
                                     ml="2">
-                                    <Text fontSize="sm">{userDetails?.fullName }</Text>
+                                    <Text fontSize="sm">{userDetails?.fullName}</Text>
                                     <Text fontSize="xs" color="gray.600">
                                         {userDetails?.type}
                                     </Text>
