@@ -54,7 +54,7 @@ function Sidebar({children}) {
             <MobileNav onOpen={onOpen}/>
             <Box ml={{base: 0, md: 60}} p="4">
                 <div className={'d-flex flex-row justify-content-center align-content-center'} style={{marginRight:'20%'}}>
-                    <BusArriveAlert/>
+                        <BusArriveAlert/>
                 </div>
                 <Outlet/>
             </Box>
@@ -74,9 +74,9 @@ const BusArriveAlert = () => {
     }, [userDetails])
 
     return (
-        <>
-            {!state?.arravi && (<>Your Bus {state?.busno ? state?.busno : ''} arrived</>)}
-        </>
+        <>{state?.arravi && (<div className={'bg-success p-2 rounded rounded-md'}>
+            <>Your Bus {state?.busno ? state?.busno : ''} arrived</>
+        </div>)}</>
     )
 
 }
@@ -128,8 +128,6 @@ const SidebarContent = ({onClose}) => {
                     {link.name}
                 </NavItem>
             ))}
-
-
         </Box>
     );
 };
