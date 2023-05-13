@@ -53,10 +53,10 @@ function Sidebar({children}) {
             </Drawer>
             <MobileNav onOpen={onOpen}/>
             <Box ml={{base: 0, md: 60}} p="4">
-                <Outlet/>
-                <div>
+                <div className={'d-flex flex-row justify-content-center align-content-center'} style={{marginRight:'20%'}}>
                     <BusArriveAlert/>
                 </div>
+                <Outlet/>
             </Box>
         </Box>
     );
@@ -65,16 +65,17 @@ function Sidebar({children}) {
 const BusArriveAlert = () => {
     const [state, setState] = useState()
     const dispatch = useDispatch()
+    const userDetails = useUserLoginInfo()
 
     useEffect(() => {
-        setInterval(()=>{
-            getBusArriveState(dispatch, setState)
-        },[1000])
-    }, [])
+        if (userDetails?.id) setInterval(() => {
+            // getBusArriveState(userDetails, dispatch, setState)
+        }, [5000])
+    }, [userDetails])
 
     return (
         <>
-            {state && (<>EFRFEERFERG</>)}
+            {!state?.arravi && (<>Your Bus {state?.busno ? state?.busno : ''} arrived</>)}
         </>
     )
 

@@ -18,7 +18,6 @@ import {setModalPoperty} from "../../../store/reducers/modal-slice";
 import {createDocOfCollection, filterDocsFromCollection, getDocFromCollection} from "../../../actions/common.action";
 import {getHoltsByRoute} from "../../../actions/home.action";
 import useFormController from "../../../hooks/useFormController";
-import passengerNotificationFactory from "../../common/notifications/notification-factory";
 
 const SendRequestModal = () => {
 
@@ -32,7 +31,6 @@ const SendRequestModal = () => {
     useEffect(() => {
         if (poperties.isOpen) {
             getHoltList()
-            let a = new passengerNotificationFactory()
         }
     }, [poperties.isOpen])
 
