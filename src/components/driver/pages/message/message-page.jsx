@@ -82,9 +82,18 @@ const MessagePage = () => {
 
     }
 
-    const generateStyle = () => {
-        if (theme == 'dark') return {backgroundColor:`${messageType == 'inbox' ? '#202021' : '#313134'}`}
-        else return {backgroundColor:`${messageType == 'inbox' ? '#f2f0eb' : '#ffffff'}`}
+    const generateStyle = (type) => {
+        switch (type) {
+            case 'inbox': {
+                if (theme == 'dark') return { backgroundColor: `${messageType == 'inbox' ? '#202021' : '#313134'}` }
+                else return { backgroundColor: `${messageType == 'inbox' ? '#f2f0eb' : '#ffffff'}` }
+            }
+            case 'sent': {
+                if (theme == 'dark') return { backgroundColor: `${messageType == 'sent' ? '#202021' : '#313134'}` }
+                else return { backgroundColor: `${messageType == 'sent' ? '#f2f0eb' : '#ffffff'}` }
+            }
+        }
+
     }
 
     return (
@@ -96,7 +105,7 @@ const MessagePage = () => {
                 <div className={'flex flex-row gx-0 p-3 w-full h-[81vh]'}>
                     <div className={'col-3 px-2 w-full'}>
                         <div className={'border h-full  dark:bg-slate-700'}>
-                            <div style={generateStyle()} onClick={inboxHandler}
+                            <div style={generateStyle('inbox')} onClick={inboxHandler}
                                 className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
                                 <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>Inbox<span
                                     style={{
@@ -106,10 +115,7 @@ const MessagePage = () => {
 
                                     }}>{totalUnreadedMessages()}</span></div>
                             </div>
-                            <div style={{
-                                cursor: 'pointer',
-                                backgroundColor: `${messageType == 'sent' ? '#202021' : '#313134'}`
-                            }} onClick={sentboxHandler}
+                            <div style={generateStyle('sent')} onClick={sentboxHandler}
                                 className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
                                 Sent
                             </div>
