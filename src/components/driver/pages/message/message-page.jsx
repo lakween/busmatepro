@@ -130,7 +130,6 @@ const MessagePage = () => {
                         }} /> : messages?.map((message, index) => (
                             <div className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}
                                 style={{
-                                    cursor: 'pointer',
                                     backgroundColor: `${selectedMessage == index ? '#202021' : '#313134'}`
                                 }} onClick={() => {
                                     onClickMessage(index, message)

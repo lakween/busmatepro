@@ -78,7 +78,7 @@ const RequestHistory = () => {
     }
 
     return (
-        <div className={'flex w-full bg-amber-50 border border-sky-400 flex-row bg-white'}>
+        <div className={'w-full bg-amber-50 border border-sky-400 bg-white'}>
             <div className={'text-center pt-4 font-bold'}>
                 Waiting Request List
             </div>

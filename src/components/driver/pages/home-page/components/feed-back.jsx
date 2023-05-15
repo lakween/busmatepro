@@ -32,7 +32,7 @@ const RatingsFeedback = () => {
 
     return (
         <>
-            <div className={'flex mt-3 w-full bg-amber-50 border border-sky-400 flex-row bg-white'}>
+            <div className={' mt-3 w-full bg-amber-50 border border-sky-400  bg-white'}>
                 <div className={'text-center pt-4 font-bold'}>
                     Feedbacks and Ratings
                 </div>
