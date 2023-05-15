@@ -15,12 +15,31 @@ const MessagePage = () => {
     let [selectedMessage, setSelectedMessage] = useState(0)
     let [messageType, setMessageType] = useState('inbox')
     let [loading, setLoading] = useState(false)
+    let [theme,settheme] = useState()
 
     const totalUnreadedMessages = () => messages?.filter((message) => !message?.read)?.length
 
     useEffect(() => {
         if (userDetails?.id) inboxHandler()
     }, [userDetails?.id])
+
+    useEffect(() => {
+        const htmlElement = document.documentElement;
+        const observer = new MutationObserver((mutationsList) => {
+            for (const mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const newClass = mutation.target.className;
+                    settheme(newClass)
+                    console.log(newClass);
+                }
+            }
+        });
+
+        observer.observe(htmlElement, { attributes: true });
+        return () => {
+            observer.disconnect();
+        };
+    }, [])
 
     const inboxHandler = () => {
         setMessageType('inbox')
@@ -64,6 +83,11 @@ const MessagePage = () => {
 
     }
 
+    const generateStyle = () => {
+        if(theme == 'dark') return `${messageType == 'inbox' ? '#202021' : '#313134'}`
+        else return  `${messageType == 'inbox' ? '#f2f0eb' : '##f2f0eb'}`
+    }
+
     return (
         <div className={"w-full"} style={{ width: '100%' }}>
             <div className={' bg-white dark:bg-slate-800 w-full rounded-sm'}>
@@ -75,7 +99,7 @@ const MessagePage = () => {
                         <div className={'border h-full  dark:bg-slate-700'}>
                             <div style={{
                                 cursor: 'pointer',
-                                backgroundColor: `${messageType == 'inbox' ? '#202021' : '#313134'}`
+                                backgroundColor: generateStyle()
                             }} onClick={inboxHandler}
                                 className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
                                 <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>Inbox<span
@@ -83,7 +107,7 @@ const MessagePage = () => {
                                         backgroundColor: 'red',
                                         padding: '0px 5px 0px 5px',
                                         borderRadius: '100px'
-                                        
+
                                     }}>{totalUnreadedMessages()}</span></div>
                             </div>
                             <div style={{
