@@ -3,13 +3,38 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@chakra-ui/react": "^1.8.6",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^4.5.8",
+    "@googlemaps/react-wrapper": "^1.1.31",
+    "@googlemaps/typescript-guards": "^1.0.13",
+    "@material-ui/core": "^4.12.4",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.13.0",
+    "@mui/styled-engine-sc": "^5.12.0",
+    "@reduxjs/toolkit": "^1.8.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/google.maps": "^3.48.6",
+    "dotenv": "^16.0.0",
+    "fast-equals": "^3.0.1",
+    "firebase": "^9.6.10",
+    "framer-motion": "6",
+    "mui-datatables": "^4.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.3.1",
+    "react-redux": "^7.2.6",
+    "react-redux-firebase": "^3.11.0",
+    "react-router-dom": "6",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "redux-firestore": "^1.0.0",
+    "styled-components": "^6.0.0-rc.1",
+    "typescript": "^4.6.3",
+    "web-vitals": "^2.1.4",
+    "yarn": "^1.22.19"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -34,5 +59,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
   }
 }
