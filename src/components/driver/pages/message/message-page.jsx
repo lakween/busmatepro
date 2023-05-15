@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
-import { filterDocsFromCollectionRT, getAllDocFromCollection, updateFieldsOnly } from "../../../../actions/common.action";
+import Loading from "../../../common/loading/loading"
+import { Button } from "@chakra-ui/react";
+import { useDispatch } from "react-redux";
 import useUserLoginInfo from "../../../../hooks/useLoginInfor";
 import { rebuildMessage } from "../../../../actions/passenger.action";
-import { Button } from "@chakra-ui/react";
 import { setModalPoperty } from "../../../../store/reducers/modal-slice";
-import { useDispatch } from "react-redux";
-import Loading from "../../../common/loading/loading"
+import { useEffect, useRef, useState } from "react";
+import { filterDocsFromCollectionRT, getAllDocFromCollection, updateFieldsOnly } from "../../../../actions/common.action";
 
 const MessagePage = () => {
 
@@ -15,7 +15,7 @@ const MessagePage = () => {
     let [selectedMessage, setSelectedMessage] = useState(0)
     let [messageType, setMessageType] = useState('inbox')
     let [loading, setLoading] = useState(false)
-    let [theme,settheme] = useState()
+    let [theme, settheme] = useState()
 
     const totalUnreadedMessages = () => messages?.filter((message) => !message?.read)?.length
 
@@ -30,7 +30,6 @@ const MessagePage = () => {
                 if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
                     const newClass = mutation.target.className;
                     settheme(newClass)
-                    console.log(newClass);
                 }
             }
         });
@@ -84,8 +83,8 @@ const MessagePage = () => {
     }
 
     const generateStyle = () => {
-        if(theme == 'dark') return `${messageType == 'inbox' ? '#202021' : '#313134'}`
-        else return  `${messageType == 'inbox' ? '#f2f0eb' : '##f2f0eb'}`
+        if (theme == 'dark') return {backgroundColor:`${messageType == 'inbox' ? '#202021' : '#313134'}`}
+        else return {backgroundColor:`${messageType == 'inbox' ? '#f2f0eb' : '#ffffff'}`}
     }
 
     return (
@@ -97,10 +96,7 @@ const MessagePage = () => {
                 <div className={'flex flex-row gx-0 p-3 w-full h-[81vh]'}>
                     <div className={'col-3 px-2 w-full'}>
                         <div className={'border h-full  dark:bg-slate-700'}>
-                            <div style={{
-                                cursor: 'pointer',
-                                backgroundColor: generateStyle()
-                            }} onClick={inboxHandler}
+                            <div style={generateStyle()} onClick={inboxHandler}
                                 className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
                                 <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>Inbox<span
                                     style={{
