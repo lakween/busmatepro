@@ -25,6 +25,7 @@ const MessagePage = () => {
 
     useEffect(() => {
         const htmlElement = document.documentElement;
+        settheme(htmlElement?.className)
         const observer = new MutationObserver((mutationsList) => {
             for (const mutation of mutationsList) {
                 if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
