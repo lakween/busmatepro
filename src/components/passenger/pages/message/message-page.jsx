@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {filterDocsFromCollectionRT, getAllDocFromCollection} from "../../../../actions/common.action";
 import useUserLoginInfo from "../../../../hooks/useLoginInfor";
+import {Box, StackDivider, VStack} from "@chakra-ui/react";
 
 const MessagePage = () => {
 
@@ -19,17 +20,28 @@ const MessagePage = () => {
     }
 
     return (
-        <div className={"w-full"} style={{width: '100%'}}>
+        // <div className={"w-full"} style={{width: '100%'}}>
+        //     <div className={'row bg-white '}>
+        //         <div className={'col-3'}>
+        //             Message List
+        //         </div>
+        //         <div className={'col-9'}>
+        //
+        //         </div>
+        //
+        //     </div>
+        // </div>
+        <VStack
+            divider={<StackDivider borderColor='gray.200'/>}
+            spacing={4}
+            align='stretch'
+        >
             <div className={'row bg-white '}>
                 <div className={'col-3'}>
                     Message List
                 </div>
-                <div className={'col-9'}>
-
-                </div>
-
             </div>
-        </div>
+        </VStack>
     )
 }
 
