@@ -112,11 +112,11 @@ const RatingsFeedback = () => {
 
     return (
         <>
-            <div className="flex-row">
+            <div className="flex-row w-full">
                 <div>
                     Give rate and FeedBack
                 </div>
-                <div className={'flex-row mt-2'}>
+                <div className={'flex-row w-full mt-2'}>
                     <div style={{width: '20vw'}}>
                         <Select onChange={onChangeBusSelection} placeholder='Select a bus'>
                             {busList.map((item, index) => (
@@ -126,33 +126,33 @@ const RatingsFeedback = () => {
                     </div>
                     {
                         selectedBus && (
-                            <div className={'row mt-2 border-1 border-light'}>
-                                <div className={'col-2'}>
-                                    <div className={'row'}>
+                            <div className={'flex gap-4 w-full  mt-2 border-1 border-light'}>
+                                <div className={'w-full'}>
+                                    <div className={'w-full'}>
                                         <text>Bus NO:</text>
                                     </div>
-                                    <div className={'row'}>
+                                    <div className={'w-full'}>
                                         <text>{busList?.filter((item) => (item.id == selectedBus))[0]?.bus_no}</text>
                                     </div>
                                 </div>
-                                <div className={'col-2'}>
-                                    <div className={'row'}>
+                                <div className={'w-full'}>
+                                    <div className={'w-full'}>
                                         <text>Route:</text>
                                     </div>
-                                    <div className={'row'}>
+                                    <div className={'w-full'}>
                                         <text>
                                             {busRouteName}
                                         </text>
                                     </div>
                                 </div>
-                                <div className={'col-4'}>
+                                <div className={'w-full'}>
                                     <RatingStar setForm={setForm} form={form}/>
                                 </div>
-                                <div className={'col-4'}>
+                                <div className={'w-full'}>
                                     <Textarea name={'comment'} value={form["comment"]} onChange={valueChangeHandler}
                                               placeholder='Yours feedBack'/>
                                 </div>
-                                <div className={'row'}>
+                                <div className={'w-full'}>
                                     <div>
                                         <Button onClick={onSaveHandler} colorScheme='teal' size='sm'>
                                             Save
