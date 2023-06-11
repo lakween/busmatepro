@@ -17,13 +17,16 @@ import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
 import {setCommonState} from "../store/reducers/common-slice";
 
 export const getDocFromCollection = async (coll, docum) => {
+    if (docum && coll) {
+        const db = firebase.firestore();
+        const docRef = await doc(db, coll, docum);
+        const docSnap = await getDoc(docRef);
 
-    const db = firebase.firestore();
-    const docRef = await doc(db, coll, docum);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-        return docSnap?.data()
+        if (docSnap.exists()) {
+            return docSnap?.data()
+        } else {
+            return {}
+        }
     } else {
         return {}
     }
