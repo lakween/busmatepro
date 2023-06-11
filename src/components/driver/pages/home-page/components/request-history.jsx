@@ -48,14 +48,17 @@ const RequestHistory = () => {
 
     async function callBackForRealtime(userRequests) {
         let rebuildedUserRequests = await rebuildUserRequsets(userRequests)
-        setRequestList(rebuildedUserRequests.length > 0 ? rebuildedUserRequests : [])
+        setRequestList(rebuildedUserRequests?.length > 0 ? rebuildedUserRequests : [])
         setIsLoading(false)
     }
 
     async function getUserRequest() {
-        setIsLoading(true)
-        let {bus_id} = await getDocFromCollection('driverByBus', userDetails?.id?.trim())
-        filterDocsFromCollectionRT('userRequests', '', [['bus_id', '==', bus_id?.trim()], ['status', '==', 'waiting']], callBackForRealtime)
+        if(userDetails?.id){
+            setIsLoading(true)
+            let {bus_id} = await getDocFromCollection('driverByBus', userDetails?.id?.trim())
+            filterDocsFromCollectionRT('userRequests', '', [['bus_id', '==', bus_id?.trim()], ['status', '==', 'waiting']], callBackForRealtime)
+        }
+       
     }
 
     async function rejectHandler(rowData) {

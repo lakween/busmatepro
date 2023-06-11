@@ -23,7 +23,7 @@ export const getDocFromCollection = async (coll, docum) => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-        return docSnap.data()
+        return docSnap?.data()
     } else {
         return {}
     }
@@ -40,7 +40,7 @@ export const getDocFromCollectionRT = async (coll, docum) => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-        return docSnap.data()
+        return docSnap?.data()
     } else {
         return {}
     }
@@ -108,7 +108,7 @@ export const updateFieldsOnly = async (collName, docu, data) => {
 
 export const updateDocument = async (col, docum, data) => {
     const db = firebase.firestore();
-    delete data.id
+    delete data?.id
     await setDoc(doc(db, col, docum), data, {merge: true});
 }
 
@@ -117,7 +117,7 @@ export const getAllDocFromCollection = async (collName) => {
     let array = []
     const querySnapshot = await getDocs(collection(db, collName));
     for (let doc of querySnapshot.docs) {
-        array.push({...doc.data(), id: doc.id})
+        array.push({...doc?.data(), id: doc?.id})
     }
     return array
 }
@@ -157,7 +157,7 @@ export const filterDocsFromCollectionRT = async (coll, fields, filters, callBack
     onSnapshot(queryData, (querySnapshot) => {
         let array = []
         for (let document of querySnapshot.docs) {
-            array.push({...document.data(), id: document.id})
+            array.push({...document?.data(), id: document?.id})
         }
         callBack(array)
     });
