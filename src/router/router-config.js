@@ -13,6 +13,8 @@ import MessagePage from "../components/driver/pages/message/message-page";
 export let RouterConfig = () => {
     let userDetails = useUserLoginInfo()
 
+    console.log('userDetails',userDetails)
+
     let passengerRoutes = [
         {
             path: "/user",

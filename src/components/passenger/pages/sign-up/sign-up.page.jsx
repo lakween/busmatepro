@@ -6,6 +6,7 @@ import useFormController from "../../../../hooks/useFormController";
 import {createDoc, emailAndPasswordAuth, login, signOut} from "../../../../actions/user.actions";
 import {useNavigate} from "react-router-dom";
 import loginSchema from "../../../common/login-page/validation.schema";
+import signUpSchema from "./sign-up.schema";
 
 const SignUp = (getNames) => {
     const [isLoading, setIsLoading] = useState(false)
@@ -29,9 +30,10 @@ const SignUp = (getNames) => {
         setIsLoading(false)
     }
 
-    const signUpHandler = async () => {
-        loginSchema.validate(form, {abortEarly: false}).then(() => {
-            dispatch(login(form, navigate))
+    const signUpHandler = () => {
+        signUpSchema.validate(form, {abortEarly: false}).then(async () => {
+            let res = await emailAndPasswordAuth(form.email, form.password, toast)
+            let result = res ? await createDoc('userProfile', toast, navigate("/user"), {id: res, ...form,type:'passenger'}) : null
 
         }).catch((errors) => {
             for (let error of errors.inner) {
@@ -45,9 +47,6 @@ const SignUp = (getNames) => {
 
             }
         })
-        let res = await emailAndPasswordAuth(form.email, form.password, toast)
-        let result = res ? await createDoc('userProfile', toast, navigate("/user"), {id: res, ...form}) : null
-        console.log(res)
     }
 
     const signedButtonMarkup = (
@@ -91,6 +90,10 @@ const SignUp = (getNames) => {
                         <FormControl>
                             <FormLabel>Password</FormLabel>
                             <Input onChange={valueChangeHandler} name='password' type='password'/>
+                        </FormControl>
+                        <FormControl>
+                            <FormLabel>Confirm password</FormLabel>
+                            <Input onChange={valueChangeHandler} name='confirm_password' type='password'/>
                         </FormControl>
                     </Box>
                     <Box width={'100%'}>
