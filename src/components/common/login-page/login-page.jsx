@@ -12,8 +12,7 @@ import {
     InputLeftElement,
     InputRightElement,
     Link,
-    Stack,
-    useColorModeValue
+    Stack, toast, useToast
 } from '@chakra-ui/react'
 import {FcGoogle} from "react-icons/fc";
 import {useDispatch} from "react-redux";
@@ -26,10 +25,11 @@ import {createDocOfCollectionWithId, getDocFromCollection} from "../../../action
 import React from 'react';
 import useUserLoginInfo from "../../../hooks/useLoginInfor";
 import Loading from "../loading/loading";
-
+import loginSchema from "./validation.schema";
 
 const Login = () => {
     let navigate = useNavigate();
+    const toast = useToast()
     let dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(false)
     let [valueChangeHandler, setValue, form, setForm] = useFormController()
@@ -44,7 +44,7 @@ const Login = () => {
         if (Object.keys(document).length === 0 && res?.reference_doc_id) {
             let doc = await createDocOfCollectionWithId('userProfile', res?.reference_doc_id, {
                 ...res,
-                type:'passenger'
+                type: 'passenger'
             })
             navigate('signup')
 
@@ -54,8 +54,22 @@ const Login = () => {
         }
     }
 
-    const loginHandler = async () => {
-        await dispatch(login(form, navigate))
+    const loginHandler = () => {
+        loginSchema.validate(form, {abortEarly: false}).then(() => {
+            dispatch(login(form, navigate))
+
+        }).catch((errors) => {
+            for (let error of errors.inner) {
+                toast({
+                    title: 'Error',
+                    description: error?.message,
+                    status: 'error',
+                    duration: 9000,
+                    isClosable: true,
+                })
+
+            }
+        })
     }
 
     const CFaUserAlt = chakra(FaUserAlt);

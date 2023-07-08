@@ -3,8 +3,9 @@ import React, {useState} from "react";
 import Card from "../../../common/card/card.component";
 import {useDispatch, useSelector} from "react-redux";
 import useFormController from "../../../../hooks/useFormController";
-import {createDoc, emailAndPasswordAuth, signOut} from "../../../../actions/user.actions";
+import {createDoc, emailAndPasswordAuth, login, signOut} from "../../../../actions/user.actions";
 import {useNavigate} from "react-router-dom";
+import loginSchema from "../../../common/login-page/validation.schema";
 
 const SignUp = (getNames) => {
     const [isLoading, setIsLoading] = useState(false)
@@ -29,6 +30,21 @@ const SignUp = (getNames) => {
     }
 
     const signUpHandler = async () => {
+        loginSchema.validate(form, {abortEarly: false}).then(() => {
+            dispatch(login(form, navigate))
+
+        }).catch((errors) => {
+            for (let error of errors.inner) {
+                toast({
+                    title: 'Error',
+                    description: error?.message,
+                    status: 'error',
+                    duration: 9000,
+                    isClosable: true,
+                })
+
+            }
+        })
         let res = await emailAndPasswordAuth(form.email, form.password, toast)
         let result = res ? await createDoc('userProfile', toast, navigate("/user"), {id: res, ...form}) : null
         console.log(res)
