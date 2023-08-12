@@ -53,10 +53,9 @@ const Profile = () => {
     };
 
     return (
-        <>
-
+        <div className={'p-5'}>
             <div
-                class="flex w-full p-5 rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+                className="flex flex-col lg:flex-row w-full p-5 rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
                 <div>
                     <Avatar
                         size="2xl"
@@ -129,19 +128,19 @@ const Profile = () => {
                         </div>
                     </div>
                     <hr className="divider-horizontal" />
-                    <div className=" mt-2 mb-2">
-                        <div className="">
-                            <p className="mb-0">Birthday</p>
-                        </div>
-                        <div className="">
-                            <DisplayLine
-                                modelPath={"birthday"}
-                                name={"birthday"}
-                                onUpdate={onUpdateHandler}
-                                value={model?.birthday ? model?.birthday : "00-00-0000"}
-                            />
-                        </div>
-                    </div>
+                    {/*<div className=" mt-2 mb-2">*/}
+                    {/*    <div className="">*/}
+                    {/*        <p className="mb-0">Birthday</p>*/}
+                    {/*    </div>*/}
+                        {/*<div className="">*/}
+                        {/*    <DisplayLine*/}
+                        {/*        modelPath={"birthday"}*/}
+                        {/*        name={"birthday"}*/}
+                        {/*        onUpdate={onUpdateHandler}*/}
+                        {/*        value={model?.birthday ? model?.birthday : "00-00-0000"}*/}
+                        {/*    />*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
                     <hr className="divider-horizontal" />
                     <div className=" mt-2 mb-2">
                         <div className="">
@@ -288,7 +287,7 @@ const Profile = () => {
                         </Card>
                     </Col>
                 </Row> */}
-        </>
+        </div>
     );
 };
 

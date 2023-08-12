@@ -44,7 +44,7 @@ root.render(
         <Provider store={store}>
             <ReactReduxFirebaseProvider {...rrfProps}>
                 <BrowserRouter>
-                    <ChakraProvider>
+                    <ChakraProvider theme={theme}>
                         <RouterConfig/>
                         <SendRequestModal/>
                         <SendMessageModal/>

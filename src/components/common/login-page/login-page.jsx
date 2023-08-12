@@ -46,11 +46,11 @@ const Login = () => {
                 ...res,
                 type: 'passenger'
             })
-            navigate('signup')
+            navigate('user')
 
         } else if (res?.reference_doc_id) {
 
-            navigate('signup')
+            navigate('user')
         }
     }
 

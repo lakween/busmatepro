@@ -75,44 +75,46 @@ const RequestHistory = (theme) => {
     const MemorizeCustomTdGroup = useMemo(() => (CustomTdGroup), [])
 
     return (
-        <div className="relative overflow-x-auto">
-            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" className="px-6 py-3">
-                        Bus No
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                        Route
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                        PickUp Holt
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                        Status
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                        Action
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {requests?.map((item) => (
-                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <MemorizeCustomTdGroup busID={item?.bus_id} pickUpHolt={item?.pickUp_holt}/>
-                        <td className="px-6 py-4">
-                            {item?.status}
-                        </td>
-                        <td className="px-6 py-4">
-                            <Button onClick={() => cancelHandler(item?.id)} className={'me-2'}
-                                    colorScheme='teal' size='xs'>
-                                Cancel
-                            </Button>
-                        </td>
+        <div className={'p-5 h-full'}>
+            <div className="relative overflow-x-auto bg-white rounded h-full">
+                <table className="w-full max-h-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead className="text-xs text-gray-700 uppercase bg-teal-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" className="px-6 py-3">
+                            Bus No
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            Route
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            PickUp Holt
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            Status
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            Action
+                        </th>
                     </tr>
-                ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {requests?.map((item) => (
+                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <MemorizeCustomTdGroup busID={item?.bus_id} pickUpHolt={item?.pickUp_holt}/>
+                            <td className="px-6 py-4">
+                                {item?.status}
+                            </td>
+                            <td className="px-6 py-4">
+                                <Button onClick={() => cancelHandler(item?.id)} className={'me-2'}
+                                        colorScheme='teal' size='xs'>
+                                    Cancel
+                                </Button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     )
 }

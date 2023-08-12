@@ -103,13 +103,13 @@ const MessagePage = () => {
         }
     }
     return (
-        <div className={"w-full"} style={{width: '100%'}}>
-            <div className={' bg-white dark:bg-slate-800 w-full rounded-sm'}>
+        <div className={"w-full h-full p-5 rounded-md"} style={{width: '100%'}}>
+            <div className={' bg-white dark:bg-slate-800 w-full rounded-sm h-full'}>
                 <div className={'text-center pt-3 w-full text-[30px]'}>
                     Message List
                 </div>
-                <div className={'flex flex-row gx-0 p-3 w-full h-[81vh]'}>
-                    <div className={'col-3 px-2 w-full'}>
+                <div className={'flex flex-col gap-5 md:flex-row gx-0 p-3 w-full h-[81vh]'}>
+                    <div className={'w-full'}>
                         <div className={'border h-full  dark:bg-slate-700'}>
                             <div style={generateStyleForType('inbox')} onClick={inboxHandler}
                                  className={`m-2 border border-black p-3 text-center cursor-pointer rounded-md cus-shadow`}>
@@ -127,7 +127,7 @@ const MessagePage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className={'w-full border dark:bg-slate-700'} style={{overflowY: "auto"}}>
+                    <div className={'w-full h-full border dark:bg-slate-700'} style={{overflowY: "auto"}}>
                         {loading ? <Loading style={{
                             height: "75vh",
                             display: 'flex',
@@ -152,12 +152,13 @@ const MessagePage = () => {
                                     <div className={'text-truncate'}>
                                         {message?.message}
                                     </div>
+
                                 </div>
                             </div>
                         ))}
                     </div>
-                    <div className={'w-full'}>
-                        <div className={'position-relative dark:bg-slate-700 border mx-2 p-2'} style={{height: '100%'}}>
+                    <div className={'w-full h-full'}>
+                        <div className={'position-relative dark:bg-slate-700 border'} style={{height: '100%'}}>
                             <div className={'text-center'}>
                                 {
                                     messages ? messages[selectedMessage]?.message : ''
@@ -166,7 +167,7 @@ const MessagePage = () => {
                             {
                                 (messageType == 'inbox') && (
                                     <div
-                                        className={' absolute bottom-[28px] right-[12%] start-50 translate-middle-x mb-2'}>
+                                        className={'absolute bottom-[55px] right-[35%] md:right-[12%] start-50 translate-middle-x mb-2'}>
                                         <Button colorScheme='teal' size='sm' onClick={openReplyModal}>
                                             Replay
                                         </Button>

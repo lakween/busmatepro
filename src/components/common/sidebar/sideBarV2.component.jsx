@@ -54,7 +54,7 @@ const SidebarV2 = ({children}) => {
                 height="6vh"
                 alignItems="center"
                 borderBottomWidth="1px"
-                className={'bg-white'}
+                className={'bg-white px-2'}
                 justifyContent={{base: 'space-between', md: 'flex-end'}}
             >
                 <IconButton
@@ -71,17 +71,10 @@ const SidebarV2 = ({children}) => {
                     fontSize="2xl"
                     fontFamily="monospace"
                     fontWeight="bold">
-                    Logo
+                   <BiSolidBus/>
                 </Text>
 
                 <HStack spacing={{base: '0', md: '6'}}>
-                    {/*<Button onClick={() => {*/}
-                    {/*    toggleColorMode()*/}
-                    {/*    const htmlElement = document.querySelector('html');*/}
-                    {/*    htmlElement.classList.toggle('dark');*/}
-                    {/*}}>*/}
-                    {/*    Toggle {colorMode === 'light' ? 'Dark' : 'Light'}*/}
-                    {/*</Button>*/}
                     <Flex alignItems={'center'}>
                         <Menu>
                             <MenuButton
