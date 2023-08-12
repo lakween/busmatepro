@@ -9,16 +9,16 @@ import Profile from "../components/common/profile/profile";
 import useUserLoginInfo from "../hooks/useLoginInfor";
 import DriverHomePage from "../components/driver/pages/home-page/home-page";
 import MessagePage from "../components/driver/pages/message/message-page";
+import SidebarV2 from "../components/common/sidebar/sideBarV2.component";
+import React from "react";
 
 export let RouterConfig = () => {
     let userDetails = useUserLoginInfo()
 
-    console.log('userDetails',userDetails)
-
     let passengerRoutes = [
         {
             path: "/user",
-            element: <Sidebar/>,
+            element:  <SidebarV2/>,
             children: [
                 {index: true, element: <Home/>},
                 {path: "history", element: <RequestHistory/>},
@@ -31,7 +31,7 @@ export let RouterConfig = () => {
     let driverRoute = [
         {
             path: "/user",
-            element: <Sidebar/>,
+            element: <SidebarV2/>,
             children: [
                 {index: true, element: <DriverHomePage/>},
                 {path: "messages", element: <MessagePage/>},
