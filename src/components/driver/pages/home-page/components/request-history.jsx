@@ -81,14 +81,14 @@ const RequestHistory = () => {
     }
 
     return (
-        <div className={'w-full bg-amber-50 border border-sky-400 bg-white'}>
+        <div className={'w-full bg-white rounded-md border'}>
             <div className={'text-center pt-4 font-bold'}>
                 Waiting Request List
             </div>
 
             <div className="flex overflow-x-auto shadow-md sm:rounded-lg w-full">
                 <Box className={'w-full relative'} mt={10} maxH={'100vh'}>
-                    <TableContainer className={'w-full'} style={{height: '50vh', overflowY: 'auto'}}>
+                    <TableContainer className={'w-full'} style={{height: '33vh', overflowY: 'auto'}}>
                         <Table size='sm' className={'w-full'}>
                             <Thead>
                                 <Tr>

@@ -34,14 +34,14 @@ const RatingsFeedback = () => {
 
     return (
         <>
-            <div className={' mt-3 w-full bg-amber-50 border border-sky-400  bg-white'}>
+            <div className={'mt-3 w-full bg-white'}>
                 <div className={'text-center pt-4 font-bold'}>
                     Feedbacks and Ratings
                 </div>
 
                 <div className="flex overflow-x-auto shadow-md sm:rounded-lg w-full">
                     <Box className={'w-full relative'} mt={10} maxH={'100vh'}>
-                        <TableContainer className={'w-full'}  style={{height:'50vh',overflowY:'auto'}}>
+                        <TableContainer className={'w-full'}  style={{height:'31vh',overflowY:'auto'}}>
                             <Table size='sm' className={'w-full '}>
                                 <Thead>
                                     <Tr>

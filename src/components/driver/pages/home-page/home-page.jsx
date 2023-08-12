@@ -55,7 +55,7 @@ const DriverHomePage = () => {
 
 
     return (
-        <div className={'w-full'}>
+        <div className={'w-full p-5'}>
             <RequestHistory/>
             <RatingsFeedback/>
         </div>
