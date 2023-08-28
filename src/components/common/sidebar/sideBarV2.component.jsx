@@ -22,8 +22,28 @@ import useUserLoginInfo from "../../../hooks/useLoginInfor";
 import {FiChevronDown, FiHome, FiMenu} from "react-icons/fi";
 import {signOut} from "../../../actions/user.actions";
 import {getAllDocFromCollection} from "../../../actions/common.action";
+import {useDispatch} from "react-redux";
 
 const SidebarV2 = ({children}) => {
+
+    const BusArriveAlert = () => {
+        const [state, setState] = useState()
+        const dispatch = useDispatch()
+        const userDetails = useUserLoginInfo()
+
+        useEffect(() => {
+            if (userDetails?.id) setInterval(() => {
+                // getBusArriveState(userDetails, dispatch, setState)
+            }, [5000])
+        }, [userDetails])
+
+        return (
+            <>{state?.arravi && (<div className={'bg-green-500 p-2 mr-4 rounded rounded-md'}>
+                <>Your Bus {state?.busno ? state?.busno : ''} arrived</>
+            </div>)}</>
+        )
+
+    }
 
     const [mobileSideBarVisible, setMobileSideBarVisible] = useState(false)
     const [linkItems, setLinkItems] = useState([])
@@ -65,7 +85,6 @@ const SidebarV2 = ({children}) => {
                     onClick={() => setMobileSideBarVisible(true)}
                     icon={<FiMenu/>}
                 />
-
                 <Text
                     display={{base: 'flex', md: 'none'}}
                     fontSize="2xl"
@@ -73,7 +92,7 @@ const SidebarV2 = ({children}) => {
                     fontWeight="bold">
                    <BiSolidBus/>
                 </Text>
-
+                <BusArriveAlert/>
                 <HStack spacing={{base: '0', md: '6'}}>
                     <Flex alignItems={'center'}>
                         <Menu>

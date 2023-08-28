@@ -21,8 +21,9 @@ const RatingsFeedback = () => {
     async function getFeedBackAndReatings() {
         setIsLoading(true)
         if(userDetails?.id){
-            let busId = await getDocFromCollection('driverByBus', userDetails?.id)
-        filterDocsFromCollectionRT('busReview', '', [['bus_id', '==', '4X1dFrokjY4ItS5gZXLx']], callBackForRealtime)
+            let busId = (await getDocFromCollection('driverByBus', userDetails?.id))?.bus_id
+            console.log(busId)
+        filterDocsFromCollectionRT('busReview', '', [['bus_id', '==', busId]], callBackForRealtime)
         }
     }
 
