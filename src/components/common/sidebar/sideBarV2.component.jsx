@@ -1,7 +1,7 @@
 import {AiOutlineClose} from 'react-icons/ai';
 import {BiSolidBus} from 'react-icons/bi';
 import React, {useEffect, useState} from "react";
-import {Outlet, useNavigate} from "react-router-dom";
+import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {
     Avatar,
     Box,
@@ -25,6 +25,10 @@ import {getAllDocFromCollection} from "../../../actions/common.action";
 import {useDispatch} from "react-redux";
 
 const SidebarV2 = ({children}) => {
+ let currentPath = useLocation();
+ let path = currentPath?.pathname
+    console.log(currentPath.pathname,'asasasa')
+
 
     const BusArriveAlert = () => {
         const [state, setState] = useState()
@@ -161,7 +165,7 @@ const SidebarV2 = ({children}) => {
                         <div onClick={() => {
                             navigate(link.link)
                         }}
-                             className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white"
+                             className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white" style
                         >
                             <span className="text-[15px] ml-4 text-gray-200 font-bold">{link.name}</span>
                         </div>
@@ -199,6 +203,7 @@ const SidebarV2 = ({children}) => {
                             navigate(link.link)
                         }}
                              className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white"
+                             style={{backgroundColor:`${link.link === path ? 'blue':''}`}}
                         >
                             <span className="text-[15px] ml-4 text-gray-200 font-bold">{link.name}</span>
                         </div>
