@@ -1,5 +1,5 @@
 import {Button, Select, Table, TableContainer, Tbody, Td, Textarea, Th, Thead, Tr, useToast} from "@chakra-ui/react";
-import {Rating} from "@mui/material";
+import Rating from '@mui/material/Rating';
 import * as React from 'react';
 import {useEffect, useRef, useState} from 'react';
 import Box from '@mui/material/Box';
@@ -8,6 +8,7 @@ import {
     createDocOfCollection,
     deleteDocument,
     filterDocsFromCollection,
+    filterDocsFromCollectionRT,
     getAllDocFromCollection,
     getDocFromCollection,
     updateDocument
@@ -17,7 +18,6 @@ import firebase from "firebase/compat/app";
 
 const RatingsFeedback = () => {
 
-    const [refetch, setRefetch] = useState(false);
     const [busList, setBusList] = useState([]);
     const [selectedBus, setSelectedBus] = useState();
     const [busRouteName, setBusRouteName] = useState();
@@ -41,16 +41,17 @@ const RatingsFeedback = () => {
 
     const onChangeBusSelection = async (e) => {
         setForm({})
-        let result = await getDocFromCollection('busRoutes', e.target.value)
+        let busDetails = await getDocFromCollection('bus', e.target.value)
+        let busRouteDeatils = await getDocFromCollection('busRoutes', busDetails?.route_id)
         let previousReatings = await getPreviousReatings(e?.target?.value)
-        setBusRouteName(result?.name)
+        setBusRouteName(busRouteDeatils?.name)
         setSelectedBus(e?.target?.value)
     }
 
     const getPreviousReatings = async (busID) => {
 
         let result = await filterDocsFromCollection('busReview', '', [['bus_id', '==', busID], ['user_id', '==', currentUser?.current]])
-        if (result.length > 0) {
+        if (result?.length > 0) {
             setPrevious(result[0])
             setForm({...result[0]})
         }
@@ -58,10 +59,11 @@ const RatingsFeedback = () => {
 
     const getAllFeedbacks = async () => {
 
-        let result = await filterDocsFromCollection('busReview', '', [['user_id', '==', currentUser?.current]])
-        if (result.length > 0) {
-            setAllFeedbacks(result)
-        }
+        let result = await filterDocsFromCollectionRT('busReview', '', [['user_id', '==', currentUser?.current]], (data) => {
+            if (Array.isArray(data)) setAllFeedbacks(data)
+            else setAllFeedbacks([])
+        })
+
     }
 
     async function getbuslist() {
@@ -78,7 +80,7 @@ const RatingsFeedback = () => {
             duration: 9000,
             isClosable: true,
         })
-        setRefetch(!refetch)
+        // setRefetch(!refetch)
     }
 
     async function onSaveHandler() {
@@ -92,7 +94,7 @@ const RatingsFeedback = () => {
             toast({
                 title: 'Saved',
                 // description:,
-                status: 'error',
+                status: 'success',
                 duration: 9000,
                 isClosable: true,
             })
@@ -102,17 +104,17 @@ const RatingsFeedback = () => {
                 toast({
                     title: 'Saved',
                     // description:,
-                    status: 'error',
+                    status: 'success',
                     duration: 9000,
                     isClosable: true,
                 })
         }
-        setRefetch(!refetch)
+        // setRefetch(!refetch)
     }
 
     return (
-        <>
-            <div className="flex-row w-full">
+        <div className={'p-5 h-full'}>
+            <div className="flex-row bg-white rounded-md h-full p-3 w-full">
                 <div>
                     Give rate and FeedBack
                 </div>
@@ -126,7 +128,7 @@ const RatingsFeedback = () => {
                     </div>
                     {
                         selectedBus && (
-                            <div className={'flex gap-4 w-full  mt-2 border-1 border-light'}>
+                            <div className={'flex flex-col md:flex-row gap-4 w-full mt-2 border-1 border-light'}>
                                 <div className={'w-full'}>
                                     <div className={'w-full'}>
                                         <text>Bus NO:</text>
@@ -196,7 +198,7 @@ const RatingsFeedback = () => {
                     </TableContainer>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

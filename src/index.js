@@ -21,6 +21,7 @@ import SendRequestModal from "./components/passenger/dialog/send-request.modal";
 import SendMessageModal from "./components/driver/pages/home-page/dialogs/sendMessage.modal";
 import SendReplyModal from "./components/driver/pages/message/dialogs/send-reply-modal/send-reply-moda";
 import theme from './theme'
+import SidebarV2 from "./components/common/sidebar/sideBarV2.component";
 
 firebase.initializeApp(firebaseConfig)
 firebase.firestore();
@@ -39,11 +40,11 @@ const rrfProps = {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-     <Provider store={store}>
+    <React.StrictMode>
+        <Provider store={store}>
             <ReactReduxFirebaseProvider {...rrfProps}>
                 <BrowserRouter>
-                <ChakraProvider theme={theme}>
+                    <ChakraProvider theme={theme}>
                         <RouterConfig/>
                         <SendRequestModal/>
                         <SendMessageModal/>
@@ -52,7 +53,7 @@ root.render(
                 </BrowserRouter>
             </ReactReduxFirebaseProvider>
         </Provider>
-  </React.StrictMode>
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

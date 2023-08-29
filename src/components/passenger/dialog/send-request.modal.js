@@ -73,7 +73,7 @@ const SendRequestModal = () => {
     }
 
     const checkRequestAvailability = async () => {
-        let result = await filterDocsFromCollection('userRequests', '', [["status", '==', "waiting"],["user_id", "==", authData.uid]])
+        let result = await filterDocsFromCollection('userRequests', '', [["status", '==', "waiting"], ["user_id", "==", authData.uid]])
         if (result?.length > 0) return false
         else return true
     }
@@ -104,7 +104,7 @@ const SendRequestModal = () => {
                         Rating
                     </Text>
                     <Text>
-                        {((rateAndFeedBack?.reduce((prev, item) => (item?.rate + prev), 0)) / rateAndFeedBack?.length) || 0} stars
+                        {((rateAndFeedBack?.reduce((prev, item) => (item?.rate + prev), 0)) / rateAndFeedBack?.length)?.toFixed(2) || 0} stars
                     </Text>
                 </Flex>
                 <div>

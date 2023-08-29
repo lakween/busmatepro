@@ -64,9 +64,10 @@ const RequestHistory = (theme) => {
 
         return (
             <>
-                <Td>{state?.bus_no}</Td>
-                <Td>{state?.routeName}</Td>
-                <Td>{state?.pickUpHoltName}</Td>
+                <th scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{state?.bus_no}</th>
+                <td className="px-6 py-4">{state?.routeName}</td>
+                <td className="px-6 py-4">{state?.pickUpHoltName}</td>
             </>
         )
     }
@@ -74,39 +75,47 @@ const RequestHistory = (theme) => {
     const MemorizeCustomTdGroup = useMemo(() => (CustomTdGroup), [])
 
     return (
-        <>
-            <Box mt={10} maxH={'100vh'}>
-                <TableContainer>
-                    <Table size='sm'>
-                        <Thead>
-                            <Tr>
-                                <Th>Bus No</Th>
-                                <Th>Route</Th>
-                                <Th>PickUp Holt</Th>
-                                <Th>Status</Th>
-                                <Th>Action</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {requests?.map((item) => (
-                                <Tr>
-                                    <MemorizeCustomTdGroup busID={item?.bus_id} pickUpHolt={item?.pickUp_holt}/>
-                                    <Td>{item?.status}</Td>
-                                    <Td><Button onClick={() => cancelHandler(item?.id)} className={'me-2'}
-                                                colorScheme='teal' size='xs'>
-                                        Cancel
-                                    </Button>
-                                        <Button onClick={() => deleteHandler(item?.id)} colorScheme='teal' size='xs'>
-                                            delete
-                                        </Button></Td>
-                                </Tr>
-                            ))}
-                        </Tbody>
-                    </Table>
-                </TableContainer>
-            </Box>
-        </>
-
+        <div className={'p-5 h-full'}>
+            <div className="relative overflow-x-auto bg-white rounded h-full">
+                <table className="w-full max-h-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead className="text-xs text-gray-700 uppercase bg-teal-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" className="px-6 py-3">
+                            Bus No
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            Route
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            PickUp Holt
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            Status
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            Action
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {requests?.map((item) => (
+                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <MemorizeCustomTdGroup busID={item?.bus_id} pickUpHolt={item?.pickUp_holt}/>
+                            <td className="px-6 py-4">
+                                {item?.status}
+                            </td>
+                            <td className="px-6 py-4">
+                                <Button onClick={() => cancelHandler(item?.id)} className={'me-2'}
+                                        colorScheme='teal' size='xs'>
+                                    Cancel
+                                </Button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     )
 }
 
